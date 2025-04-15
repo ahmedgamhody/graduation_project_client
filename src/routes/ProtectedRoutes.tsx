@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import CookieService from "../services/CookieService";
 import actRefreshAuth from "../store/auth/act/actRefreshAuth";
+import LottieHandler from "../animations/LottieHandler";
 
 export default function ProtectedRoutes() {
   const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ export default function ProtectedRoutes() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LottieHandler type="mainlottie" />;
   if (!storedToken && !storedRefreshToken)
     return <Navigate to="/login" replace />;
   return token ? <Outlet /> : <Navigate to="/login" replace />;

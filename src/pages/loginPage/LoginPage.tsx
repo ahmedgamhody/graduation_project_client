@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import loginLogo from "../../assets/login.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LoginFormData, LoginSchema } from "../../validation/LoginValidation";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
@@ -12,7 +12,7 @@ import { actAuthLogin, authCleanUp } from "../../store/auth/authSlice";
 const Login = () => {
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const { loadingState } = useAppSelector((state) => state.auth);
+  const { loadingState, token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const {
     register,
@@ -45,7 +45,7 @@ const Login = () => {
       dispatch(authCleanUp());
     };
   }, [dispatch]);
-
+  if (token) return <Navigate to="/" replace />;
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -102,7 +102,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loadingState === "pending"}
-            className={`w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 transition flex items-center justify-center ${
+            className={`w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center ${
               loadingState === "pending" ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

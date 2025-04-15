@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import registerLogo from "../../assets/login.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   RegisterFormData,
   RegisterSchema,
@@ -17,7 +17,7 @@ import { actAuthRegister, authCleanUp } from "../../store/auth/authSlice";
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [countries, setCountries] = useState([]);
-  const { error, loadingState } = useAppSelector((state) => state.auth);
+  const { error, loadingState, token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -71,6 +71,7 @@ const RegisterPage = () => {
       dispatch(authCleanUp());
     };
   }, [dispatch]);
+  if (token) return <Navigate to="/" replace />;
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
@@ -188,7 +189,7 @@ const RegisterPage = () => {
           <button
             disabled={loadingState === "pending"}
             type="submit"
-            className={`w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 transition flex items-center justify-center ${
+            className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center ${
               loadingState === "pending" ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

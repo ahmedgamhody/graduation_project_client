@@ -14,6 +14,7 @@ interface IAuthState {
   refreshTokenExpiretion: string;
   loadingState: TLoading;
   error: string | null;
+  id: string;
 }
 
 const initialState: IAuthState = {
@@ -25,6 +26,7 @@ const initialState: IAuthState = {
   refreshTokenExpiretion: "",
   loadingState: "idle",
   error: null,
+  id: "",
 };
 
 const authSlice = createSlice({
@@ -38,6 +40,7 @@ const authSlice = createSlice({
       state.expiresIn = 0;
       state.refreshToken = "";
       state.refreshTokenExpiretion = "";
+      state.id = "";
       state.error = null;
       CookieService.removeCookie("token", { path: "/" });
       CookieService.removeCookie("refreshToken", { path: "/" });
@@ -61,6 +64,7 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
+      state.id = action.payload.id;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, { path: "/" });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {
@@ -87,6 +91,7 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
+      state.id = action.payload.id;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, { path: "/" });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {
@@ -112,6 +117,7 @@ const authSlice = createSlice({
       state.token = action.payload.token;
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
+      state.id = action.payload.id;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, { path: "/" });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {

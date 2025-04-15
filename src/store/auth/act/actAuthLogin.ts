@@ -3,7 +3,7 @@ import axiosErrorHandler from "../../../utils/axiosErrorHandler";
 // import axios from "axios";
 import { LoginFormData } from "../../../validation/LoginValidation";
 import axios from "axios";
-// const BASE_URL = "https://localhost:7214/api";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 type TResponse = {
   token: string;
@@ -13,6 +13,7 @@ type TResponse = {
   name: string;
   email: string;
   password: string;
+  id: string;
 };
 
 const actAuthLogin = createAsyncThunk(
@@ -22,7 +23,7 @@ const actAuthLogin = createAsyncThunk(
 
     try {
       const res = await axios.post<TResponse>(
-        `https://localhost:7214/api/authenticat/Login`,
+        `${BASE_URL}/authenticat/Login`,
         // `${BASE_URL}/authenticat/Login`,
         formData
       );
