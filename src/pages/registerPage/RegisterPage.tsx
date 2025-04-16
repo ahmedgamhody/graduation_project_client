@@ -163,10 +163,10 @@ const RegisterPage = () => {
           </div>
 
           <div className="mb-3">
-            <label className="block text-gray-700">Birth Date</label>
+            <label className="block text-gray-700">Age </label>
             <input
-              type="date"
-              {...register("birthDate")}
+              type="number"
+              {...register("age")}
               className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
             />
           </div>

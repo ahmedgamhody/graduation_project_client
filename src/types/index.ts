@@ -3,5 +3,14 @@ export type TPlaceHome = {
   id: number;
   name: string;
   photo: string;
-  rate?: number;
+  googleRate?: number;
+};
+export type TTourism = {
+  id: number;
+  name: string;
+  photo: string;
+};
+export type TGovernorate = {
+  name: string;
+  photo: string;
 };

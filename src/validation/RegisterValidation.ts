@@ -17,7 +17,11 @@ export const RegisterSchema = z.object({
   phone: z
     .string()
     .min(10, { message: "Phone number must be at least 10 digits" }),
-  birthDate: z.string(),
+  age: z.coerce
+    .number()
+    .min(1, { message: "Age must be at least 1" })
+    .max(100, { message: "Age must be less than or equal to 100" }),
+
   gender: z.enum(["male", "female"], { message: "Select a gender" }),
 });
 
