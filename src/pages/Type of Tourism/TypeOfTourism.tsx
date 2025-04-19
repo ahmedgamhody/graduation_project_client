@@ -9,7 +9,7 @@ import TourismCard from "./TourismCard";
 export default function TypeOfTourism() {
   useTitle("Type of Tourism");
   const token = useAppSelector((state) => state.auth.token);
-  const fetchAllTypeOfTourism = () =>
+  const fetchAllTypeOfTourisms = () =>
     axios(`https://localhost:7214/api/TypeOfTourism/All-TypeOfTourism`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -20,23 +20,24 @@ export default function TypeOfTourism() {
     });
 
   const { data, isPending } = useQuery({
-    queryKey: ["AllTypeOfTourism"],
-    queryFn: () => fetchAllTypeOfTourism(),
+    queryKey: ["Tourism"],
+    queryFn: () => fetchAllTypeOfTourisms(),
   });
-
   return (
     <div className="container mx-auto my-5">
       <h1 className="text-4xl font-bold text-center text-primary">
         Type of Tourism
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-        {isPending
-          ? Array.from({ length: 6 }, (_, index) => (
-              <CardPlaceSkeleton key={index} />
-            ))
-          : data?.map((item: TTourism, index: number) => (
-              <TourismCard key={item.id || index} tourism={item} />
-            ))}
+        {isPending &&
+          Array.from({ length: 6 }, (_, index) => (
+            <CardPlaceSkeleton key={index} />
+          ))}
+        {!isPending &&
+          data?.length > 0 &&
+          data?.map((item: TTourism, index: number) => (
+            <TourismCard key={item.id || index} tourism={item} />
+          ))}
       </div>
     </div>
   );

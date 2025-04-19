@@ -93,7 +93,9 @@ const authSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.id = action.payload.id;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
-      CookieService.setCookie("token", action.payload.token, { path: "/" });
+      CookieService.setCookie("token", action.payload.token, {
+        path: "/",
+      });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {
         path: "/",
       });

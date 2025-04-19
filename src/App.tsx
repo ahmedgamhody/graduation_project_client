@@ -5,6 +5,8 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
+import SingleTourism from "./pages/Type of Tourism/SingleTourism";
+import SingleGovernorate from "./pages/Governorates/SingleGovernorate";
 
 // Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
@@ -60,6 +62,14 @@ function App() {
               }
             />
             <Route
+              path="/governorates/:name"
+              element={
+                <PageSuspenseFallback>
+                  <SingleGovernorate />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
               path="/suggestions"
               element={
                 <PageSuspenseFallback>
@@ -68,10 +78,18 @@ function App() {
               }
             />
             <Route
-              path="/places/:id"
+              path="/places/:name"
               element={
                 <PageSuspenseFallback>
                   <SinglePlace />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path="/type-of-tourism/:name"
+              element={
+                <PageSuspenseFallback>
+                  <SingleTourism />
                 </PageSuspenseFallback>
               }
             />
