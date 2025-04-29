@@ -3,13 +3,12 @@ import useTitle from "../../hooks/useChangePageTitle";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useAppSelector } from "../../store/hooks";
-import axios from "axios";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import { TPlaceHome } from "../../types";
 import { Pagination } from "flowbite-react";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../api/axiosInstance";
 export default function SingleGovernorate() {
   const { name } = useParams();
   useTitle(`Governorates - ${name}`);
@@ -20,8 +19,8 @@ export default function SingleGovernorate() {
   // Pagination logic
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllPlacesGovernorate = (currentPage = 0) =>
-    axios(
-      `${baseUrl}/Governerate/GovernorateAndPlaces-pagnation?Name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
+    axiosInstance(
+      `/Governerate/GovernorateAndPlaces-pagnation?Name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

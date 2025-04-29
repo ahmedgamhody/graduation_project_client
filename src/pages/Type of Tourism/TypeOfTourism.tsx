@@ -1,16 +1,15 @@
-import axios from "axios";
 import useTitle from "../../hooks/useChangePageTitle";
 import { useAppSelector } from "../../store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { TTourism } from "../../types";
 import TourismCard from "./TourismCard";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../api/axiosInstance";
 export default function TypeOfTourism() {
   useTitle("Type of Tourism");
   const token = useAppSelector((state) => state.auth.token);
   const fetchAllTypeOfTourisms = () =>
-    axios(`${baseUrl}/TypeOfTourism/All-TypeOfTourism`, {
+    axiosInstance(`/TypeOfTourism/All-TypeOfTourism`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

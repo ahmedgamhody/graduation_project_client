@@ -1,14 +1,13 @@
 import { useParams } from "react-router-dom";
 import useTitle from "../../hooks/useChangePageTitle";
 import { useAppSelector } from "../../store/hooks";
-import axios from "axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { TPlaceHome } from "../../types";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import { useState } from "react";
 import { Pagination } from "flowbite-react";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../api/axiosInstance";
 export default function SingleTourism() {
   const { name } = useParams();
   useTitle(`${name} Tourism`);
@@ -19,8 +18,8 @@ export default function SingleTourism() {
   // Pagination logic
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllTypeOfTourism = () =>
-    axios(
-      `${baseUrl}/TypeOfTourism/TypeOfTourismAndPlaces-pagnation?name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
+    axiosInstance(
+      `/TypeOfTourism/TypeOfTourismAndPlaces-pagnation?name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,5 +1,4 @@
 import useTitle from "../../hooks/useChangePageTitle";
-import axios from "axios";
 import { useAppSelector } from "../../store/hooks";
 import { useQuery } from "@tanstack/react-query";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
@@ -8,7 +7,7 @@ import GovernorateCard from "./GovernorateCard";
 import { useState } from "react";
 import { Pagination } from "flowbite-react";
 import { keepPreviousData } from "@tanstack/react-query";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../api/axiosInstance";
 export default function Governorates() {
   useTitle("Governorates");
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,8 +17,8 @@ export default function Governorates() {
   // Pagination logic
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllGovernorates = (currentPage = 0) =>
-    axios(
-      `${baseUrl}/Governerate/All-Governorate-Pagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
+    axiosInstance(
+      `/Governerate/All-Governorate-Pagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

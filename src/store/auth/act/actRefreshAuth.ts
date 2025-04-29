@@ -1,10 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
-// import axios from "axios";
 import axiosErrorHandler from "../../../utils/axiosErrorHandler";
-
-import axios from "axios";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../../api/axiosInstance";
 type TResponse = {
   token: string;
   refreshToken: string;
@@ -24,8 +20,8 @@ const actRefreshAuth = createAsyncThunk(
   async (data: Tdata, thunk) => {
     const { rejectWithValue } = thunk;
     try {
-      const res = await axios.post<TResponse>(
-        `${BASE_URL}/authenticat/GetRefreshToken`,
+      const res = await axiosInstance.post<TResponse>(
+        `/authenticat/GetRefreshToken`,
         data
       );
       return res.data;

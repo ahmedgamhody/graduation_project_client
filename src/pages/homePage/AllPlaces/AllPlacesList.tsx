@@ -1,5 +1,4 @@
 import { TPlaceHome } from "../../../types";
-import axios from "axios";
 import { useState } from "react";
 import { Pagination } from "flowbite-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,7 +6,7 @@ import PlaceCard from "./PlaceCard";
 import CardPlaceSkeleton from "../../../animations/skeletons/CardPlaceSkeleton";
 import { useAppSelector } from "../../../store/hooks";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../../api/axiosInstance";
 
 export default function AllPlacesList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,8 +17,8 @@ export default function AllPlacesList() {
   const onPageChange = (page: number) => setCurrentPage(page);
 
   const fetchAllPlaces = (currentPage = 0) =>
-    axios(
-      `${baseUrl}/Place/DisplayAllPlacesByPagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
+    axiosInstance(
+      `/Place/DisplayAllPlacesByPagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -1,9 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosErrorHandler from "../../../utils/axiosErrorHandler";
-// import axios from "axios";
 import { LoginFormData } from "../../../validation/LoginValidation";
-import axios from "axios";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../../api/axiosInstance";
 
 type TResponse = {
   token: string;
@@ -22,9 +20,8 @@ const actAuthLogin = createAsyncThunk(
     const { rejectWithValue } = thunk;
 
     try {
-      const res = await axios.post<TResponse>(
-        `${BASE_URL}/authenticat/Login`,
-        // `${BASE_URL}/authenticat/Login`,
+      const res = await axiosInstance.post<TResponse>(
+        `/authenticat/Login`,
         formData
       );
       return res.data;

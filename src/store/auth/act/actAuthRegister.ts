@@ -3,8 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 // import axios from "axios";
 import axiosErrorHandler from "../../../utils/axiosErrorHandler";
 import { RegisterFormData } from "../../../validation/RegisterValidation";
-import axios from "axios";
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../../api/axiosInstance";
 type TResponse = {
   token: string;
   refreshToken: string;
@@ -20,8 +19,8 @@ const actAuthRegister = createAsyncThunk(
   async (formData: RegisterFormData, thunk) => {
     const { rejectWithValue } = thunk;
     try {
-      const res = await axios.post<TResponse>(
-        `${BASE_URL}/authenticat/Register`,
+      const res = await axiosInstance.post<TResponse>(
+        `/authenticat/Register`,
         formData
       );
       return res.data;

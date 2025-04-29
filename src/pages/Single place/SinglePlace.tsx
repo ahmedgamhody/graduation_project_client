@@ -1,6 +1,5 @@
 import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
-import axios from "axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useTitle from "../../hooks/useChangePageTitle";
 import { TPlaceDetails } from "../../types";
@@ -8,14 +7,14 @@ import { LocateFixed } from "lucide-react";
 import { Badge, Button } from "flowbite-react";
 import { useState } from "react";
 import SinglePlaceSkeleton from "../../animations/skeletons/SinglePlaceSkeleton";
-const baseUrl = import.meta.env.VITE_BASE_URL;
+import axiosInstance from "../../api/axiosInstance";
 export default function SinglePlace() {
   const { name } = useParams();
   const [comment, setComment] = useState("");
   useTitle(`Place - ${name}`);
   const token = useAppSelector((state) => state.auth.token);
   const fetchSinglePlace = () =>
-    axios(`${baseUrl}/Place/PlacesDetails?name=${name}`, {
+    axiosInstance(`/Place/PlacesDetails?name=${name}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
