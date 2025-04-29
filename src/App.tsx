@@ -7,6 +7,7 @@ import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
 import SingleTourism from "./pages/Type of Tourism/SingleTourism";
 import SingleGovernorate from "./pages/Governorates/SingleGovernorate";
+import MachineQuotations from "./pages/Machine Quotations/MachineQuotations";
 
 // Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
@@ -27,6 +28,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
+        <Route path="/machine-quotations" element={<MachineQuotations />} />
 
         <Route element={<ProtectedRoutes />}>
           <Route

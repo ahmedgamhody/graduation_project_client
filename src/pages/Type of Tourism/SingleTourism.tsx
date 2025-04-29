@@ -8,7 +8,7 @@ import { TPlaceHome } from "../../types";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import { useState } from "react";
 import { Pagination } from "flowbite-react";
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function SingleTourism() {
   const { name } = useParams();
   useTitle(`${name} Tourism`);
@@ -20,7 +20,7 @@ export default function SingleTourism() {
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllTypeOfTourism = () =>
     axios(
-      `https://localhost:7214/api/TypeOfTourism/TypeOfTourismAndPlaces-pagnation?name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
+      `${baseUrl}/TypeOfTourism/TypeOfTourismAndPlaces-pagnation?name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

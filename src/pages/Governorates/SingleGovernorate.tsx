@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import { TPlaceHome } from "../../types";
 import { Pagination } from "flowbite-react";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function SingleGovernorate() {
   const { name } = useParams();
   useTitle(`Governorates - ${name}`);
@@ -20,7 +21,7 @@ export default function SingleGovernorate() {
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllPlacesGovernorate = (currentPage = 0) =>
     axios(
-      `https://localhost:7214/api/Governerate/GovernorateAndPlaces-pagnation?Name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
+      `${baseUrl}/Governerate/GovernorateAndPlaces-pagnation?Name=${name}&pageSize=${limitPerPage}&pageNumber=${currentPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -37,7 +38,6 @@ export default function SingleGovernorate() {
     queryFn: () => fetchAllPlacesGovernorate(currentPage),
     placeholderData: keepPreviousData,
   });
-  console.log(data);
   return (
     <div className="container mx-auto my-5">
       <h1 className="text-4xl font-bold text-center text-primary">

@@ -5,12 +5,12 @@ import { useQuery } from "@tanstack/react-query";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { TTourism } from "../../types";
 import TourismCard from "./TourismCard";
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function TypeOfTourism() {
   useTitle("Type of Tourism");
   const token = useAppSelector((state) => state.auth.token);
   const fetchAllTypeOfTourisms = () =>
-    axios(`https://localhost:7214/api/TypeOfTourism/All-TypeOfTourism`, {
+    axios(`${baseUrl}/TypeOfTourism/All-TypeOfTourism`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

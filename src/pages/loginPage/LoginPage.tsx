@@ -17,7 +17,7 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginFormData>({
     resolver: zodResolver(LoginSchema),
     mode: "onChange",
@@ -101,8 +101,8 @@ const Login = () => {
 
           <button
             type="submit"
-            disabled={loadingState === "pending"}
-            className={`w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center ${
+            disabled={loadingState === "pending" || !isValid}
+            className={`w-full bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed ${
               loadingState === "pending" ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

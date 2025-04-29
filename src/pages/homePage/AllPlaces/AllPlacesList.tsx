@@ -7,6 +7,8 @@ import PlaceCard from "./PlaceCard";
 import CardPlaceSkeleton from "../../../animations/skeletons/CardPlaceSkeleton";
 import { useAppSelector } from "../../../store/hooks";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 export default function AllPlacesList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesNumber, setPagesNumber] = useState(0);
@@ -17,7 +19,7 @@ export default function AllPlacesList() {
 
   const fetchAllPlaces = (currentPage = 0) =>
     axios(
-      `https://localhost:7214/api/Place/DisplayAllPlacesByPagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
+      `${baseUrl}/Place/DisplayAllPlacesByPagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

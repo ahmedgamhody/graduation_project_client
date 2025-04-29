@@ -8,14 +8,14 @@ import { LocateFixed } from "lucide-react";
 import { Badge, Button } from "flowbite-react";
 import { useState } from "react";
 import SinglePlaceSkeleton from "../../animations/skeletons/SinglePlaceSkeleton";
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function SinglePlace() {
   const { name } = useParams();
   const [comment, setComment] = useState("");
   useTitle(`Place - ${name}`);
   const token = useAppSelector((state) => state.auth.token);
   const fetchSinglePlace = () =>
-    axios(`https://localhost:7214/api/Place/PlacesDetails?name=${name}`, {
+    axios(`${baseUrl}/Place/PlacesDetails?name=${name}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

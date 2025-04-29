@@ -31,3 +31,17 @@ export type TPlaceDetails = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   userRates: any[];
 };
+export type NumberInputField =
+  | "stay_duration"
+  | "spending_usd"
+  | "travel_frequency"
+  | "avg_spending_accommodation"
+  | "avg_spending_transport"
+  | "avg_spending_food"
+  | "avg_cost_per_day_aed";
+
+export type SelectField =
+  | "with_family"
+  | "accommodation_type"
+  | "preferred_destination"
+  | "travel_purpose";

@@ -8,6 +8,7 @@ import GovernorateCard from "./GovernorateCard";
 import { useState } from "react";
 import { Pagination } from "flowbite-react";
 import { keepPreviousData } from "@tanstack/react-query";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function Governorates() {
   useTitle("Governorates");
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +19,7 @@ export default function Governorates() {
   const onPageChange = (page: number) => setCurrentPage(page);
   const fetchAllGovernorates = (currentPage = 0) =>
     axios(
-      `https://localhost:7214/api/Governerate/All-Governorate-Pagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
+      `${baseUrl}/Governerate/All-Governorate-Pagnation?pageNumber=${currentPage}&pageSize=${limitPerPage}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

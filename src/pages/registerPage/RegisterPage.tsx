@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,14 +8,13 @@ import {
   RegisterFormData,
   RegisterSchema,
 } from "../../validation/RegisterValidation";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { actAuthRegister, authCleanUp } from "../../store/auth/authSlice";
+import { countries } from ".";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [countries, setCountries] = useState([]);
   const { error, loadingState, token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const dispatch = useAppDispatch();
@@ -24,7 +22,7 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(RegisterSchema),
     mode: "onChange",
@@ -37,7 +35,7 @@ const RegisterPage = () => {
 
       if (result.token) {
         toast.success(`Registration successful! Welcome ${result.name}`);
-        nav("/");
+        nav("/machine-quotations");
       } else {
         toast.error("Registration failed. Please check your details.");
       }
@@ -46,24 +44,6 @@ const RegisterPage = () => {
       console.error("Error registering user:", error);
     }
   };
-
-  // get countries
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get("https://restcountries.com/v3.1/all");
-        const countries = response.data.map(
-          (country: any) => country.name.common
-        );
-        setCountries(countries);
-      } catch (error) {
-        toast.error("Failed to load countries. Please try again!");
-        console.error("Error fetching countries:", error);
-      }
-    };
-
-    fetchCountries();
-  }, []);
 
   useEffect(() => {
     // clean up loading and error messages form slice
@@ -138,7 +118,7 @@ const RegisterPage = () => {
               {...register("country")}
               className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
             >
-              <option value="">Select a country</option>
+              <option className="hidden">Select a country</option>
               {countries?.map((country) => (
                 <option key={country} value={country}>
                   {country}
@@ -169,6 +149,9 @@ const RegisterPage = () => {
               {...register("age")}
               className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
             />
+            {errors.age && (
+              <p className="text-red-500 text-sm">{errors.age.message}</p>
+            )}
           </div>
 
           <div className="mb-3">
@@ -177,7 +160,7 @@ const RegisterPage = () => {
               {...register("gender")}
               className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
             >
-              <option value="">Select</option>
+              <option className="hidden">Select</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
@@ -187,9 +170,9 @@ const RegisterPage = () => {
           </div>
 
           <button
-            disabled={loadingState === "pending"}
+            disabled={loadingState === "pending" || !isValid}
             type="submit"
-            className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center ${
+            className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed ${
               loadingState === "pending" ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
