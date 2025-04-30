@@ -59,7 +59,7 @@ export default function NavBar() {
             { to: "/", label: "Home" },
             { to: "/type-of-tourism", label: "Type of Tourism" },
             { to: "/governorates", label: "Governorates" },
-            { to: "/suggestions", label: "Suggestions" },
+            { to: "/recommendation", label: "Recommendation" },
           ].map(({ to, label }) => (
             <NavLink
               key={to}
@@ -127,7 +127,7 @@ export default function NavBar() {
                   { to: "/", label: "Home" },
                   { to: "/type-of-tourism", label: "Type of Tourism" },
                   { to: "/governorates", label: "Governorates" },
-                  { to: "/suggestions", label: "Suggestions" },
+                  { to: "/recommendation", label: "Recommendation" },
                 ].map(({ to, label }) => (
                   <NavLink
                     key={to}

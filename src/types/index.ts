@@ -45,3 +45,11 @@ export type SelectField =
   | "accommodation_type"
   | "preferred_destination"
   | "travel_purpose";
+
+export type TTripPlace = {
+  name: string;
+  description: string;
+  number_of_Sites: number;
+  price: number;
+  days: number;
+};

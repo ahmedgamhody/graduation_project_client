@@ -5,9 +5,6 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
-import SingleTourism from "./pages/Type of Tourism/SingleTourism";
-import SingleGovernorate from "./pages/Governorates/SingleGovernorate";
-import MachineQuotations from "./pages/Machine Quotations/MachineQuotations";
 
 // Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
@@ -17,9 +14,19 @@ const TypeOfTourism = lazy(
   () => import("./pages/Type of Tourism/TypeOfTourism")
 );
 const Governorates = lazy(() => import("./pages/Governorates/Governorates"));
-const Suggestions = lazy(() => import("./pages/Suggestions/Suggestions"));
+const Recommendation = lazy(
+  () => import("./pages/Recommendation/Recommendation")
+);
 const SinglePlace = lazy(() => import("./pages/Single place/SinglePlace"));
-
+const SingleTourism = lazy(
+  () => import("./pages/Type of Tourism/SingleTourism")
+);
+const SingleGovernorate = lazy(
+  () => import("./pages/Governorates/SingleGovernorate")
+);
+const MachineQuotations = lazy(
+  () => import("./pages/Machine Quotations/MachineQuotations")
+);
 function App() {
   return (
     <div className="App">
@@ -28,7 +35,14 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
-        <Route path="/machine-quotations" element={<MachineQuotations />} />
+        <Route
+          path="/machine-quotations"
+          element={
+            <PageSuspenseFallback>
+              <MachineQuotations />
+            </PageSuspenseFallback>
+          }
+        />
 
         <Route element={<ProtectedRoutes />}>
           <Route
@@ -72,10 +86,10 @@ function App() {
               }
             />
             <Route
-              path="/suggestions"
+              path="/recommendation"
               element={
                 <PageSuspenseFallback>
-                  <Suggestions />
+                  <Recommendation />
                 </PageSuspenseFallback>
               }
             />
