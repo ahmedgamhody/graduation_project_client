@@ -27,6 +27,10 @@ const SingleGovernorate = lazy(
 const MachineQuotations = lazy(
   () => import("./pages/Machine Quotations/MachineQuotations")
 );
+const TripDetails = lazy(
+  () => import("./pages/Recommendation/Trip Details/TripDetails")
+);
+
 function App() {
   return (
     <div className="App">
@@ -90,6 +94,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <Recommendation />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path="/recommendation/trips/:name"
+              element={
+                <PageSuspenseFallback>
+                  <TripDetails />
                 </PageSuspenseFallback>
               }
             />

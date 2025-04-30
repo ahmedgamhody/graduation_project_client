@@ -36,12 +36,7 @@ export default function NavBar() {
       >
         <div className="flex lg:flex-1">
           <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-              className="h-8 w-auto"
-            />
+            <img src="/main_logo.png" alt="main logo" className="h-24 w-auto" />
           </Link>
         </div>
         <div className="flex lg:hidden">
@@ -110,15 +105,15 @@ export default function NavBar() {
       <Drawer open={isOpen} onClose={handleClose}>
         <DrawerHeader title="Menu" />
         <DrawerItems>
-          <div className="flex items-center justify-between">
-            <a href="#" className="-m-1.5 p-1.5">
+          <div className="flex items-center justify-center">
+            <Link to="/" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
-                alt=""
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
+                src="/main_logo.png"
+                alt="main logo"
+                className="h-24 w-auto"
               />
-            </a>
+            </Link>
           </div>
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import registerLogo from "../../assets/login.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import {
   RegisterFormData,
@@ -54,125 +53,136 @@ const RegisterPage = () => {
   if (token) return <Navigate to="/" replace />;
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-xl">
         <img
-          src={registerLogo}
+          src="/main_logo.png"
           alt="Register Logo"
-          className="mx-auto block w-24 md:w-32 lg:w-48 mb-4"
+          className="mx-auto block w-24 md:w-32 lg:w-28 mb-4"
         />
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-3">
-            <label className="block text-gray-700">Full Name</label>
-            <input
-              type="text"
-              {...register("name")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name.message}</p>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700">Email Address</label>
-            <input
-              type="email"
-              {...register("email")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            />
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email.message}</p>
-            )}
-            {error && <p className="text-red-500 text-sm">{error}</p>}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700">Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                {...register("password")}
-                className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-              />
-              <button
-                type="button"
-                className="absolute right-3 top-3 text-gray-500"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOffIcon size={18} />
-                ) : (
-                  <EyeIcon size={18} />
+          <div className="flex gap-4 mt-6">
+            <div className="w-full">
+              <div className="mb-3">
+                <label className="block text-gray-700">Full Name</label>
+                <input
+                  type="text"
+                  {...register("name")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name.message}</p>
                 )}
-              </button>
+              </div>
+
+              <div className="mb-3">
+                <label className="block text-gray-700">Email Address</label>
+                <input
+                  type="email"
+                  {...register("email")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email.message}</p>
+                )}
+                {error && <p className="text-red-500 text-sm">{error}</p>}
+              </div>
+
+              <div className="mb-3">
+                <label className="block text-gray-700">Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    {...register("password")}
+                    className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                  />
+                  <button
+                    type="button"
+                    className="absolute right-3 top-3 text-gray-500"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOffIcon size={18} />
+                    ) : (
+                      <EyeIcon size={18} />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-sm">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="block text-gray-700">Gender</label>
+                <select
+                  {...register("gender")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                >
+                  <option className="hidden">Select</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm">
+                    {errors.gender.message}
+                  </p>
+                )}
+              </div>
             </div>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password.message}</p>
-            )}
-          </div>
 
-          <div className="mb-3">
-            <label className="block text-gray-700">Country</label>
-            <select
-              {...register("country")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            >
-              <option className="hidden">Select a country</option>
-              {countries?.map((country) => (
-                <option key={country} value={country}>
-                  {country}
-                </option>
-              ))}
-            </select>
-            {errors.country && (
-              <p className="text-red-500 text-sm">{errors.country.message}</p>
-            )}
-          </div>
+            <div className="w-full">
+              <div className="mb-3">
+                <label className="block text-gray-700">Country</label>
+                <select
+                  {...register("country")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                >
+                  <option className="hidden">Select a country</option>
+                  {countries?.map((country) => (
+                    <option key={country} value={country}>
+                      {country}
+                    </option>
+                  ))}
+                </select>
+                {errors.country && (
+                  <p className="text-red-500 text-sm">
+                    {errors.country.message}
+                  </p>
+                )}
+              </div>
 
-          <div className="mb-3">
-            <label className="block text-gray-700">Phone Number</label>
-            <input
-              type="tel"
-              {...register("phone")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-sm">{errors.phone.message}</p>
-            )}
-          </div>
+              <div className="mb-3">
+                <label className="block text-gray-700">Phone Number</label>
+                <input
+                  type="tel"
+                  {...register("phone")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone.message}</p>
+                )}
+              </div>
 
-          <div className="mb-3">
-            <label className="block text-gray-700">Age </label>
-            <input
-              type="number"
-              {...register("age")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            />
-            {errors.age && (
-              <p className="text-red-500 text-sm">{errors.age.message}</p>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-gray-700">Gender</label>
-            <select
-              {...register("gender")}
-              className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-            >
-              <option className="hidden">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-            </select>
-            {errors.gender && (
-              <p className="text-red-500 text-sm">{errors.gender.message}</p>
-            )}
+              <div className="mb-3">
+                <label className="block text-gray-700">Age </label>
+                <input
+                  type="number"
+                  {...register("age")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                />
+                {errors.age && (
+                  <p className="text-red-500 text-sm">{errors.age.message}</p>
+                )}
+              </div>
+            </div>
           </div>
 
           <button
             disabled={loadingState === "pending" || !isValid}
             type="submit"
-            className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed ${
+            className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed mt-4 ${
               loadingState === "pending" ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

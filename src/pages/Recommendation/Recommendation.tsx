@@ -8,9 +8,11 @@ import { TPlaceHome, TTripPlace } from "../../types";
 import { Pagination } from "flowbite-react";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import TripPlaceCard from "./TripPlaceCard";
+import useTitle from "../../hooks/useChangePageTitle";
 // import { Pagination } from "flowbite-react";
 
 export default function Recommendation() {
+  useTitle(`Recommendation`);
   const [recommendationPlacePage, setRecommendationPlacePage] = useState(1);
   const [allTripsPlacePage, setAllTripsPlacePage] = useState(1);
   const [recommendationPlaces, setRecommendationPlaces] = useState<

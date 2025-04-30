@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import loginLogo from "../../assets/login.png";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LoginFormData, LoginSchema } from "../../validation/LoginValidation";
 import toast from "react-hot-toast";
@@ -50,9 +49,9 @@ const Login = () => {
     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <img
-          src={loginLogo}
+          src="/main_logo.png"
           alt="Main Logo"
-          className="mx-auto block w-24 md:w-32 lg:w-48 mb-4"
+          className="mx-auto block w-24 md:w-32 lg:w-42 mb-4"
         />
 
         <form onSubmit={handleSubmit(onSubmit)}>
