@@ -1,12 +1,12 @@
 import { TPlaceHome } from "../../../types";
 import { useState } from "react";
-import { Pagination } from "flowbite-react";
 import { motion, AnimatePresence } from "framer-motion";
 import PlaceCard from "./PlaceCard";
 import CardPlaceSkeleton from "../../../animations/skeletons/CardPlaceSkeleton";
 import { useAppSelector } from "../../../store/hooks";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../../api/axiosInstance";
+import PaginationComponent from "../../../components/PaginationComponent";
 
 export default function AllPlacesList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -60,14 +60,13 @@ export default function AllPlacesList() {
               ))}
             </motion.div>
           </AnimatePresence>
-          <div className="pagination  flex overflow-x-auto sm:justify-center mt-8">
-            <Pagination
+          {pagesNumber > 1 && (
+            <PaginationComponent
               currentPage={currentPage}
-              totalPages={pagesNumber}
+              pagesNumber={pagesNumber}
               onPageChange={onPageChange}
-              showIcons
             />
-          </div>
+          )}
         </>
       )}
     </div>

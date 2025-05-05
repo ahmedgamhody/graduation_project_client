@@ -7,8 +7,8 @@ import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import { TPlaceHome } from "../../types";
-import { Pagination } from "flowbite-react";
 import axiosInstance from "../../api/axiosInstance";
+import PaginationComponent from "../../components/PaginationComponent";
 export default function SingleGovernorate() {
   const { name } = useParams();
   useTitle(`Governorates - ${name}`);
@@ -66,14 +66,11 @@ export default function SingleGovernorate() {
       )}
 
       {data?.totalPages > 1 && (
-        <div className="pagination  flex overflow-x-auto sm:justify-center mt-8">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={pagesNumber}
-            onPageChange={onPageChange}
-            showIcons
-          />
-        </div>
+        <PaginationComponent
+          currentPage={currentPage}
+          pagesNumber={pagesNumber}
+          onPageChange={onPageChange}
+        />
       )}
     </div>
   );

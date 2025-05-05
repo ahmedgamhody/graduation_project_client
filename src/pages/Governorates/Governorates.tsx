@@ -5,9 +5,11 @@ import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { TGovernorate } from "../../types";
 import GovernorateCard from "./GovernorateCard";
 import { useState } from "react";
-import { Pagination } from "flowbite-react";
 import { keepPreviousData } from "@tanstack/react-query";
 import axiosInstance from "../../api/axiosInstance";
+import PaginationComponent from "../../components/PaginationComponent";
+import { motion, AnimatePresence } from "framer-motion";
+
 export default function Governorates() {
   useTitle("Governorates");
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,27 +42,38 @@ export default function Governorates() {
       <h1 className="text-4xl font-bold text-center text-primary">
         Governorates
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-        {isPlaceholderData ? (
-          Array.from({ length: 6 }, (_, index) => (
+
+      {isPlaceholderData ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }, (_, index) => (
             <CardPlaceSkeleton key={index} />
-          ))
-        ) : (
-          <>
-            {data?.items?.map((item: TGovernorate, index: number) => (
-              <GovernorateCard key={item.name || index} governorate={item} />
-            ))}
-          </>
-        )}
-      </div>
-      <div className="pagination  flex overflow-x-auto sm:justify-center mt-8">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={pagesNumber}
-          onPageChange={onPageChange}
-          showIcons
-        />
-      </div>
+          ))}
+        </div>
+      ) : (
+        <>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentPage}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {data?.items?.map((item: TGovernorate, index: number) => (
+                <GovernorateCard key={item.name || index} governorate={item} />
+              ))}
+            </motion.div>
+          </AnimatePresence>
+          {pagesNumber > 1 && (
+            <PaginationComponent
+              currentPage={currentPage}
+              pagesNumber={pagesNumber}
+              onPageChange={onPageChange}
+            />
+          )}
+        </>
+      )}
     </div>
   );
 }
