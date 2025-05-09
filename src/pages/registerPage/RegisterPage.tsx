@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,7 +11,7 @@ import {
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { actAuthRegister, authCleanUp } from "../../store/auth/authSlice";
-import { countries } from ".";
+import { countries, languages } from ".";
 
 const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,8 +39,8 @@ const RegisterPage = () => {
       } else {
         toast.error("Registration failed. Please check your details.");
       }
-    } catch (error) {
-      toast.error("Registration failed. Please try again!");
+    } catch (error: any) {
+      toast.error(`Registration failed , ${error.errors[1]}`);
       console.error("Error registering user:", error);
     }
   };
@@ -164,16 +165,36 @@ const RegisterPage = () => {
                   <p className="text-red-500 text-sm">{errors.phone.message}</p>
                 )}
               </div>
-
               <div className="mb-3">
-                <label className="block text-gray-700">Age </label>
+                <label className="block text-gray-700">Birth Date</label>
                 <input
-                  type="number"
-                  {...register("age")}
+                  type="date"
+                  {...register("birthDate")}
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 />
-                {errors.age && (
-                  <p className="text-red-500 text-sm">{errors.age.message}</p>
+                {errors.birthDate && (
+                  <p className="text-red-500 text-sm">
+                    {errors.birthDate.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label className="block text-gray-700">Language</label>
+                <select
+                  {...register("language")}
+                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                >
+                  <option className="hidden">Select a Language</option>
+                  {languages?.map((language) => (
+                    <option key={language.name} value={language.name}>
+                      {language.name} {`(${language.code})`}
+                    </option>
+                  ))}
+                </select>
+                {errors.language && (
+                  <p className="text-red-500 text-sm">
+                    {errors.language.message}
+                  </p>
                 )}
               </div>
             </div>

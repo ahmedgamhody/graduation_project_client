@@ -250,3 +250,21 @@ export const countries = [
   "Lithuania",
   "Saint Lucia",
 ];
+export const languages = [
+  { code: "en", name: "English" },
+  { code: "ar", name: "Arabic" },
+  { code: "fr", name: "French" },
+  { code: "es", name: "Spanish" },
+  { code: "de", name: "German" },
+  { code: "it", name: "Italian" },
+  { code: "ru", name: "Russian" },
+  { code: "zh", name: "Chinese" },
+  { code: "ja", name: "Japanese" },
+  { code: "ko", name: "Korean" },
+  { code: "pt", name: "Portuguese" },
+  { code: "tr", name: "Turkish" },
+  { code: "hi", name: "Hindi" },
+  { code: "bn", name: "Bengali" },
+  { code: "ur", name: "Urdu" },
+  { code: "fa", name: "Persian" },
+];

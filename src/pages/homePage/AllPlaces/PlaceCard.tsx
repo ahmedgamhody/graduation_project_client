@@ -27,7 +27,7 @@ export default function PlaceCard({ place }: { place: TPlaceHome }) {
           />
         </div>
         <div className="flex  items-center justify-between">
-          <h5 className="text-l font-bold tracking-tight text-gray-900 dark:text-white">
+          <h5 className="text-l font-bold tracking-tight text-gray-900 dark:text-white truncate">
             {place.name}
           </h5>
           {place?.googleRate && (

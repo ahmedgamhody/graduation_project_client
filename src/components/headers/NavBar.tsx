@@ -7,12 +7,13 @@ import { Drawer, DrawerHeader, DrawerItems } from "flowbite-react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { authLogout } from "../../store/auth/authSlice";
+import avatar from "../../../public/avatar.png";
 import toast from "react-hot-toast";
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
   const dispatch = useAppDispatch();
-  const { name } = useAppSelector((state) => state.auth);
+  const { name, token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const handleSignOut = async () => {
     try {
@@ -72,33 +73,63 @@ export default function NavBar() {
           ))}
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Menu as="div" className="relative inline-block text-left">
-            <div>
-              <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                {name}
-                <ChevronDownIcon
-                  aria-hidden="true"
-                  className="-mr-1 size-5 text-gray-400"
-                />
-              </MenuButton>
-            </div>
-
-            <MenuItems
-              transition
-              className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-            >
-              <div className="py-1">
-                <MenuItem>
-                  <button
-                    className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                    onClick={handleSignOut}
-                  >
-                    Sign out
-                  </button>
-                </MenuItem>
+          {token && name ? (
+            <Menu as="div" className="relative inline-block text-left">
+              <div>
+                <MenuButton className="inline-flex w-full justify-center items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                  <img
+                    src={avatar}
+                    alt="avatar"
+                    className="w-6 h-6 rounded-full"
+                  />
+                  {name}
+                  <ChevronDownIcon
+                    aria-hidden="true"
+                    className="-mr-1 size-5 text-gray-400"
+                  />
+                </MenuButton>
               </div>
-            </MenuItems>
-          </Menu>
+
+              <MenuItems
+                transition
+                className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+              >
+                <div className="py-1">
+                  <MenuItem>
+                    <button
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                      onClick={() => nav("/profile")}
+                    >
+                      Profile
+                    </button>
+                  </MenuItem>
+                  <MenuItem>
+                    <button
+                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                      onClick={handleSignOut}
+                    >
+                      Sign out
+                    </button>
+                  </MenuItem>
+                </div>
+              </MenuItems>
+            </Menu>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link
+                to="/login"
+                className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#4E4FEB] transition bg-gray-200 rounded-full"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-full hover:bg-[#3c3cd1] transition duration-300"
+              >
+                Register
+              </Link>
+            </div>
+          )}
         </div>
       </nav>
 
@@ -140,34 +171,62 @@ export default function NavBar() {
                   </NavLink>
                 ))}
               </div>
-              <div className="py-6">
-                <Menu as="div" className="relative inline-block text-left">
-                  <div>
-                    <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                      {name}
-                      <ChevronDownIcon
-                        aria-hidden="true"
-                        className="-mr-1 size-5 text-gray-400"
-                      />
-                    </MenuButton>
-                  </div>
 
-                  <MenuItems
-                    transition
-                    className="absolute left-0 z-10 mt-2 w-32 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                  >
-                    <div className="py-1">
-                      <MenuItem>
-                        <button
-                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                          onClick={handleSignOut}
-                        >
-                          Sign out
-                        </button>
-                      </MenuItem>
+              <div className="py-6 flex justify-center">
+                {token ? (
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                        {name}
+                        <ChevronDownIcon
+                          aria-hidden="true"
+                          className="-mr-1 size-5 text-gray-400"
+                        />
+                      </MenuButton>
                     </div>
-                  </MenuItems>
-                </Menu>
+
+                    <MenuItems
+                      transition
+                      className="absolute left-0 z-10 mt-2 w-32 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <button
+                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                            onClick={() => nav("/profile")}
+                          >
+                            Profile
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                            onClick={handleSignOut}
+                          >
+                            Sign out
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
+                ) : (
+                  <div className="flex items-center justify-center gap-4">
+                    <Link
+                      to="/login"
+                      className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#4E4FEB] transition bg-gray-200 rounded-full w-full text-center"
+                      onClick={handleClose}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-full hover:bg-[#3c3cd1] transition duration-300 w-full text-center"
+                      onClick={handleClose}
+                    >
+                      Register
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

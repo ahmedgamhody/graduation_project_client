@@ -30,6 +30,7 @@ const MachineQuotations = lazy(
 const TripDetails = lazy(
   () => import("./pages/Recommendation/Trip Details/TripDetails")
 );
+const Profile = lazy(() => import("./pages/profile/Profile"));
 
 function App() {
   return (
@@ -47,53 +48,69 @@ function App() {
             </PageSuspenseFallback>
           }
         />
-
-        <Route element={<ProtectedRoutes />}>
+        <Route
+          path="/"
+          element={
+            <PageSuspenseFallback>
+              <MainLayout />
+            </PageSuspenseFallback>
+          }
+        >
           <Route
-            path="/"
+            index
             element={
               <PageSuspenseFallback>
-                <MainLayout />
+                <HomePage />
               </PageSuspenseFallback>
             }
-          >
-            <Route
-              index
-              element={
-                <PageSuspenseFallback>
-                  <HomePage />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path="/type-of-tourism"
-              element={
-                <PageSuspenseFallback>
-                  <TypeOfTourism />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path="/governorates"
-              element={
-                <PageSuspenseFallback>
-                  <Governorates />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path="/governorates/:name"
-              element={
-                <PageSuspenseFallback>
-                  <SingleGovernorate />
-                </PageSuspenseFallback>
-              }
-            />
+          />
+          <Route
+            path="/type-of-tourism"
+            element={
+              <PageSuspenseFallback>
+                <TypeOfTourism />
+              </PageSuspenseFallback>
+            }
+          />
+          <Route
+            path="/governorates"
+            element={
+              <PageSuspenseFallback>
+                <Governorates />
+              </PageSuspenseFallback>
+            }
+          />
+          <Route
+            path="/type-of-tourism/:name"
+            element={
+              <PageSuspenseFallback>
+                <SingleTourism />
+              </PageSuspenseFallback>
+            }
+          />
+          <Route
+            path="/governorates/:name"
+            element={
+              <PageSuspenseFallback>
+                <SingleGovernorate />
+              </PageSuspenseFallback>
+            }
+          />
+
+          <Route element={<ProtectedRoutes />}>
             <Route
               path="/recommendation"
               element={
                 <PageSuspenseFallback>
                   <Recommendation />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <PageSuspenseFallback>
+                  <Profile />
                 </PageSuspenseFallback>
               }
             />
@@ -110,14 +127,6 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <SinglePlace />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path="/type-of-tourism/:name"
-              element={
-                <PageSuspenseFallback>
-                  <SingleTourism />
                 </PageSuspenseFallback>
               }
             />

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const RegisterSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
+  name: z.string().min(3, { message: "Name must be at least 3 characters" }),
   email: z.string().email({ message: "Invalid email address" }),
   password: z
     .string()
@@ -17,10 +17,18 @@ export const RegisterSchema = z.object({
   phone: z
     .string()
     .min(10, { message: "Phone number must be at least 10 digits" }),
-  age: z.coerce
-    .number()
-    .min(1, { message: "Age must be at least 1" })
-    .max(100, { message: "Age must be less than or equal to 100" }),
+
+  birthDate: z.string().refine(
+    (val) => {
+      const date = new Date(val);
+      const now = new Date();
+      return !isNaN(date.getTime()) && date <= now;
+    },
+    {
+      message: "Please enter a valid birth date that is not in the future",
+    }
+  ),
+  language: z.string().min(1, { message: "Language is required" }),
 
   gender: z.enum(["male", "female"], { message: "Select a gender" }),
 });
