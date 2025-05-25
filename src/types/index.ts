@@ -16,6 +16,18 @@ export type TGovernorate = {
   photo: string;
 };
 
+export type TComment = {
+  id?: number;
+  userName?: string;
+  comment?: string;
+  text?: string;
+  content?: string;
+  date?: string;
+  rating?: number;
+  photo?: string;
+  userId?: string;
+};
+
 export type TPlaceDetails = {
   name: string;
   photo: string;
@@ -24,7 +36,7 @@ export type TPlaceDetails = {
   googleRate: number;
   description: string;
   governmentName: string;
-  comments: any[];
+  comments: TComment[];
   tourguids: any[];
   typeOfTourism: string[];
   userRates: any[];
@@ -66,4 +78,18 @@ export type TTripDetails = {
   programName: string;
   tripPlaces: TTripPlaceDetails[];
   tourguids: any[];
+};
+
+export type TUserProfile = {
+  name: string;
+  email: string;
+  password: string;
+  country: string;
+  phone: string;
+  birthDate: string;
+  language: string;
+  gender: "Male" | "Female" | string;
+  photo: string | null;
+  tourguid?: string | null;
+  favoritePlaces?: string[];
 };

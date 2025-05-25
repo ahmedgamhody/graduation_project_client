@@ -5,10 +5,15 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
 import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
+import TourGuideRegisterPage from "./pages/registerPage/TourGuideRegisterPage";
+import { AppRoutes } from "./constants/enums";
 
 // Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
+const UserRegisterPage = lazy(
+  () => import("./pages/registerPage/UserRegisterPage")
+);
 const RegisterPage = lazy(() => import("./pages/registerPage/RegisterPage"));
 const TypeOfTourism = lazy(
   () => import("./pages/Type of Tourism/TypeOfTourism")
@@ -30,18 +35,26 @@ const MachineQuotations = lazy(
 const TripDetails = lazy(
   () => import("./pages/Recommendation/Trip Details/TripDetails")
 );
-const Profile = lazy(() => import("./pages/profile/Profile"));
+const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route element={<ProtectedAuthRoutes />}>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path={AppRoutes.LOGIN} element={<LoginPage />} />
+          <Route path={AppRoutes.REGISTER} element={<RegisterPage />} />
+          <Route
+            path={AppRoutes.REGISTER_USER}
+            element={<UserRegisterPage />}
+          />
+          <Route
+            path={AppRoutes.REGISTER_TOUR_GUIDE}
+            element={<TourGuideRegisterPage />}
+          />
         </Route>
         <Route
-          path="/machine-quotations"
+          path={AppRoutes.MACHINE_QUOTATIONS}
           element={
             <PageSuspenseFallback>
               <MachineQuotations />
@@ -49,7 +62,7 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path={AppRoutes.ROOT}
           element={
             <PageSuspenseFallback>
               <MainLayout />
@@ -65,7 +78,7 @@ function App() {
             }
           />
           <Route
-            path="/type-of-tourism"
+            path={AppRoutes.TYPE_OF_TOURISM}
             element={
               <PageSuspenseFallback>
                 <TypeOfTourism />
@@ -73,7 +86,7 @@ function App() {
             }
           />
           <Route
-            path="/governorates"
+            path={AppRoutes.GOVERNORATES}
             element={
               <PageSuspenseFallback>
                 <Governorates />
@@ -81,7 +94,7 @@ function App() {
             }
           />
           <Route
-            path="/type-of-tourism/:name"
+            path={AppRoutes.SINGLE_TOURISM}
             element={
               <PageSuspenseFallback>
                 <SingleTourism />
@@ -89,7 +102,7 @@ function App() {
             }
           />
           <Route
-            path="/governorates/:name"
+            path={AppRoutes.SINGLE_GOVERNORATE}
             element={
               <PageSuspenseFallback>
                 <SingleGovernorate />
@@ -99,7 +112,7 @@ function App() {
 
           <Route element={<ProtectedRoutes />}>
             <Route
-              path="/recommendation"
+              path={AppRoutes.RECOMMENDATION}
               element={
                 <PageSuspenseFallback>
                   <Recommendation />
@@ -107,15 +120,15 @@ function App() {
               }
             />
             <Route
-              path="/profile"
+              path={AppRoutes.USER_PROFILE}
               element={
                 <PageSuspenseFallback>
-                  <Profile />
+                  <UserProfile />
                 </PageSuspenseFallback>
               }
             />
             <Route
-              path="/recommendation/trips/:name"
+              path={AppRoutes.TRIP_DETAILS}
               element={
                 <PageSuspenseFallback>
                   <TripDetails />
@@ -123,7 +136,7 @@ function App() {
               }
             />
             <Route
-              path="/places/:name"
+              path={AppRoutes.SINGLE_PLACE}
               element={
                 <PageSuspenseFallback>
                   <SinglePlace />

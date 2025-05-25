@@ -7,8 +7,10 @@ import { LoginFormData, LoginSchema } from "../../validation/LoginValidation";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { actAuthLogin, authCleanUp } from "../../store/auth/authSlice";
+import useTitle from "../../hooks/useChangePageTitle";
 
 const Login = () => {
+  useTitle("Login");
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const { loadingState, token } = useAppSelector((state) => state.auth);

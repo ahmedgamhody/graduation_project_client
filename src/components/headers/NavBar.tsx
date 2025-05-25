@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { authLogout } from "../../store/auth/authSlice";
 import avatar from "../../../public/avatar.png";
 import toast from "react-hot-toast";
+import { AppRoutes } from "../../constants/enums";
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
@@ -18,7 +19,6 @@ export default function NavBar() {
   const handleSignOut = async () => {
     try {
       const result = await dispatch(authLogout());
-
       if (result) {
         nav("/login");
       } else {
@@ -36,7 +36,7 @@ export default function NavBar() {
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
       >
         <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
+          <Link to={AppRoutes.ROOT} className="-m-1.5 p-1.5">
             <img src="/main_logo.png" alt="main logo" className="h-24 w-auto" />
           </Link>
         </div>
@@ -52,10 +52,10 @@ export default function NavBar() {
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           {[
-            { to: "/", label: "Home" },
-            { to: "/type-of-tourism", label: "Type of Tourism" },
-            { to: "/governorates", label: "Governorates" },
-            { to: "/recommendation", label: "Recommendation" },
+            { to: AppRoutes.ROOT, label: "Home" },
+            { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
+            { to: AppRoutes.GOVERNORATES, label: "Governorates" },
+            { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
           ].map(({ to, label }) => (
             <NavLink
               key={to}
@@ -98,7 +98,7 @@ export default function NavBar() {
                   <MenuItem>
                     <button
                       className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                      onClick={() => nav("/profile")}
+                      onClick={() => nav(AppRoutes.USER_PROFILE)}
                     >
                       Profile
                     </button>
@@ -117,13 +117,13 @@ export default function NavBar() {
           ) : (
             <div className="flex items-center gap-4">
               <Link
-                to="/login"
+                to={AppRoutes.LOGIN}
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#4E4FEB] transition bg-gray-200 rounded-full"
               >
                 Login
               </Link>
               <Link
-                to="/register"
+                to={AppRoutes.REGISTER}
                 className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-full hover:bg-[#3c3cd1] transition duration-300"
               >
                 Register
@@ -150,10 +150,10 @@ export default function NavBar() {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {[
-                  { to: "/", label: "Home" },
-                  { to: "/type-of-tourism", label: "Type of Tourism" },
-                  { to: "/governorates", label: "Governorates" },
-                  { to: "/recommendation", label: "Recommendation" },
+                  { to: AppRoutes.ROOT, label: "Home" },
+                  { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
+                  { to: AppRoutes.GOVERNORATES, label: "Governorates" },
+                  { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
                 ].map(({ to, label }) => (
                   <NavLink
                     key={to}
@@ -193,7 +193,7 @@ export default function NavBar() {
                         <MenuItem>
                           <button
                             className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                            onClick={() => nav("/profile")}
+                            onClick={() => nav(AppRoutes.USER_PROFILE)}
                           >
                             Profile
                           </button>
@@ -212,14 +212,14 @@ export default function NavBar() {
                 ) : (
                   <div className="flex items-center justify-center gap-4">
                     <Link
-                      to="/login"
+                      to={AppRoutes.LOGIN}
                       className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-[#4E4FEB] transition bg-gray-200 rounded-full w-full text-center"
                       onClick={handleClose}
                     >
                       Login
                     </Link>
                     <Link
-                      to="/register"
+                      to={AppRoutes.REGISTER}
                       className="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-full hover:bg-[#3c3cd1] transition duration-300 w-full text-center"
                       onClick={handleClose}
                     >

@@ -5,12 +5,13 @@ import useTitle from "../../hooks/useChangePageTitle";
 import { TPlaceDetails } from "../../types";
 import { LocateFixed } from "lucide-react";
 import { Badge, Button } from "flowbite-react";
-import { useState } from "react";
 import SinglePlaceSkeleton from "../../animations/skeletons/SinglePlaceSkeleton";
 import axiosInstance from "../../api/axiosInstance";
+import SinglePlaceComments from "./SinglePlaceComments";
+
 export default function SinglePlace() {
   const { name } = useParams();
-  const [comment, setComment] = useState("");
+
   useTitle(`Place - ${name}`);
   const token = useAppSelector((state) => state.auth.token);
   const fetchSinglePlace = () =>
@@ -28,10 +29,6 @@ export default function SinglePlace() {
     queryFn: () => fetchSinglePlace(),
     placeholderData: keepPreviousData,
   });
-
-  const handleComment = async () => {
-    console.log(comment);
-  };
   return (
     <div className="container mx-auto my-5">
       {isPending && <SinglePlaceSkeleton />}
@@ -44,7 +41,6 @@ export default function SinglePlace() {
               className="rounded-lg max-w-full h-auto"
             />
           </div>
-
           <div className="flex justify-between">
             <h1 className="flex items-center gap-1 text-green-600">
               <LocateFixed color="green" size={20} />
@@ -89,32 +85,8 @@ export default function SinglePlace() {
                 </Button>
               </Link>
             </div>
-          </div>
-          <div className="mt-3">
-            <label
-              htmlFor="comment"
-              className="block mb-2 text-lg font-medium text-gray-700"
-            >
-              Review Lists
-            </label>
-            <textarea
-              id="comment"
-              name="comment"
-              rows={3}
-              placeholder="Write Your Comment ..."
-              className="w-[600px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-              onChange={(e) => setComment(e.target.value)}
-            ></textarea>
-          </div>
-          <div className="flex justify-start">
-            <Button
-              disabled={!comment}
-              className="bg-secondary enabled:hover:bg-primary !important"
-              onClick={handleComment}
-            >
-              Submit
-            </Button>
-          </div>
+          </div>{" "}
+          <SinglePlaceComments data={data} />
         </div>
       )}
     </div>
