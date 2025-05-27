@@ -98,3 +98,33 @@ export const updateComment = async (
 
   return response;
 };
+
+export const forgotPassword = async (email: string) => {
+  const response = await axiosInstance.post(
+    `/authenticat/ForGetPassword?Email=${email}`
+  );
+
+  toast.success("Reset Code sent successfully!");
+
+  return response;
+};
+
+export const sendOTPCode = async (code: string) => {
+  const response = await axiosInstance.post(
+    `/authenticat/GetCode?code=${code}`
+  );
+  toast.success("OTP verified successfully!");
+  return response;
+};
+export const resetPassword = async (data: {
+  email: string;
+  confirmCode: string;
+  newPassword: string;
+  confirmPassword: string;
+}) => {
+  const response = await axiosInstance.post(`/authenticat/ResetPassword`, data);
+  toast.success(
+    "Password reset successfully! Please login with your new password."
+  );
+  return response;
+};

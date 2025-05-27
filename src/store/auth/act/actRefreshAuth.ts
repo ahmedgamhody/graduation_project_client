@@ -10,6 +10,7 @@ type TResponse = {
   refreshTokenExpiretion: string;
   password: string;
   id: string;
+  role: string;
 };
 type Tdata = {
   token: string;

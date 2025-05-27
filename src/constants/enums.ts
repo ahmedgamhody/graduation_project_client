@@ -4,6 +4,10 @@ export enum AppRoutes {
   REGISTER = "/register",
   REGISTER_USER = "/register/user",
   REGISTER_TOUR_GUIDE = "/register/tour-guide",
+  CONFIRMED_TOUR_GUIDE_REGISTER = "/register/tour-guide/confirmed",
+  FORGOT_PASSWORD = "/forgot-password",
+  OPT_CODE = "/opt-code",
+  RESET_PASSWORD = "/reset-password",
 
   // Main Pages
   ROOT = "/",

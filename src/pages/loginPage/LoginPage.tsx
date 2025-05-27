@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { actAuthLogin, authCleanUp } from "../../store/auth/authSlice";
 import useTitle from "../../hooks/useChangePageTitle";
+import { AppRoutes } from "../../constants/enums";
 
 const Login = () => {
   useTitle("Login");
@@ -30,7 +31,7 @@ const Login = () => {
 
       if (result.token) {
         toast.success(`Login successful! Welcome back ${result.name}`);
-        nav("/");
+        nav(AppRoutes.ROOT, { replace: true });
       } else {
         toast.error("Invalid login credentials.");
       }
@@ -95,9 +96,12 @@ const Login = () => {
           </div>
 
           <div className="flex justify-between items-center mb-4">
-            <a href="#/" className="text-purple-700 text-sm hover:underline">
+            <Link
+              to={AppRoutes.FORGOT_PASSWORD}
+              className="text-purple-700 text-sm hover:underline"
+            >
               Forgot Password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -120,7 +124,10 @@ const Login = () => {
 
         <p className="text-center text-gray-700 mt-4">
           Don't have an account?{" "}
-          <Link to={"/register"} className="text-purple-700 hover:underline">
+          <Link
+            to={AppRoutes.REGISTER}
+            className="text-purple-700 hover:underline"
+          >
             Register
           </Link>
         </p>

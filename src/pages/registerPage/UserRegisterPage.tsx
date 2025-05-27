@@ -17,7 +17,8 @@ import useTitle from "../../hooks/useChangePageTitle";
 const UserRegisterPage = () => {
   useTitle("Register - Visitor");
   const [showPassword, setShowPassword] = useState(false);
-  const { error, loadingState, token } = useAppSelector((state) => state.auth);
+  const [errorMessage, setErrorMessage] = useState("");
+  const { loadingState, token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -42,8 +43,11 @@ const UserRegisterPage = () => {
         toast.error("Registration failed. Please check your details.");
       }
     } catch (error: any) {
-      toast.error(`Registration failed , ${error.errors[1]}`);
+      toast.error(`Registration failed , ${error?.errors[1]}`);
       console.error("Error registering user:", error);
+      if (error?.response?.data?.errors) {
+        setErrorMessage(error?.errors[1]);
+      }
     }
   };
 
@@ -90,7 +94,9 @@ const UserRegisterPage = () => {
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email.message}</p>
                 )}
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {errorMessage && (
+                  <p className="text-red-500 text-sm">{errorMessage}</p>
+                )}
               </div>
 
               <div className="mb-3">

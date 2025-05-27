@@ -12,6 +12,7 @@ type TResponse = {
   email: string;
   password: string;
   id: string;
+  role: string;
 };
 
 const actAuthLogin = createAsyncThunk(

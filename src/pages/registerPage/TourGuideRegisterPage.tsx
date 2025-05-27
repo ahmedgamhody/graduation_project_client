@@ -13,12 +13,14 @@ import toast from "react-hot-toast";
 import { useAppSelector } from "../../store/hooks";
 import { countries, AllTripsName, AllPlacesName, languages } from ".";
 import axiosInstance from "../../api/axiosInstance";
+import { AppRoutes } from "../../constants/enums";
 export default function TourGuideRegisterPage() {
   useTitle("Register - Tour Guide");
   const [showPassword, setShowPassword] = useState(false);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [uploadedCV, setUploadedCV] = useState<File | null>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
     null
   );
@@ -27,12 +29,12 @@ export default function TourGuideRegisterPage() {
   const cvRef = useRef<HTMLInputElement | null>(null);
   const { token } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
-
   const {
     register,
     handleSubmit,
     setValue,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
   } = useForm<TourGuideRegisterFormData>({
     resolver: zodResolver(TourGuideRegisterSchema),
     mode: "onChange",
@@ -70,18 +72,23 @@ export default function TourGuideRegisterPage() {
       });
       if (res.status === 200) {
         toast.success(`Registration successful! Welcome`);
-        nav("/");
+        nav(AppRoutes.CONFIRMED_TOUR_GUIDE_REGISTER);
       } else {
         toast.error("Registration failed. Please check your details.");
       }
     } catch (error: any) {
-      toast.error(`Registration failed , ${error.errors[1]}`);
+      toast.error(`Registration failed , ${error?.response?.data?.errors[1]}`);
+      if (error?.response?.data?.errors) {
+        setErrorMessage(error?.response?.data?.errors[1]);
+      }
       console.error("Error registering user:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       // Check if file is an image
@@ -99,6 +106,8 @@ export default function TourGuideRegisterPage() {
       setProfileImage(file);
       // Update form field for validation
       setValue("image", event.target.files as any);
+      // Trigger validation for this field
+      await trigger("image");
 
       // Create preview URL
       const reader = new FileReader();
@@ -108,11 +117,13 @@ export default function TourGuideRegisterPage() {
       reader.readAsDataURL(file);
     }
   };
-  const handleImageDelete = () => {
+  const handleImageDelete = async () => {
     setProfileImage(null);
     setProfileImagePreview(null);
     // Clear form field
     setValue("image", undefined as any);
+    // Trigger validation for this field
+    await trigger("image");
     if (ref.current) {
       ref.current.value = "";
     }
@@ -218,7 +229,6 @@ export default function TourGuideRegisterPage() {
                   <p className="text-red-500 text-sm">{errors.Name.message}</p>
                 )}
               </div>
-
               <div className="mb-3">
                 <label className="block text-gray-700">Email Address</label>
                 <input
@@ -229,8 +239,10 @@ export default function TourGuideRegisterPage() {
                 {errors.Email && (
                   <p className="text-red-500 text-sm">{errors.Email.message}</p>
                 )}
+                {errorMessage && (
+                  <p className="text-red-500 text-sm">{errorMessage}</p>
+                )}
               </div>
-
               <div className="mb-3">
                 <label className="block text-gray-700">Password</label>
                 <div className="relative">
@@ -256,15 +268,17 @@ export default function TourGuideRegisterPage() {
                     {errors.Password.message}
                   </p>
                 )}
-              </div>
-
+              </div>{" "}
               <div className="mb-3">
                 <label className="block text-gray-700">Gender</label>
                 <select
                   {...register("Gender")}
+                  defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
-                  <option className="hidden">Select</option>
+                  <option value="" disabled>
+                    Select
+                  </option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
@@ -273,15 +287,17 @@ export default function TourGuideRegisterPage() {
                     {errors.Gender.message}
                   </p>
                 )}
-              </div>
-
+              </div>{" "}
               <div className="mb-3">
                 <label className="block text-gray-700">Trip Name</label>
                 <select
                   {...register("TripName")}
+                  defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
-                  <option className="hidden">Select a trip type</option>
+                  <option value="" disabled>
+                    Select a trip type
+                  </option>
                   {AllTripsName.map((trip) => (
                     <option key={trip} value={trip}>
                       {trip}
@@ -296,13 +312,17 @@ export default function TourGuideRegisterPage() {
               </div>
             </div>
             <div className="w-full">
+              {" "}
               <div className="mb-3">
                 <label className="block text-gray-700">Country</label>
                 <select
                   {...register("Country")}
+                  defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
-                  <option className="hidden">Select a country</option>
+                  <option value="" disabled>
+                    Select a country
+                  </option>
                   {countries?.map((country) => (
                     <option key={country} value={country}>
                       {country}
@@ -343,9 +363,10 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Place Name</label>
                 <select
                   {...register("PlaceName")}
+                  defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
-                  <option value="" className="hidden">
+                  <option value="" disabled>
                     Select a place
                   </option>
                   {AllPlacesName?.map((place) => (
@@ -369,7 +390,7 @@ export default function TourGuideRegisterPage() {
               <label className="block text-gray-700 mb-2">Languages</label>{" "}
               <select
                 className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-                onChange={(e) => {
+                onChange={async (e) => {
                   const selectedLang = e.target.value;
                   if (
                     selectedLang &&
@@ -378,6 +399,8 @@ export default function TourGuideRegisterPage() {
                     const newLanguages = [...selectedLanguages, selectedLang];
                     setSelectedLanguages(newLanguages);
                     setValue("AllLangues", newLanguages as any);
+                    // Trigger validation for this field
+                    await trigger("AllLangues");
                   }
                   e.target.value = "";
                 }}
@@ -386,7 +409,7 @@ export default function TourGuideRegisterPage() {
                 <option value="" className="hidden">
                   Select a language
                 </option>
-                {languages.map((lang) => (
+                {/* {languages.map((lang) => (
                   <option
                     key={lang.code}
                     value={lang.code}
@@ -394,7 +417,15 @@ export default function TourGuideRegisterPage() {
                   >
                     {lang.name}
                   </option>
-                ))}
+                ))} */}
+                {/* return all languages but not chosen */}
+                {languages
+                  .filter((lang) => !selectedLanguages.includes(lang.code))
+                  .map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </option>
+                  ))}
               </select>
               {/* Selected Languages Display */}
               {selectedLanguages.length > 0 && (
@@ -415,13 +446,15 @@ export default function TourGuideRegisterPage() {
                           <span>{language?.name}</span>
                           <button
                             type="button"
-                            onClick={() => {
+                            onClick={async () => {
                               const newLanguages = selectedLanguages.filter(
                                 (l) => l !== langCode
                               );
                               setSelectedLanguages(newLanguages);
                               // Update form field using setValue
                               setValue("AllLangues", newLanguages as any);
+                              // Trigger validation for this field
+                              await trigger("AllLangues");
                             }}
                             className="text-purple-600 hover:text-purple-800 font-bold"
                           >
@@ -437,18 +470,9 @@ export default function TourGuideRegisterPage() {
                 <p className="text-red-500 text-sm mt-1">
                   {errors.AllLangues.message}
                 </p>
-              )}{" "}
-              {/* Hidden input for form registration */}
-              <input
-                type="hidden"
-                {...register("AllLangues")}
-                value={selectedLanguages}
-              />
-              {/* Hidden inputs for file validation */}
-              <input type="hidden" {...register("image")} />
-              <input type="hidden" {...register("Cvfile")} />
+              )}
             </div>
-          </div>{" "}
+          </div>
           {/* CV File Upload Section */}
           <div className="my-3">
             <label className="block text-gray-700 mb-2">CV (PDF only)</label>{" "}
@@ -456,12 +480,14 @@ export default function TourGuideRegisterPage() {
               <input
                 type="file"
                 accept=".pdf"
-                onChange={(e) => {
+                onChange={async (e) => {
                   const file = e.target.files?.[0];
                   if (file) {
                     setUploadedCV(file);
                     // Update form field for validation
                     setValue("Cvfile", e.target.files as any);
+                    // Trigger validation for this field
+                    await trigger("Cvfile");
                   }
                 }}
                 className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
@@ -490,9 +516,11 @@ export default function TourGuideRegisterPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
+                  onClick={async () => {
                     setUploadedCV(null);
                     setValue("Cvfile", undefined as any);
+                    // Trigger validation for this field
+                    await trigger("Cvfile");
                     if (cvRef.current) {
                       cvRef.current.value = "";
                     }
@@ -511,7 +539,7 @@ export default function TourGuideRegisterPage() {
             )}
           </div>
           <button
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isValid}
             type="submit"
             className={`w-full  bg-primary text-white py-2 rounded-md hover:bg-secondary transition flex items-center justify-center disabled:bg-gray-400 disabled:cursor-not-allowed mt-4 ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""

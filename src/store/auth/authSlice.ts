@@ -15,6 +15,7 @@ interface IAuthState {
   loadingState: TLoading;
   error: string | null;
   id: string;
+  role: string;
 }
 
 const initialState: IAuthState = {
@@ -27,6 +28,7 @@ const initialState: IAuthState = {
   loadingState: "idle",
   error: null,
   id: "",
+  role: "",
 };
 
 const authSlice = createSlice({
@@ -40,6 +42,8 @@ const authSlice = createSlice({
       state.expiresIn = 0;
       state.refreshToken = "";
       state.refreshTokenExpiretion = "";
+      state.loadingState = "idle";
+      state.role = "";
       state.id = "";
       state.error = null;
       CookieService.removeCookie("token", { path: "/" });
@@ -65,6 +69,7 @@ const authSlice = createSlice({
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
       state.id = action.payload.id;
+      state.role = action.payload.role;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, { path: "/" });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {
@@ -92,6 +97,7 @@ const authSlice = createSlice({
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
       state.id = action.payload.id;
+      state.role = action.payload.role;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, {
         path: "/",
@@ -120,6 +126,7 @@ const authSlice = createSlice({
       state.expiresIn = action.payload.expiresIn;
       state.refreshToken = action.payload.refreshToken;
       state.id = action.payload.id;
+      state.role = action.payload.role;
       state.refreshTokenExpiretion = action.payload.refreshTokenExpiretion;
       CookieService.setCookie("token", action.payload.token, { path: "/" });
       CookieService.setCookie("refreshToken", action.payload.refreshToken, {

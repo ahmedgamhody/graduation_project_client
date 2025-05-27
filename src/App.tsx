@@ -15,6 +15,17 @@ const UserRegisterPage = lazy(
   () => import("./pages/registerPage/UserRegisterPage")
 );
 const RegisterPage = lazy(() => import("./pages/registerPage/RegisterPage"));
+const ForgotPasswordPage = lazy(
+  () => import("./pages/forgot password/ForgotPasswordPage")
+);
+const OPTCodePage = lazy(() => import("./pages/forgot password/OPTCodePage"));
+const ResetPasswordPage = lazy(
+  () => import("./pages/forgot password/ResetPasswordPage")
+);
+const ConfirmedTourGuideRegister = lazy(
+  () => import("./pages/registerPage/ConfirmedTourGuideRegister")
+);
+
 const TypeOfTourism = lazy(
   () => import("./pages/Type of Tourism/TypeOfTourism")
 );
@@ -51,6 +62,19 @@ function App() {
           <Route
             path={AppRoutes.REGISTER_TOUR_GUIDE}
             element={<TourGuideRegisterPage />}
+          />
+          <Route
+            path={AppRoutes.CONFIRMED_TOUR_GUIDE_REGISTER}
+            element={<ConfirmedTourGuideRegister />}
+          />
+          <Route
+            path={AppRoutes.FORGOT_PASSWORD}
+            element={<ForgotPasswordPage />}
+          />
+          <Route path={AppRoutes.OPT_CODE} element={<OPTCodePage />} />
+          <Route
+            path={AppRoutes.RESET_PASSWORD}
+            element={<ResetPasswordPage />}
           />
         </Route>
         <Route
