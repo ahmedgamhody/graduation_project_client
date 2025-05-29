@@ -2,7 +2,7 @@ import { Button } from "flowbite-react";
 import { useState } from "react";
 import { addComment, deleteComment, updateComment } from "../../utils/api";
 import { queryClient } from "../../main";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { TComment, TPlaceDetails } from "../../types";
 import avatar from "../../../public/avatar.png";
@@ -165,16 +165,18 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
 
                   <div className="flex items-center justify-between mb-2">
                     {" "}
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={avatar}
-                        alt="User Avatar"
-                        className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
-                      />
-                      <span className="font-semibold text-gray-800">
-                        {commentItem.userName || "Anonymous User"}
-                      </span>
-                    </div>
+                    <Link to={`/show-user-profile/${commentItem.userId}`}>
+                      <div className="flex items-center gap-3 hover:underline hover:text-blue-600 transition duration-300">
+                        <img
+                          src={avatar}
+                          alt="User Avatar"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                        />
+                        <span className="font-semibold text-gray-800">
+                          {commentItem.userName || "Anonymous User"}
+                        </span>
+                      </div>
+                    </Link>
                     <div className="flex items-center ">
                       {commentItem?.userId === id && (
                         <Menu

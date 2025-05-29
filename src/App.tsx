@@ -47,6 +47,7 @@ const TripDetails = lazy(
   () => import("./pages/Recommendation/Trip Details/TripDetails")
 );
 const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
+const ShowUserProfile = lazy(() => import("./pages/profile/ShowUserProfile"));
 
 function App() {
   return (
@@ -164,6 +165,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <SinglePlace />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.SHOW_USER_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <ShowUserProfile />
                 </PageSuspenseFallback>
               }
             />

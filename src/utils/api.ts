@@ -116,6 +116,7 @@ export const sendOTPCode = async (code: string) => {
   toast.success("OTP verified successfully!");
   return response;
 };
+
 export const resetPassword = async (data: {
   email: string;
   confirmCode: string;

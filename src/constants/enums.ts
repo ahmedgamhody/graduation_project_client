@@ -24,6 +24,7 @@ export enum AppRoutes {
   // Protected Pages
   RECOMMENDATION = "/recommendation",
   USER_PROFILE = "/user-profile",
+  SHOW_USER_PROFILE = "/show-user-profile/:userId",
 }
 
 export enum UserRole {

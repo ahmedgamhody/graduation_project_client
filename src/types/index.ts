@@ -93,3 +93,21 @@ export type TUserProfile = {
   tourguid?: string | null;
   favoritePlaces?: string[];
 };
+
+export type UserProfileData = {
+  name: string;
+  country: string;
+  language: string;
+  tourguid: TourGuideCard;
+  phone: string;
+  birthDate: string;
+  gender: string;
+  photo: string;
+};
+
+export type TourGuideCard = {
+  name: string;
+  id: string;
+  photo: string;
+  rate: number;
+};

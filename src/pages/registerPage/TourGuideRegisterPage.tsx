@@ -223,6 +223,7 @@ export default function TourGuideRegisterPage() {
                 <input
                   type="text"
                   {...register("Name")}
+                  disabled={isSubmitting}
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 />
                 {errors.Name && (
@@ -234,6 +235,7 @@ export default function TourGuideRegisterPage() {
                 <input
                   type="email"
                   {...register("Email")}
+                  disabled={isSubmitting}
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 />
                 {errors.Email && (
@@ -249,11 +251,13 @@ export default function TourGuideRegisterPage() {
                   <input
                     type={showPassword ? "text" : "password"}
                     {...register("Password")}
+                    disabled={isSubmitting}
                     className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                   />
                   <button
                     type="button"
                     className="absolute right-3 top-3 text-gray-500"
+                    disabled={isSubmitting}
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -273,6 +277,7 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Gender</label>
                 <select
                   {...register("Gender")}
+                  disabled={isSubmitting}
                   defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
@@ -292,6 +297,7 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Trip Name</label>
                 <select
                   {...register("TripName")}
+                  disabled={isSubmitting}
                   defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
@@ -317,6 +323,7 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Country</label>
                 <select
                   {...register("Country")}
+                  disabled={isSubmitting}
                   defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
@@ -340,6 +347,7 @@ export default function TourGuideRegisterPage() {
                 <input
                   type="tel"
                   {...register("Phone")}
+                  disabled={isSubmitting}
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 />
                 {errors.Phone && (
@@ -351,6 +359,7 @@ export default function TourGuideRegisterPage() {
                 <input
                   type="date"
                   {...register("BirthDate")}
+                  disabled={isSubmitting}
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 />
                 {errors.BirthDate && (
@@ -363,6 +372,7 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Place Name</label>
                 <select
                   {...register("PlaceName")}
+                  disabled={isSubmitting}
                   defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
@@ -405,6 +415,7 @@ export default function TourGuideRegisterPage() {
                   e.target.value = "";
                 }}
                 defaultValue=""
+                disabled={isSubmitting}
               >
                 <option value="" className="hidden">
                   Select a language
