@@ -10,6 +10,10 @@ import { AppRoutes } from "./constants/enums";
 
 // Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
+const ContactUsPage = lazy(() => import("./pages/contact us/ContactUsPage"));
+const SearchPlacePage = lazy(
+  () => import("./pages/search place/SearchPlacePage")
+);
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const UserRegisterPage = lazy(
   () => import("./pages/registerPage/UserRegisterPage")
@@ -99,6 +103,22 @@ function App() {
             element={
               <PageSuspenseFallback>
                 <HomePage />
+              </PageSuspenseFallback>
+            }
+          />
+          <Route
+            path={AppRoutes.SEARCH_PLACES}
+            element={
+              <PageSuspenseFallback>
+                <SearchPlacePage />
+              </PageSuspenseFallback>
+            }
+          />
+          <Route
+            path={AppRoutes.CONTACT_US}
+            element={
+              <PageSuspenseFallback>
+                <ContactUsPage />
               </PageSuspenseFallback>
             }
           />

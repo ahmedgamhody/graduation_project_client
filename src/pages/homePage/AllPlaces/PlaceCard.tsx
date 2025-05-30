@@ -32,12 +32,14 @@ export default function PlaceCard({ place }: { place: TPlaceHome }) {
           <h5 className="text-l font-bold tracking-tight text-gray-900 dark:text-white truncate">
             {place.name}
           </h5>
-          <div className="flex items-center justify-center gap-1 ">
-            {renderStars(place.googleRate || 0)}
-            <span className="text-sm text-gray-600 mr-2">
-              ({place?.googleRate?.toFixed(1)})
-            </span>
-          </div>
+          {place?.googleRate && (
+            <div className="flex items-center justify-center gap-1 ">
+              {renderStars(place.googleRate || 0)}
+              <span className="text-sm text-gray-600 mr-2">
+                ({place?.googleRate?.toFixed(1)})
+              </span>
+            </div>
+          )}
         </div>
         <Link to={`/places/${place.name}`}>
           <Button className="bg-primary enabled:hover:bg-secondary !important">

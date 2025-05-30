@@ -28,7 +28,13 @@ export default function NavBar() {
       toast.error("Error signing out" + error);
     }
   };
-
+  const navLinks = [
+    { to: AppRoutes.ROOT, label: "Home" },
+    { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
+    { to: AppRoutes.GOVERNORATES, label: "Governorates" },
+    { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
+    { to: AppRoutes.CONTACT_US, label: "Contact Us" },
+  ];
   return (
     <header className="bg-white">
       <nav
@@ -51,12 +57,7 @@ export default function NavBar() {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          {[
-            { to: AppRoutes.ROOT, label: "Home" },
-            { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
-            { to: AppRoutes.GOVERNORATES, label: "Governorates" },
-            { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
-          ].map(({ to, label }) => (
+          {navLinks.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
@@ -149,12 +150,7 @@ export default function NavBar() {
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
-                {[
-                  { to: AppRoutes.ROOT, label: "Home" },
-                  { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
-                  { to: AppRoutes.GOVERNORATES, label: "Governorates" },
-                  { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
-                ].map(({ to, label }) => (
+                {navLinks.map(({ to, label }) => (
                   <NavLink
                     key={to}
                     to={to}

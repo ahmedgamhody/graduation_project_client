@@ -14,13 +14,14 @@ export enum AppRoutes {
   TYPE_OF_TOURISM = "/type-of-tourism",
   GOVERNORATES = "/governorates",
   MACHINE_QUOTATIONS = "/machine-quotations",
+  CONTACT_US = "/contact-us",
 
   // Dynamic Pages
   SINGLE_TOURISM = "/type-of-tourism/:name",
   SINGLE_GOVERNORATE = "/governorates/:name",
   SINGLE_PLACE = "/places/:name",
   TRIP_DETAILS = "/recommendation/trips/:name",
-
+  SEARCH_PLACES = "/search-places/:query",
   // Protected Pages
   RECOMMENDATION = "/recommendation",
   USER_PROFILE = "/user-profile",

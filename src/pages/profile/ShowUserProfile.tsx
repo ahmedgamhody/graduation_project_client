@@ -15,17 +15,23 @@ export default function ShowUserProfile() {
       return data;
     });
 
-  const { data, error } = useQuery<UserProfileData>({
+  const { data, error, isLoading } = useQuery<UserProfileData>({
     queryKey: ["ShowUserProfile", userId],
     queryFn: () => fetchShowUserProfile(userId!),
     enabled: !!userId,
     placeholderData: keepPreviousData,
   });
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        {" "}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-red-600 mb-2">
             Error Loading Data
@@ -39,7 +45,6 @@ export default function ShowUserProfile() {
   if (!data) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        {" "}
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-600 mb-2">
             No Data Found

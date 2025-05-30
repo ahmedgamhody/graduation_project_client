@@ -129,3 +129,24 @@ export const resetPassword = async (data: {
   );
   return response;
 };
+
+export const sendContactUserMessage = async (
+  problem: string,
+  token: string
+) => {
+  const response = await axiosInstance.post(
+    `/User/SendContactUsProblem`,
+    {
+      problem,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success(
+    "Your message has been sent successfully! We'll get back to you soon."
+  );
+  return response;
+};
