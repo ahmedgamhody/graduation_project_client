@@ -1,9 +1,5 @@
 import { z } from "zod";
-import {
-  AllPlacesName,
-  AllTripsName,
-  languageCodes,
-} from "../pages/registerPage";
+import { languageCodes } from "../pages/registerPage";
 
 export const UserRegisterSchema = z.object({
   name: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -92,8 +88,8 @@ export const TourGuideRegisterSchema = z.object({
       (file) => file?.[0]?.size <= MAX_FILE_SIZE,
       "CV must be less than 10MB"
     ),
-  TripName: z.enum(AllTripsName).optional(),
-  PlaceName: z.enum(AllPlacesName).optional(),
+  TripName: z.string().optional(),
+  PlaceName: z.string().optional(),
 
   AllLangues: z
     .array(z.enum(languageCodes))
