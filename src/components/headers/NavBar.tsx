@@ -43,11 +43,11 @@ export default function NavBar() {
     <header className="bg-white">
       <nav
         aria-label="Global"
-        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+        className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8"
       >
         <div className="flex lg:flex-1">
           <Link to={AppRoutes.ROOT} className="-m-1.5 p-1.5">
-            <img src="/main_logo.png" alt="main logo" className="h-24 w-auto" />
+            <img src="/main_logo.png" alt="main logo" className="h-14 w-auto" />
           </Link>
         </div>
         <div className="flex lg:hidden bg-gray-200 rounded-lg p-2 ">
@@ -61,7 +61,7 @@ export default function NavBar() {
           </button>
         </div>
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
-          {navLinks.map(({ to, label }) => (
+          {navLinks?.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}

@@ -62,8 +62,8 @@ export default function AdminTourGuidesRequest() {
     } finally {
       setShowCVModal(false);
       setSelectedGuide(null);
-      setIsLoading(false);
       queryClient.invalidateQueries({ queryKey: ["AllNotActiveTourGuides"] });
+      setIsLoading(false);
     }
   };
 
@@ -75,9 +75,9 @@ export default function AdminTourGuidesRequest() {
       console.error("Error rejecting guide:", error);
     } finally {
       setShowCVModal(false);
-      setIsLoading(false);
       setSelectedGuide(null);
       queryClient.invalidateQueries({ queryKey: ["AllNotActiveTourGuides"] });
+      setIsLoading(false);
     }
   };
 

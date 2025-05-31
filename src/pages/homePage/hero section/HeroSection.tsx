@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Navigation } from "swiper/modules";
 import { useState } from "react";
 import { Search } from "lucide-react";
 
@@ -21,9 +21,10 @@ export default function HeroSection() {
     <div className=" mx-auto mb-3 ">
       <Swiper
         pagination={{
-          dynamicBullets: true,
+          type: "fraction",
         }}
-        modules={[Pagination]}
+        navigation={true}
+        modules={[Pagination, Navigation]}
         className="mySwiper h-[60vh] md:h-[70vh]"
       >
         {[

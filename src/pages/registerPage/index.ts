@@ -159,7 +159,6 @@ export const countries = [
   "Montserrat",
   "Myanmar",
   "Niue",
-  "Israel",
   "Heard Island and McDonald Islands",
   "Comoros",
   "Saint Vincent and the Grenadines",
