@@ -33,7 +33,7 @@ export default function MachineQuotations() {
     // }
   };
   return (
-    <div className="container mx-auto my-5">
+    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
       <h1 className="text-center text-4xl font-bold text-primary">
         Machine Quotations
       </h1>

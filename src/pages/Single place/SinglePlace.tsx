@@ -32,7 +32,7 @@ export default function SinglePlace() {
   });
 
   return (
-    <div className="container mx-auto my-5">
+    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
       {isPending && <SinglePlaceSkeleton />}
       {data && (
         <div className="flex flex-col  gap-5">

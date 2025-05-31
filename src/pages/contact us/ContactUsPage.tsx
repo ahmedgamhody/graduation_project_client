@@ -49,7 +49,7 @@ export default function ContactUsPage() {
   };
 
   return (
-    <div className="min-h-screen  to-indigo-100 py-5 px-4">
+    <div className="min-h-screen  to-indigo-100 py-5 px-4 md:px-8 lg:px-16">
       <div className="container mx-auto">
         <h1 className="text-4xl font-bold text-center text-primary">
           Contact Us

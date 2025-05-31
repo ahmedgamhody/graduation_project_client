@@ -3,7 +3,7 @@ import AllPlacesList from "./AllPlacesList";
 
 export default function AllPlacesSection({ query }: { query?: string }) {
   return (
-    <div className="my-8">
+    <div className="my-8 px-4 md:px-8 lg:px-16">
       <h1 className="text-4xl font-bold text-center text-primary">
         {query || "All Places"}
       </h1>

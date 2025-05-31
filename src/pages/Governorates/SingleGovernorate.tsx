@@ -48,7 +48,7 @@ export default function SingleGovernorate() {
     setCurrentPage(1);
   }, [name, searchQuery]);
   return (
-    <div className="container mx-auto my-5">
+    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
       <h1 className="text-4xl font-bold text-center text-primary">
         {name} Governorate Places
       </h1>

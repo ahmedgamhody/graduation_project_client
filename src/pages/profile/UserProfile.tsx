@@ -77,7 +77,7 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 bg-white shadow-lg rounded-lg mt-10">
+    <div className="max-w-3xl mx-auto p-4 bg-white shadow-lg rounded-lg mt-10 px-4 md:px-8 lg:px-16">
       <h2 className="text-2xl font-bold mb-6 text-center text-primary">
         My Profile
       </h2>

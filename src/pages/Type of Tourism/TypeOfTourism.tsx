@@ -27,7 +27,7 @@ export default function TypeOfTourism() {
       <h1 className="text-4xl font-bold text-center text-primary">
         Type of Tourism
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8 px-4 md:px-8 lg:px-16">
         {isPending &&
           Array.from({ length: 6 }, (_, index) => (
             <CardPlaceSkeleton key={index} />

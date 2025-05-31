@@ -42,8 +42,11 @@ export default function HeroSection() {
                 <span className="text-secondary">Travel</span>, enjoy <br /> and
                 live a new <br /> and full life
               </h2>{" "}
-              <div className="mt-8 w-full max-w-2xl">
-                <form onSubmit={handleSearchSubmit} className="flex gap-2">
+              <div className="mt-8 w-full max-w-2xl px-4 md:px-8 lg:px-16">
+                <form
+                  onSubmit={handleSearchSubmit}
+                  className="flex flex-row gap-2"
+                >
                   <div className="flex-1 relative">
                     <input
                       type="text"
@@ -56,7 +59,7 @@ export default function HeroSection() {
                   </div>
                   <button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 shadow-lg font-medium flex items-center gap-2"
+                    className=" bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors duration-200 shadow-lg font-medium flex items-center gap-2"
                   >
                     <Search className="w-5 h-5" />
                     Search
