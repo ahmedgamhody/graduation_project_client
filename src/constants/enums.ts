@@ -26,6 +26,8 @@ export enum AppRoutes {
   RECOMMENDATION = "/recommendation",
   USER_PROFILE = "/user-profile",
   SHOW_USER_PROFILE = "/show-user-profile/:userId",
+  // Admin Pages
+  ADMIN_DASHBOARD = "/admin/dashboard",
 }
 
 export enum UserRole {

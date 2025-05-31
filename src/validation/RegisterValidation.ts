@@ -92,8 +92,9 @@ export const TourGuideRegisterSchema = z.object({
       (file) => file?.[0]?.size <= MAX_FILE_SIZE,
       "CV must be less than 10MB"
     ),
-  TripName: z.enum(AllTripsName, { message: " Trip Name is required" }),
-  PlaceName: z.enum(AllPlacesName, { message: " Place Name is required" }),
+  TripName: z.enum(AllTripsName).optional(),
+  PlaceName: z.enum(AllPlacesName).optional(),
+
   AllLangues: z
     .array(z.enum(languageCodes))
     .min(1, { message: "Please select at least one language" }),

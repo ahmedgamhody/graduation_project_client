@@ -7,13 +7,23 @@ import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
 import TourGuideRegisterPage from "./pages/registerPage/TourGuideRegisterPage";
 import { AppRoutes } from "./constants/enums";
+import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
 
-// Lazy Load Pages
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
+// pages
 const ContactUsPage = lazy(() => import("./pages/contact us/ContactUsPage"));
 const SearchPlacePage = lazy(
   () => import("./pages/search place/SearchPlacePage")
 );
+const SinglePlace = lazy(() => import("./pages/Single place/SinglePlace"));
+// Recommendation Pages
+const Recommendation = lazy(
+  () => import("./pages/Recommendation/Recommendation")
+);
+const TripDetails = lazy(
+  () => import("./pages/Recommendation/Trip Details/TripDetails")
+);
+// Auth Pages
 const LoginPage = lazy(() => import("./pages/loginPage/LoginPage"));
 const UserRegisterPage = lazy(
   () => import("./pages/registerPage/UserRegisterPage")
@@ -30,28 +40,30 @@ const ConfirmedTourGuideRegister = lazy(
   () => import("./pages/registerPage/ConfirmedTourGuideRegister")
 );
 
+// Tourism Pages
 const TypeOfTourism = lazy(
   () => import("./pages/Type of Tourism/TypeOfTourism")
 );
-const Governorates = lazy(() => import("./pages/Governorates/Governorates"));
-const Recommendation = lazy(
-  () => import("./pages/Recommendation/Recommendation")
-);
-const SinglePlace = lazy(() => import("./pages/Single place/SinglePlace"));
 const SingleTourism = lazy(
   () => import("./pages/Type of Tourism/SingleTourism")
 );
+// Governorates Pages
+const Governorates = lazy(() => import("./pages/Governorates/Governorates"));
 const SingleGovernorate = lazy(
   () => import("./pages/Governorates/SingleGovernorate")
 );
+
+// Machine Quotations Page
 const MachineQuotations = lazy(
   () => import("./pages/Machine Quotations/MachineQuotations")
 );
-const TripDetails = lazy(
-  () => import("./pages/Recommendation/Trip Details/TripDetails")
-);
+// User Profile Pages
 const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
 const ShowUserProfile = lazy(() => import("./pages/profile/ShowUserProfile"));
+// Admin Pages
+const AdminDashboard = lazy(
+  () => import("./pages/admin dashboard/AdminDashboard")
+);
 
 function App() {
   return (
@@ -90,6 +102,26 @@ function App() {
             </PageSuspenseFallback>
           }
         />
+
+        {/* Admin Layout and Routes */}
+        <Route
+          path={AppRoutes.ADMIN_DASHBOARD}
+          element={
+            <PageSuspenseFallback>
+              <AdminDashboardLayout />
+            </PageSuspenseFallback>
+          }
+        >
+          <Route
+            index
+            element={
+              <PageSuspenseFallback>
+                <AdminDashboard />
+              </PageSuspenseFallback>
+            }
+          />
+        </Route>
+
         <Route
           path={AppRoutes.ROOT}
           element={
