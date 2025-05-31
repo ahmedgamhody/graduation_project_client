@@ -18,13 +18,13 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="container mx-auto my-5 ">
+    <div className=" mx-auto mb-3 ">
       <Swiper
         pagination={{
           dynamicBullets: true,
         }}
         modules={[Pagination]}
-        className="mySwiper"
+        className="mySwiper h-[60vh] md:h-[70vh]"
       >
         {[
           "hero3.jpg",
@@ -35,8 +35,12 @@ export default function HeroSection() {
           "hero7.jpg",
           "hero8.jpg",
         ].map((image, index) => (
-          <SwiperSlide key={index} className="relative">
-            <img src={`/${image}`} alt="" className="rounded-lg w-full" />
+          <SwiperSlide key={index} className="relative h-full">
+            <img
+              src={`/${image}`}
+              alt=""
+              className="rounded-lg w-full h-full object-cover"
+            />
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 rounded-lg">
               <h2 className="text-white text-4xl md:text-5xl lg:text-6xl font-bold text-center drop-shadow-lg">
                 <span className="text-secondary">Travel</span>, enjoy <br /> and

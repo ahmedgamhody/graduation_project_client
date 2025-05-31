@@ -9,12 +9,12 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { authLogout } from "../../store/auth/authSlice";
 import avatar from "../../../public/avatar.png";
 import toast from "react-hot-toast";
-import { AppRoutes } from "../../constants/enums";
+import { AppRoutes, UserRoles } from "../../constants/enums";
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
   const dispatch = useAppDispatch();
-  const { name, token } = useAppSelector((state) => state.auth);
+  const { name, token, role } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const handleSignOut = async () => {
     try {
@@ -32,8 +32,12 @@ export default function NavBar() {
     { to: AppRoutes.ROOT, label: "Home" },
     { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
     { to: AppRoutes.GOVERNORATES, label: "Governorates" },
-    { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
-    { to: AppRoutes.CONTACT_US, label: "Contact Us" },
+    ...(role === UserRoles.MEMBER
+      ? [
+          { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
+          { to: AppRoutes.CONTACT_US, label: "Contact Us" },
+        ]
+      : []),
   ];
   return (
     <header className="bg-white">
@@ -89,21 +93,32 @@ export default function NavBar() {
                     className="-mr-1 size-5 text-gray-400"
                   />
                 </MenuButton>
-              </div>
-
+              </div>{" "}
               <MenuItems
                 transition
                 className="absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
                 <div className="py-1">
-                  <MenuItem>
-                    <button
-                      className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                      onClick={() => nav(AppRoutes.USER_PROFILE)}
-                    >
-                      Profile
-                    </button>
-                  </MenuItem>
+                  {role === UserRoles.ADMIN && (
+                    <MenuItem>
+                      <Link
+                        to={AppRoutes.ADMIN_DASHBOARD}
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                      >
+                        Dashboard
+                      </Link>
+                    </MenuItem>
+                  )}
+                  {role === UserRoles.MEMBER && (
+                    <MenuItem>
+                      <button
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                        onClick={() => nav(AppRoutes.USER_PROFILE)}
+                      >
+                        Profile
+                      </button>
+                    </MenuItem>
+                  )}
                   <MenuItem>
                     <button
                       className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
@@ -179,21 +194,33 @@ export default function NavBar() {
                           className="-mr-1 size-5 text-gray-400"
                         />
                       </MenuButton>
-                    </div>
-
+                    </div>{" "}
                     <MenuItems
                       transition
                       className="absolute left-0 z-10 mt-2 w-32 origin-top-left rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
                       <div className="py-1">
-                        <MenuItem>
-                          <button
-                            className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                            onClick={() => nav(AppRoutes.USER_PROFILE)}
-                          >
-                            Profile
-                          </button>
-                        </MenuItem>
+                        {role === UserRoles.ADMIN && (
+                          <MenuItem>
+                            <Link
+                              to={AppRoutes.ADMIN_DASHBOARD}
+                              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                            >
+                              Dashboard
+                            </Link>
+                          </MenuItem>
+                        )}
+                        {role === UserRoles.MEMBER && (
+                          <MenuItem>
+                            <button
+                              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                              onClick={() => nav(AppRoutes.USER_PROFILE)}
+                            >
+                              Profile
+                            </button>
+                          </MenuItem>
+                        )}
+
                         <MenuItem>
                           <button
                             className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"

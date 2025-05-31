@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { actAuthLogin, authCleanUp } from "../../store/auth/authSlice";
 import useTitle from "../../hooks/useChangePageTitle";
-import { AppRoutes } from "../../constants/enums";
+import { AppRoutes, UserRoles } from "../../constants/enums";
 
 const Login = () => {
   useTitle("Login");
@@ -31,7 +31,14 @@ const Login = () => {
 
       if (result.token) {
         toast.success(`Login successful! Welcome back ${result.name}`);
-        nav(AppRoutes.ROOT, { replace: true });
+
+        // Redirect based on  role
+        if (result.role === UserRoles.ADMIN) {
+          nav(AppRoutes.ADMIN_DASHBOARD, { replace: true });
+        }
+        if (result.role === UserRoles.MEMBER) {
+          nav(AppRoutes.ROOT, { replace: true });
+        }
       } else {
         toast.error("Invalid login credentials.");
       }

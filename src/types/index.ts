@@ -111,3 +111,14 @@ export type TourGuideCard = {
   photo: string;
   rate: number;
 };
+export type TNotActiveTourGuide = {
+  id: string;
+  cv: string;
+  photo: string;
+  name: string;
+};
+
+export type TNotActiveTourGuidesData = {
+  notActiveTourguids: TNotActiveTourGuide[];
+  count: number;
+};

@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import { lazy } from "react";
 import MainLayout from "./layouts/MainLayout";
 import { Toaster } from "react-hot-toast";
@@ -6,7 +6,7 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import ProtectedAuthRoutes from "./routes/ProtectedAuthRoutes";
 import PageSuspenseFallback from "./animations/PageSuspenseFallback";
 import TourGuideRegisterPage from "./pages/registerPage/TourGuideRegisterPage";
-import { AppRoutes } from "./constants/enums";
+import { AppRoutes, UserRoles } from "./constants/enums";
 import AdminDashboardLayout from "./layouts/AdminDashboardLayout";
 
 const HomePage = lazy(() => import("./pages/homePage/HomePage"));
@@ -64,7 +64,9 @@ const ShowUserProfile = lazy(() => import("./pages/profile/ShowUserProfile"));
 const AdminDashboard = lazy(
   () => import("./pages/admin dashboard/AdminDashboard")
 );
-
+const AdminTourGuidesRequest = lazy(
+  () => import("./pages/admin dashboard/AdminTourGuidesRequest")
+);
 function App() {
   return (
     <div className="App">
@@ -94,34 +96,41 @@ function App() {
             element={<ResetPasswordPage />}
           />
         </Route>
-        <Route
-          path={AppRoutes.MACHINE_QUOTATIONS}
-          element={
-            <PageSuspenseFallback>
-              <MachineQuotations />
-            </PageSuspenseFallback>
-          }
-        />
 
-        {/* Admin Layout and Routes */}
-        <Route
-          path={AppRoutes.ADMIN_DASHBOARD}
-          element={
-            <PageSuspenseFallback>
-              <AdminDashboardLayout />
-            </PageSuspenseFallback>
-          }
-        >
+        {/* Admin Layout and Routes , all Routes are private   */}
+        <Route element={<ProtectedRoutes allowedRoles={[UserRoles.ADMIN]} />}>
           <Route
-            index
+            path={AppRoutes.ADMIN}
             element={
               <PageSuspenseFallback>
-                <AdminDashboard />
+                <AdminDashboardLayout />
               </PageSuspenseFallback>
             }
-          />
+          >
+            <Route
+              index
+              element={<Navigate to={AppRoutes.ADMIN_DASHBOARD} replace />}
+            />
+            <Route
+              path={AppRoutes.ADMIN_DASHBOARD}
+              element={
+                <PageSuspenseFallback>
+                  <AdminDashboard />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.ADMIN_TOUR_GUIDES_REQUEST}
+              element={
+                <PageSuspenseFallback>
+                  <AdminTourGuidesRequest />
+                </PageSuspenseFallback>
+              }
+            />
+          </Route>
         </Route>
 
+        {/* Main Layout and Routes for User , some pages public and some private*/}
         <Route
           path={AppRoutes.ROOT}
           element={
@@ -180,7 +189,18 @@ function App() {
             }
           />
 
-          <Route element={<ProtectedRoutes />}>
+          <Route
+            path={AppRoutes.MACHINE_QUOTATIONS}
+            element={
+              <PageSuspenseFallback>
+                <MachineQuotations />
+              </PageSuspenseFallback>
+            }
+          />
+
+          <Route
+            element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
+          >
             <Route
               path={AppRoutes.RECOMMENDATION}
               element={

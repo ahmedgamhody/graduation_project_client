@@ -5,7 +5,7 @@ export default function AdminDashboardLayout() {
   return (
     <div className="flex  min-h-screen">
       <AdminSideBar />
-      <main className="flex-grow">
+      <main className="flex-grow overflow-auto">
         <Outlet />
       </main>
     </div>

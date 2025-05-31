@@ -150,3 +150,29 @@ export const sendContactUserMessage = async (
   );
   return response;
 };
+
+export const setTourguidActive = async (tourguidId: string, token: string) => {
+  const response = await axiosInstance.put(
+    `/Admin/ActiveTourguid?TourguidId=${tourguidId}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Tourguid activated successfully! They can now accept tours.");
+  return response;
+};
+export const deleteTourguid = async (tourguidId: string, token: string) => {
+  const response = await axiosInstance.delete(
+    `/Admin/DeleteTourguid?tourguidId=${tourguidId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Tourguid deleted successfully!");
+  return response;
+};

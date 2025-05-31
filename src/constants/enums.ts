@@ -27,10 +27,12 @@ export enum AppRoutes {
   USER_PROFILE = "/user-profile",
   SHOW_USER_PROFILE = "/show-user-profile/:userId",
   // Admin Pages
+  ADMIN = "/admin",
   ADMIN_DASHBOARD = "/admin/dashboard",
+  ADMIN_TOUR_GUIDES_REQUEST = "/admin/dashboard/tour-guides-request",
 }
-
-export enum UserRole {
-  USER = "USER",
-  ADMIN = "ADMIN",
+export enum UserRoles {
+  ADMIN = "Admin",
+  TOUR_GUIDE = "TourGuide",
+  MEMBER = "Member",
 }
