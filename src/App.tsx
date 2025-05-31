@@ -114,14 +114,7 @@ function App() {
               </PageSuspenseFallback>
             }
           />
-          <Route
-            path={AppRoutes.CONTACT_US}
-            element={
-              <PageSuspenseFallback>
-                <ContactUsPage />
-              </PageSuspenseFallback>
-            }
-          />
+
           <Route
             path={AppRoutes.TYPE_OF_TOURISM}
             element={
@@ -193,6 +186,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <ShowUserProfile />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.CONTACT_US}
+              element={
+                <PageSuspenseFallback>
+                  <ContactUsPage />
                 </PageSuspenseFallback>
               }
             />
