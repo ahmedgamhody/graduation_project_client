@@ -57,9 +57,13 @@ const SingleGovernorate = lazy(
 const MachineQuotations = lazy(
   () => import("./pages/Machine Quotations/MachineQuotations")
 );
-// User Profile Pages
+// User Profile Pages and Favorite Places
 const UserProfile = lazy(() => import("./pages/profile/UserProfile"));
 const ShowUserProfile = lazy(() => import("./pages/profile/ShowUserProfile"));
+const FavoritePlaces = lazy(
+  () => import("./pages/favorite places/FavoritePlaces")
+);
+
 // Admin Pages
 const AdminDashboard = lazy(
   () => import("./pages/admin dashboard/AdminDashboard")
@@ -246,6 +250,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <ContactUsPage />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.FAVORITE_PLACES}
+              element={
+                <PageSuspenseFallback>
+                  <FavoritePlaces />
                 </PageSuspenseFallback>
               }
             />

@@ -176,3 +176,67 @@ export const deleteTourguid = async (tourguidId: string, token: string) => {
   toast.success("Tourguid deleted successfully!");
   return response;
 };
+export const setTourguidReservation = async (
+  tourguidId: string,
+  token: string
+) => {
+  const response = await axiosInstance.post(
+    `/User/ReservationTourguid?tourguidId=${tourguidId}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success(
+    "Tourguid reservation request sent successfully! We'll notify you once it's confirmed."
+  );
+  return response;
+};
+
+export const cancelTourguidReservation = async (token: string) => {
+  const response = await axiosInstance.delete(
+    `/User/CancelReservationTourguid`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success(
+    "Tourguid reservation cancelled successfully! You can request a new reservation anytime."
+  );
+  return response;
+};
+export const handleFavoriteToggleApi = async (
+  token: string,
+  placeName: string,
+  isFavorite: boolean
+) => {
+  const response = await axiosInstance.post(
+    `/User/AddOrRemoveFavoritePlace?PlaceName=${placeName}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (isFavorite) {
+    toast.success("Place removed from favorites successfully!");
+  } else {
+    toast.success("Place added to favorites successfully!");
+  }
+  return response;
+};
+
+export const getAllFavoritePlaces = async (token: string) => {
+  const response = await axiosInstance.get("/User/UserProfile", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = response.data.favoritePlaces || [];
+  return data;
+};

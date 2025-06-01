@@ -7,6 +7,7 @@ export default function TripPlaceCard({
 }: {
   tripPlace: TTripPlace;
 }) {
+  console.log("TripPlaceCard rendered for:", tripPlace);
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}

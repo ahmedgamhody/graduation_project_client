@@ -38,7 +38,7 @@ export default function SingleTourism() {
   });
   console.log(data);
   return (
-    <div className="container mx-auto my-8 px-4 md:px-8 lg:px-16">
+    <div className="container mx-auto my-8 px-4 md:px-8 lg:px-16 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-center text-primary">
         {name} Tourism
       </h1>

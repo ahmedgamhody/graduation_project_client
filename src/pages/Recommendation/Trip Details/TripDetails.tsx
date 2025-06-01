@@ -7,6 +7,8 @@ import { TTripDetails } from "../../../types";
 import PlaceCard from "../../homePage/AllPlaces/PlaceCard";
 import CardPlaceSkeleton from "../../../animations/skeletons/CardPlaceSkeleton";
 import TripInfoSkeleton from "../../../animations/skeletons/TripInfoSkeleton";
+import { User } from "lucide-react";
+import GuideCard from "../../Single place/GuideCard";
 
 export default function TripDetails() {
   const { name } = useParams();
@@ -28,8 +30,9 @@ export default function TripDetails() {
     queryFn: () => fetchSinglePlace(),
     placeholderData: keepPreviousData,
   });
+
   return (
-    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
+    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-center text-primary">
         {name} Trip Details
       </h1>
@@ -64,18 +67,41 @@ export default function TripDetails() {
         </div>
       )}
 
-      <h2 className="text-3xl font-semibold text-secondary mb-8 text-center">
-        Trip Places
-      </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-        {data?.tripPlaces.map((place, idx) => (
-          <PlaceCard place={place} key={idx} />
-        ))}
-
-        {isPending &&
-          Array.from({ length: 6 }, (_, index) => (
-            <CardPlaceSkeleton key={index} />
+      <div className="w-full">
+        <h2 className="text-3xl font-semibold text-secondary mb-8 text-center">
+          Trip Places
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+          {data?.tripPlaces.map((place, idx) => (
+            <PlaceCard place={place} key={idx} />
           ))}
+
+          {isPending &&
+            Array.from({ length: 6 }, (_, index) => (
+              <CardPlaceSkeleton key={index} />
+            ))}
+        </div>
+      </div>
+      <div className="w-full">
+        <h2 className="text-3xl font-semibold text-secondary my-8 text-center">
+          Tour Guides
+        </h2>
+        {data?.tourguids && data.tourguids.length > 0 && (
+          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <User className="w-6 h-6 text-blue-600" />
+              </div>
+              Available Tour Guides
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {data.tourguids.map((guide, index) => (
+                <GuideCard key={index} guide={guide} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -48,7 +48,7 @@ export default function Governorates() {
     setCurrentPage(1);
   }, [searchQuery]);
   return (
-    <div className="container mx-auto my-5">
+    <div className="container mx-auto my-5 flex flex-col items-center">
       <h1 className="text-4xl font-bold text-center text-primary">
         Governorates
       </h1>

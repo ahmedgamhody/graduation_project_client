@@ -38,6 +38,9 @@ export default function NavBar() {
           { to: AppRoutes.CONTACT_US, label: "Contact Us" },
         ]
       : []),
+    ...(role === UserRoles.ADMIN
+      ? [{ to: AppRoutes.ADMIN_DASHBOARD, label: "Dashboard" }]
+      : []),
   ];
   return (
     <header className="bg-white">
@@ -110,14 +113,24 @@ export default function NavBar() {
                     </MenuItem>
                   )}
                   {role === UserRoles.MEMBER && (
-                    <MenuItem>
-                      <button
-                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                        onClick={() => nav(AppRoutes.USER_PROFILE)}
-                      >
-                        Profile
-                      </button>
-                    </MenuItem>
+                    <>
+                      <MenuItem>
+                        <button
+                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                          onClick={() => nav(AppRoutes.USER_PROFILE)}
+                        >
+                          Profile
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                          onClick={() => nav(AppRoutes.FAVORITE_PLACES)}
+                        >
+                          Favorite Places
+                        </button>
+                      </MenuItem>
+                    </>
                   )}
                   <MenuItem>
                     <button
@@ -211,14 +224,24 @@ export default function NavBar() {
                           </MenuItem>
                         )}
                         {role === UserRoles.MEMBER && (
-                          <MenuItem>
-                            <button
-                              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                              onClick={() => nav(AppRoutes.USER_PROFILE)}
-                            >
-                              Profile
-                            </button>
-                          </MenuItem>
+                          <>
+                            <MenuItem>
+                              <button
+                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                onClick={() => nav(AppRoutes.USER_PROFILE)}
+                              >
+                                Profile
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                onClick={() => nav(AppRoutes.FAVORITE_PLACES)}
+                              >
+                                Favorite Places
+                              </button>
+                            </MenuItem>
+                          </>
                         )}
 
                         <MenuItem>

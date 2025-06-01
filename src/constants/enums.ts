@@ -15,6 +15,7 @@ export enum AppRoutes {
   GOVERNORATES = "/governorates",
   MACHINE_QUOTATIONS = "/machine-quotations",
   CONTACT_US = "/contact-us",
+  FAVORITE_PLACES = "/favorite-places",
 
   // Dynamic Pages
   SINGLE_TOURISM = "/type-of-tourism/:name",

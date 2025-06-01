@@ -37,9 +37,10 @@ export type TPlaceDetails = {
   description: string;
   governmentName: string;
   comments: TComment[];
-  tourguids: any[];
+  tourguids: TourGuideCard[];
   typeOfTourism: string[];
   userRates: any[];
+  isFavorite: boolean;
 };
 export type NumberInputField =
   | "stay_duration"
@@ -109,7 +110,12 @@ export type TourGuideCard = {
   name: string;
   id: string;
   photo: string;
-  rate: number;
+  rate?: number;
+  gender?: string;
+  email?: string;
+  phone?: string;
+  isActive?: boolean;
+  isBooked?: boolean;
 };
 export type TNotActiveTourGuide = {
   id: string;

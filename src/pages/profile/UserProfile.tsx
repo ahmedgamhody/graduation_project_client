@@ -58,6 +58,7 @@ export default function UserProfile() {
           phone: data.phone,
         });
         setReadonlyData(data);
+        console.log(data);
       } catch (err) {
         console.error(err);
       }
