@@ -176,9 +176,9 @@ export default function ShowUserProfile() {
 
                   {/* Rating */}
                   <div className="flex items-center justify-center gap-1 mb-3">
-                    {renderStars(data?.tourguid?.rate)}
+                    {renderStars(data?.tourguid?.rate || 0)}
                     <span className="text-sm text-gray-600 mr-2">
-                      ({data?.tourguid?.rate.toFixed(1)})
+                      ({(data?.tourguid?.rate ?? 0).toFixed(1)})
                     </span>
                   </div>
                 </div>

@@ -67,7 +67,7 @@ export default function TripDetails() {
         </div>
       )}
 
-      <div className="w-full">
+      <div className="w-full flex flex-col items-center">
         <h2 className="text-3xl font-semibold text-secondary mb-8 text-center">
           Trip Places
         </h2>

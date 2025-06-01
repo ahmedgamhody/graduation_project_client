@@ -128,3 +128,36 @@ export type TNotActiveTourGuidesData = {
   notActiveTourguids: TNotActiveTourGuide[];
   count: number;
 };
+
+type Tourist = {
+  id: string;
+  name: string;
+  email: string;
+  country: string;
+  photo: string | null;
+};
+
+type RateGroup = {
+  value: number;
+  count: number;
+};
+
+export type GuideData = {
+  name: string;
+  email: string;
+  country: string;
+  phone: string;
+  birthDate: string;
+  allLangues: string[];
+  isActive: boolean;
+  score: number;
+  gender: "Male" | "Female" | string;
+  photo: string;
+  rate: number;
+  places: any | null;
+  tripName: string;
+  tourists: Tourist[];
+  touristsCount: number;
+  rateGroup: RateGroup[];
+  isBooked: boolean;
+};

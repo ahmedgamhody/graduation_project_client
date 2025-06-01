@@ -8,6 +8,7 @@ import {
 import { renderStars } from "../../utils/functions";
 import { Button } from "flowbite-react";
 import { queryClient } from "../../main";
+import { Link } from "react-router-dom";
 
 export default function GuideCard({ guide }: { guide: TourGuideCard }) {
   const token = useAppSelector((state) => state.auth.token);
@@ -36,28 +37,28 @@ export default function GuideCard({ guide }: { guide: TourGuideCard }) {
       setLoading(false);
     }
   };
-
   return (
     <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
       {/* Guide Photo */}
-      <div className="flex flex-col items-center mb-4">
-        <img
-          src={
-            guide.photo
-              ? `https://egypt-guid26.runasp.net/images/${guide.photo}`
-              : "/avatar.png"
-          }
-          alt={guide.name}
-          className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
-          onError={(e) => {
-            e.currentTarget.src = "/avatar.png";
-          }}
-        />
-        <h3 className="text-lg font-semibold text-gray-900 mt-2 text-center">
-          {guide.name}
-        </h3>
-      </div>
-
+      <Link to={`/show-tour-guide-profile/${guide.id}`}>
+        <div className="flex flex-col items-center mb-4 hover:underline hover:text-blue-600 transition duration-300">
+          <img
+            src={
+              guide.photo
+                ? `https://egypt-guid26.runasp.net/images/${guide.photo}`
+                : "/avatar.png"
+            }
+            alt={guide.name}
+            className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
+            onError={(e) => {
+              e.currentTarget.src = "/avatar.png";
+            }}
+          />
+          <h3 className="text-lg font-semibold text-gray-900 mt-2 text-center">
+            {guide.name}
+          </h3>
+        </div>
+      </Link>
       {/* Guide Info */}
       <div className="space-y-2 text-sm text-gray-600 mb-4">
         {guide?.rate !== undefined && guide.rate >= 0 && (

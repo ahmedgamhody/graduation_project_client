@@ -63,7 +63,9 @@ const ShowUserProfile = lazy(() => import("./pages/profile/ShowUserProfile"));
 const FavoritePlaces = lazy(
   () => import("./pages/favorite places/FavoritePlaces")
 );
-
+const ShowTourGuideProfile = lazy(
+  () => import("./pages/profile/ShowTourGuideProfile")
+);
 // Admin Pages
 const AdminDashboard = lazy(
   () => import("./pages/admin dashboard/AdminDashboard")
@@ -242,6 +244,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <ShowUserProfile />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.SHOW_TOUR_GUIDE_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <ShowTourGuideProfile />
                 </PageSuspenseFallback>
               }
             />

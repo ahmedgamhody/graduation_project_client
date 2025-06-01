@@ -240,3 +240,24 @@ export const getAllFavoritePlaces = async (token: string) => {
   const data = response.data.favoritePlaces || [];
   return data;
 };
+
+export const rateTourGuide = async (
+  token: string,
+  tourguidId: string,
+  rate: number
+) => {
+  const response = await axiosInstance.post(
+    "/User/AddTourguidRate",
+    {
+      tourguidId,
+      rate,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Tourguid rated successfully!");
+  return response;
+};
