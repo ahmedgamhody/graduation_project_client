@@ -135,7 +135,7 @@ export default function ShowTourGuideProfile() {
       </div>
     );
   }
-
+  console.log(data);
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -282,7 +282,7 @@ export default function ShowTourGuideProfile() {
           </div>
           {
             /* Action Buttons Section */
-            !data.isBooked && (
+            !data.isBooked ? (
               <div className="p-6 bg-gray-50 border-t border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Book This Tour Guide
@@ -292,6 +292,7 @@ export default function ShowTourGuideProfile() {
                   onClick={() => {
                     handleBookGuide(tourGuideId!);
                   }}
+                  disabled={loading}
                 >
                   <div className="flex items-center justify-center gap-2">
                     {loading ? (
@@ -301,6 +302,28 @@ export default function ShowTourGuideProfile() {
                       </>
                     ) : (
                       <span>Book Tour Guide</span>
+                    )}
+                  </div>
+                </Button>
+              </div>
+            ) : (
+              <div className="p-6 bg-gray-50 border-t border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Cancel Your Booking
+                </h3>
+                <Button
+                  className="w-full bg-red-500 enabled:hover:bg-red-600 !important"
+                  onClick={handleCancelGuide}
+                  disabled={loading}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    {loading ? (
+                      <>
+                        <span className="loader"></span>
+                        <span> Cancelling...</span>
+                      </>
+                    ) : (
+                      <span>Cancel Booking</span>
                     )}
                   </div>
                 </Button>
@@ -395,26 +418,6 @@ export default function ShowTourGuideProfile() {
                             {tourist.country}
                           </p>
                         </div>
-                      </div>
-                      <div>
-                        {data.isBooked && (
-                          <Button
-                            className="w-full bg-red-500 enabled:hover:bg-red-600 !important"
-                            onClick={handleCancelGuide}
-                            disabled={loading}
-                          >
-                            <div className="flex items-center justify-center gap-2">
-                              {loading ? (
-                                <>
-                                  <span className="loader"></span>
-                                  <span> Cancelling...</span>
-                                </>
-                              ) : (
-                                <span>Cancel Tour Guide</span>
-                              )}
-                            </div>
-                          </Button>
-                        )}
                       </div>
                     </div>
                   ))}
