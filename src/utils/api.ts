@@ -261,3 +261,12 @@ export const rateTourGuide = async (
   toast.success("Tourguid rated successfully!");
   return response;
 };
+
+export const getDashboardCharts = async (token: string) => {
+  const response = await axiosInstance.get("/Admin/dashboard", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

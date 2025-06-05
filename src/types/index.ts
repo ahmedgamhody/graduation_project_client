@@ -161,3 +161,25 @@ export type GuideData = {
   rateGroup: RateGroup[];
   isBooked: boolean;
 };
+export interface DashboardData {
+  countFamle: number;
+  peopleForCountries: Array<{
+    country: string;
+    count: number;
+  }>;
+  countMale: number;
+  allTourguidsByScope: Array<{
+    id: string;
+    name: string;
+    email: string;
+    photo: string;
+    birthDate: string;
+    countOfTourisms: number;
+    gender: string;
+  }>;
+  topFavoritePlaces: Array<{
+    name: string;
+    googleRate: number;
+    photo: string;
+  }>;
+}
