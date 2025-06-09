@@ -1,6 +1,11 @@
 import { Button } from "flowbite-react";
 import { useState } from "react";
-import { addComment, deleteComment, updateComment } from "../../utils/api";
+import {
+  addComment,
+  deleteComment,
+  updateComment,
+  deleteCommentByAdmin,
+} from "../../utils/api";
 import { queryClient } from "../../main";
 import { Link, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
@@ -8,9 +13,11 @@ import { TComment, TPlaceDetails } from "../../types";
 import avatar from "../../../public/avatar.png";
 import { Menu } from "@headlessui/react";
 import DeleteSpinier from "../../animations/DeleteSpinier";
+import { UserRoles } from "../../constants/enums";
+import { Trash2 } from "lucide-react";
 export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
   const { name } = useParams();
-  const { token, id } = useAppSelector((state) => state.auth);
+  const { token, id, role } = useAppSelector((state) => state.auth);
   const [comment, setComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
   const [isNeedToUpdateStatus, setIsNeedToUpdateStatus] = useState(false);
@@ -46,6 +53,20 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
       setDeletingCommentId(null);
     }
   };
+
+  const handleDeleteCommentByAdmin = async (commentId: number) => {
+    if (!commentId) return;
+
+    try {
+      setDeletingCommentId(commentId);
+      await deleteCommentByAdmin(token, commentId);
+    } catch (error) {
+      console.error("Failed to delete comment by admin:", error);
+    } finally {
+      queryClient.invalidateQueries({ queryKey: ["place"] });
+      setDeletingCommentId(null);
+    }
+  };
   const handleUpdateComment = async (commentId: number) => {
     if (!name || !commentId) return;
     try {
@@ -65,33 +86,38 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
   };
   return (
     <>
-      <div className="mt-3">
-        <label
-          htmlFor="comment"
-          className="block mb-2 text-lg font-medium text-gray-700"
-        >
-          Review Lists
-        </label>{" "}
-        <textarea
-          id="comment"
-          name="comment"
-          rows={2}
-          disabled={isSubmittingComment}
-          value={comment}
-          placeholder="Write Your Comment ..."
-          className="w-full max-w-[600px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-          onChange={(e) => setComment(e.target.value)}
-        ></textarea>
-      </div>{" "}
-      <div className="flex justify-start">
-        <Button
-          disabled={!comment.trim() || isSubmittingComment}
-          className="bg-secondary enabled:hover:bg-primary !important"
-          onClick={handleComment}
-        >
-          {isSubmittingComment ? "Submitting..." : "Submit"}
-        </Button>
-      </div>
+      {role !== UserRoles.ADMIN && (
+        <>
+          <div className="mt-3">
+            <label
+              htmlFor="comment"
+              className="block mb-2 text-lg font-medium text-gray-700"
+            >
+              Review Lists
+            </label>{" "}
+            <textarea
+              id="comment"
+              name="comment"
+              rows={2}
+              disabled={isSubmittingComment}
+              value={comment}
+              placeholder="Write Your Comment ..."
+              className="w-full max-w-[600px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+              onChange={(e) => setComment(e.target.value)}
+            ></textarea>
+          </div>{" "}
+          <div className="flex justify-start">
+            <Button
+              disabled={!comment.trim() || isSubmittingComment}
+              className="bg-secondary enabled:hover:bg-primary !important"
+              onClick={handleComment}
+            >
+              {isSubmittingComment ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
+        </>
+      )}
+
       {/* Comments Section */}
       <div className="mt-8">
         {" "}
@@ -237,8 +263,18 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
                             </div>
                           </Menu.Items>
                         </Menu>
-                      )}
+                      )}{" "}
                     </div>
+                    {role == UserRoles.ADMIN && (
+                      <Trash2
+                        className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700 transition-colors duration-200"
+                        onClick={() => {
+                          if (commentItem?.id) {
+                            handleDeleteCommentByAdmin(commentItem.id);
+                          }
+                        }}
+                      />
+                    )}
                   </div>
                   <p className="text-gray-700 leading-relaxed">
                     {commentItem?.content}

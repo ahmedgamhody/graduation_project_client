@@ -182,4 +182,5 @@ export interface DashboardData {
     googleRate: number;
     photo: string;
   }>;
+  countTourguid: number;
 }

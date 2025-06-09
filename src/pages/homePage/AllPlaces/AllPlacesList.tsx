@@ -10,7 +10,13 @@ import PaginationComponent from "../../../components/PaginationComponent";
 import { ArrowBigLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function AllPlacesList({ query }: { query?: string }) {
+export default function AllPlacesList({
+  query,
+  isInAdminDashboard,
+}: {
+  query?: string;
+  isInAdminDashboard?: boolean;
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const [pagesNumber, setPagesNumber] = useState(0);
   const nav = useNavigate();
@@ -64,7 +70,11 @@ export default function AllPlacesList({ query }: { query?: string }) {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
             >
               {data?.items.map((place: TPlaceHome, index: number) => (
-                <PlaceCard place={place} key={place.id || index} />
+                <PlaceCard
+                  place={place}
+                  key={place.id || index}
+                  isInAdminDashboard={isInAdminDashboard}
+                />
               ))}
             </motion.div>
           </AnimatePresence>
@@ -80,7 +90,7 @@ export default function AllPlacesList({ query }: { query?: string }) {
       {data?.items.length === 0 && (
         <div className="flex flex-col items-center justify-center gap-4 ">
           <p className="text-2xl font-bold text-gray-800 mt-10">
-            No places found
+            No Places Found for "{query}"
           </p>
           <button
             onClick={() => nav("/")}

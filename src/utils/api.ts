@@ -270,3 +270,77 @@ export const getDashboardCharts = async (token: string) => {
   });
   return response.data;
 };
+
+export const updatePlaceByAdmin = async (
+  token: string,
+  data: {
+    photo: string;
+    description: string;
+    visitingHours: string;
+    googleRate: number;
+  },
+  placeName: string
+) => {
+  const response = await axiosInstance.put(
+    `/Admin/UpdatePlace?PlaceName=${placeName}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Place updated successfully!");
+  return response;
+};
+
+export const addPlaceByAdmin = async (
+  token: string,
+  data: {
+    photo: string;
+    description: string;
+    visitingHours: string;
+    googleRate: number;
+    name: string;
+    location: string;
+    governmentName: string;
+    typeOfTourism: string[];
+  }
+) => {
+  const response = await axiosInstance.post(`/Admin/AddPlace`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  toast.success("Place added successfully!");
+  return response;
+};
+
+export const deletePlaceByAdmin = async (token: string, placeName: string) => {
+  const response = await axiosInstance.delete(
+    `/Admin/DeletePlace?PlaceName=${placeName}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+export const deleteCommentByAdmin = async (
+  token: string,
+  commentId: number
+) => {
+  const response = await axiosInstance.delete(
+    `/Admin/DeleteComment?commentId=${commentId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  toast.success("Comment deleted successfully!");
+
+  return response;
+};

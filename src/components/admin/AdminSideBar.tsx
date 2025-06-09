@@ -2,15 +2,10 @@ import { Link, useLocation } from "react-router-dom";
 import {
   Home,
   Users,
-  //   MapPin,
-  //   Settings,
-  //   BarChart3,
-  //   MessageSquare,
-  //   Building2,
-  //   Plane,
   ChevronLeft,
   ChevronRight,
   ArrowLeft,
+  MapPinHouse,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
@@ -42,6 +37,11 @@ export default function AdminSideBar() {
       path: AppRoutes.ADMIN_TOUR_GUIDES_REQUEST,
       name: "Tour Guides Requests",
       icon: Users,
+    },
+    {
+      path: AppRoutes.ADMIN_PLACES,
+      name: "Places",
+      icon: MapPinHouse,
     },
   ];
 

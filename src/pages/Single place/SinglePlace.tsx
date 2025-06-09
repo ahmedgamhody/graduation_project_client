@@ -12,6 +12,7 @@ import { renderStars } from "../../utils/functions";
 import GuideCard from "./GuideCard";
 import { useState, useEffect } from "react";
 import { handleFavoriteToggleApi } from "../../utils/api";
+import { UserRoles } from "../../constants/enums";
 
 export default function SinglePlace() {
   const { name } = useParams();
@@ -19,7 +20,7 @@ export default function SinglePlace() {
   const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
 
   useTitle(`Place - ${name}`);
-  const token = useAppSelector((state) => state.auth.token);
+  const { token, role } = useAppSelector((state) => state.auth);
   const fetchSinglePlace = () =>
     axiosInstance(`/Place/PlacesDetails?name=${name}`, {
       headers: {
@@ -84,27 +85,30 @@ export default function SinglePlace() {
                 </span>
               </div>
               {/* Favorite Heart Icon */}
-              <button
-                onClick={handleFavoriteToggle}
-                disabled={isUpdatingFavorite}
-                className={`p-2 rounded-full transition-all duration-200 ease-in-out transform hover:scale-110 ${
-                  isUpdatingFavorite
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-gray-100 active:scale-95"
-                }`}
-                title={
-                  isFavorite ? "Remove from favorites" : "Add to favorites"
-                }
-              >
-                <Heart
-                  size={24}
-                  className={`transition-colors duration-200 ${
-                    isFavorite
-                      ? "fill-red-500 text-red-500"
-                      : "text-gray-400 hover:text-red-400"
+
+              {role !== UserRoles.ADMIN && (
+                <button
+                  onClick={handleFavoriteToggle}
+                  disabled={isUpdatingFavorite}
+                  className={`p-2 rounded-full transition-all duration-200 ease-in-out transform hover:scale-110 ${
+                    isUpdatingFavorite
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100 active:scale-95"
                   }`}
-                />
-              </button>
+                  title={
+                    isFavorite ? "Remove from favorites" : "Add to favorites"
+                  }
+                >
+                  <Heart
+                    size={24}
+                    className={`transition-colors duration-200 ${
+                      isFavorite
+                        ? "fill-red-500 text-red-500"
+                        : "text-gray-400 hover:text-red-400"
+                    }`}
+                  />
+                </button>
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-5">
@@ -132,25 +136,25 @@ export default function SinglePlace() {
             </div>
           </div>
           {data?.tourguids && data.tourguids.length > 0 && (
-            <h2 className="text-3xl font-semibold text-secondary my-3 text-center">
-              Tour Guides
-            </h2>
-          )}
-          {data?.tourguids && data.tourguids.length > 0 && (
-            <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <User className="w-6 h-6 text-blue-600" />
-                </div>
-                Available Tour Guides
+            <>
+              <h2 className="text-3xl font-semibold text-secondary my-3 text-center">
+                Tour Guides
               </h2>
+              <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <div className="p-2 bg-blue-100 rounded-lg">
+                    <User className="w-6 h-6 text-blue-600" />
+                  </div>
+                  Available Tour Guides
+                </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {data.tourguids.map((guide, index) => (
-                  <GuideCard key={index} guide={guide} />
-                ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {data.tourguids.map((guide, index) => (
+                    <GuideCard key={index} guide={guide} />
+                  ))}
+                </div>
               </div>
-            </div>
+            </>
           )}
           <SinglePlaceComments data={data} />
         </div>

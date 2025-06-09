@@ -71,7 +71,7 @@ export default function AdminDashboard() {
   ];
   console.log(data);
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className=" bg-gray-50 p-6 max-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
               <div className="ml-4">
                 <p className="text-sm text-gray-500">Tour Guides</p>
                 <p className="text-2xl font-bold text-gray-900">
-                  {data.allTourguidsByScope.length}
+                  {data.countTourguid}
                 </p>
               </div>
             </div>

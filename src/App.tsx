@@ -73,6 +73,7 @@ const AdminDashboard = lazy(
 const AdminTourGuidesRequest = lazy(
   () => import("./pages/admin dashboard/AdminTourGuidesRequest")
 );
+const AdminPlaces = lazy(() => import("./pages/admin dashboard/AdminPlaces"));
 function App() {
   return (
     <div className="App">
@@ -125,11 +126,20 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
+
             <Route
               path={AppRoutes.ADMIN_TOUR_GUIDES_REQUEST}
               element={
                 <PageSuspenseFallback>
                   <AdminTourGuidesRequest />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.ADMIN_PLACES}
+              element={
+                <PageSuspenseFallback>
+                  <AdminPlaces />
                 </PageSuspenseFallback>
               }
             />
@@ -185,8 +195,7 @@ function App() {
                 <SingleTourism />
               </PageSuspenseFallback>
             }
-          />
-          <Route
+          />          <Route
             path={AppRoutes.SINGLE_GOVERNORATE}
             element={
               <PageSuspenseFallback>
@@ -203,6 +212,20 @@ function App() {
               </PageSuspenseFallback>
             }
           />
+
+          {/* SinglePlace route for both Admin and Member */}
+          <Route
+            element={<ProtectedRoutes allowedRoles={[UserRoles.ADMIN, UserRoles.MEMBER]} />}
+          >
+            <Route
+              path={AppRoutes.SINGLE_PLACE}
+              element={
+                <PageSuspenseFallback>
+                  <SinglePlace />
+                </PageSuspenseFallback>
+              }
+            />
+          </Route>
 
           <Route
             element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
@@ -222,8 +245,7 @@ function App() {
                   <UserProfile />
                 </PageSuspenseFallback>
               }
-            />
-            <Route
+            />            <Route
               path={AppRoutes.TRIP_DETAILS}
               element={
                 <PageSuspenseFallback>
@@ -231,14 +253,7 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
-            <Route
-              path={AppRoutes.SINGLE_PLACE}
-              element={
-                <PageSuspenseFallback>
-                  <SinglePlace />
-                </PageSuspenseFallback>
-              }
-            />
+
             <Route
               path={AppRoutes.SHOW_USER_PROFILE}
               element={
