@@ -8,7 +8,7 @@ import {
   UpdatePlaceSchema,
 } from "../../validation/AdminPlaceValidation";
 import { visitingHoursOptions } from "../../pages/admin dashboard";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { updatePlaceByAdmin } from "../../utils/api";
 import { useAppSelector } from "../../store/hooks";
 import { queryClient } from "../../main";
@@ -23,11 +23,10 @@ export default function UpdatePlaceModal({
   handleCloseUpdateModal: () => void;
 }) {
   const { token } = useAppSelector((state) => state.auth);
-  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     watch,
     reset,
   } = useForm<UpdatePlaceFormData>({
@@ -58,18 +57,16 @@ export default function UpdatePlaceModal({
 
   const onSubmit = async (data: UpdatePlaceFormData) => {
     try {
-      setLoading(true);
       await updatePlaceByAdmin(token, data, selectedPlace.name);
     } catch (error) {
       console.error("Error updating place:", error);
     } finally {
       queryClient.invalidateQueries({ queryKey: ["AllPlaces"] });
-      setLoading(false);
       handleCloseUpdateModal();
     }
   };
 
-  if (loading) {
+  if (isSubmitting) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl p-8 text-center">

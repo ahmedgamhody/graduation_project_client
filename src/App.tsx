@@ -171,7 +171,6 @@ function App() {
               </PageSuspenseFallback>
             }
           />
-
           <Route
             path={AppRoutes.TYPE_OF_TOURISM}
             element={
@@ -195,7 +194,8 @@ function App() {
                 <SingleTourism />
               </PageSuspenseFallback>
             }
-          />          <Route
+          />
+          <Route
             path={AppRoutes.SINGLE_GOVERNORATE}
             element={
               <PageSuspenseFallback>
@@ -203,7 +203,6 @@ function App() {
               </PageSuspenseFallback>
             }
           />
-
           <Route
             path={AppRoutes.MACHINE_QUOTATIONS}
             element={
@@ -212,10 +211,13 @@ function App() {
               </PageSuspenseFallback>
             }
           />
-
           {/* SinglePlace route for both Admin and Member */}
           <Route
-            element={<ProtectedRoutes allowedRoles={[UserRoles.ADMIN, UserRoles.MEMBER]} />}
+            element={
+              <ProtectedRoutes
+                allowedRoles={[UserRoles.ADMIN, UserRoles.MEMBER]}
+              />
+            }
           >
             <Route
               path={AppRoutes.SINGLE_PLACE}
@@ -226,7 +228,6 @@ function App() {
               }
             />
           </Route>
-
           <Route
             element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
           >
@@ -245,7 +246,8 @@ function App() {
                   <UserProfile />
                 </PageSuspenseFallback>
               }
-            />            <Route
+            />{" "}
+            <Route
               path={AppRoutes.TRIP_DETAILS}
               element={
                 <PageSuspenseFallback>
@@ -253,7 +255,6 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
-
             <Route
               path={AppRoutes.SHOW_USER_PROFILE}
               element={

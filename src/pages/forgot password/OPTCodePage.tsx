@@ -146,6 +146,7 @@ export default function OPTCodePage() {
                 <input
                   key={index}
                   ref={(el) => (inputRefs.current[index] = el)}
+                  inputMode="numeric"
                   type="text"
                   maxLength={1}
                   className={`w-12 h-12 text-center text-lg font-semibold border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${

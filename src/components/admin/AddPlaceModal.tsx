@@ -23,7 +23,6 @@ export default function AddPlaceModal({
   handleCloseAddPlaceModal: () => void;
 }) {
   const { token } = useAppSelector((state) => state.auth);
-  const [loading, setLoading] = useState(false);
   const [selectedTypesOfTourism, setSelectedTypesOfTourism] = useState<
     string[]
   >([allTypesOfTourism[0]]);
@@ -31,7 +30,7 @@ export default function AddPlaceModal({
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     watch,
     setValue,
   } = useForm<AddPlaceFormData>({
@@ -50,18 +49,16 @@ export default function AddPlaceModal({
   });
   const onSubmit = async (data: AddPlaceFormData) => {
     try {
-      setLoading(true);
       await addPlaceByAdmin(token, data);
     } catch (error) {
       console.error("Error adding place:", error);
     } finally {
       queryClient.invalidateQueries({ queryKey: ["AllPlaces"] });
-      setLoading(false);
       handleCloseAddPlaceModal();
     }
   };
 
-  if (loading) {
+  if (isSubmitting) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-xl p-8 text-center">
@@ -350,22 +347,22 @@ export default function AddPlaceModal({
           <button
             onClick={() => handleCloseAddPlaceModal()}
             className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
-            disabled={loading}
+            disabled={isSubmitting}
           >
             Close
           </button>
           <button
             type="submit"
             form="add-place-form"
-            disabled={!isValid || loading}
+            disabled={!isValid || isSubmitting}
             className={`flex items-center gap-2 px-6 py-2 rounded-lg transition-colors duration-200 ${
-              isValid && !loading
+              isValid && !isSubmitting
                 ? "bg-green-600 hover:bg-green-700 text-white"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
             }`}
           >
             <CirclePlus className="w-4 h-4" />
-            {loading ? "Adding..." : "Add Place"}
+            {isSubmitting ? "Adding..." : "Add Place"}
           </button>
         </div>
       </motion.div>
