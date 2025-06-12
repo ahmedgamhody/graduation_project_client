@@ -6,6 +6,7 @@ import {
   ChevronRight,
   ArrowLeft,
   MapPinHouse,
+  BookUser,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
@@ -42,6 +43,11 @@ export default function AdminSideBar() {
       path: AppRoutes.ADMIN_PLACES,
       name: "Places",
       icon: MapPinHouse,
+    },
+    {
+      path: AppRoutes.ADMIN_USERS_CONTACT_US_PROBLEMS,
+      name: "Users Problems",
+      icon: BookUser,
     },
   ];
 

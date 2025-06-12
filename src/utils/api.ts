@@ -2,6 +2,7 @@
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/axiosInstance";
 import { UserProfileFormData } from "../validation/ProfileValidation";
+import { ContactUsResponse } from "../types";
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -343,4 +344,52 @@ export const deleteCommentByAdmin = async (
   toast.success("Comment deleted successfully!");
 
   return response;
+};
+
+export const getAllUsersProblems = async (
+  token: string
+): Promise<ContactUsResponse> => {
+  const response = await axiosInstance.get("/Admin/ContactUsProblems", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const getResolvedUserProblems = async (
+  token: string
+): Promise<ContactUsResponse> => {
+  const response = await axiosInstance.get("/Admin/ResolvedContactUsProblems", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return response.data;
+};
+
+export const deleteUserProblem = async (token: string, problemId: number) => {
+  const response = await axiosInstance.delete(
+    `/Admin/DeleteContactUsProblem?problemId=${problemId}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  toast.success("User problem deleted successfully!");
+  return response.data;
+};
+
+export const resolveUserProblem = async (
+  token: string,
+  contactUsId: number,
+  replyMessage: string
+) => {
+  const response = await axiosInstance.post(
+    `/Admin/ReplyToContactUs`,
+    {
+      contactUsId,
+      replyMessage,
+    },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  toast.success("User problem resolved successfully!");
+  return response.data;
 };

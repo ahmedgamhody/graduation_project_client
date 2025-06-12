@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../api/axiosInstance";
 import { User, MapPin, Phone, Calendar, Globe } from "lucide-react";
@@ -142,47 +142,49 @@ export default function ShowUserProfile() {
 
           {data?.tourguid ? (
             <div className="text-center">
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-lg transition-shadow duration-300">
-                {/* Guide Photo */}
-                <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-3 border-blue-200">
-                  {data?.tourguid?.photo ? (
-                    <img
-                      src={`https://egypt-guid26.runasp.net/images/${data?.tourguid?.photo}`}
-                      alt={data?.tourguid?.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div
-                      className={`w-full h-full bg-gray-200 flex items-center justify-center ${
-                        data?.tourguid?.photo ? "hidden" : ""
-                      }`}
-                    >
-                      {" "}
-                      <div className="text-center">
-                        <User className="w-8 h-8 text-gray-400 mx-auto" />
-                        <span className="text-xs text-gray-500 mt-1 block">
-                          No Image
-                        </span>
+              <Link to={`/show-tour-guide-profile/${data?.tourguid?.id}`}>
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 hover:shadow-lg transition-shadow duration-300">
+                  {/* Guide Photo */}
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-3 border-blue-200">
+                    {data?.tourguid?.photo ? (
+                      <img
+                        src={`https://egypt-guid26.runasp.net/images/${data?.tourguid?.photo}`}
+                        alt={data?.tourguid?.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className={`w-full h-full bg-gray-200 flex items-center justify-center ${
+                          data?.tourguid?.photo ? "hidden" : ""
+                        }`}
+                      >
+                        {" "}
+                        <div className="text-center">
+                          <User className="w-8 h-8 text-gray-400 mx-auto" />
+                          <span className="text-xs text-gray-500 mt-1 block">
+                            No Image
+                          </span>
+                        </div>
                       </div>
+                    )}
+                  </div>
+
+                  {/* Guide Info */}
+                  <div className="text-center">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                      {data?.tourguid?.name}
+                    </h3>
+
+                    {/* Rating */}
+                    <div className="flex items-center justify-center gap-1 mb-3">
+                      {renderStars(data?.tourguid?.rate || 0)}
+                      <span className="text-sm text-gray-600 mr-2">
+                        ({(data?.tourguid?.rate ?? 0).toFixed(1)})
+                      </span>
                     </div>
-                  )}
-                </div>
-
-                {/* Guide Info */}
-                <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                    {data?.tourguid?.name}
-                  </h3>
-
-                  {/* Rating */}
-                  <div className="flex items-center justify-center gap-1 mb-3">
-                    {renderStars(data?.tourguid?.rate || 0)}
-                    <span className="text-sm text-gray-600 mr-2">
-                      ({(data?.tourguid?.rate ?? 0).toFixed(1)})
-                    </span>
                   </div>
                 </div>
-              </div>
+              </Link>
             </div>
           ) : (
             <div className="text-center py-12">

@@ -184,3 +184,18 @@ export interface DashboardData {
   }>;
   countTourguid: number;
 }
+export interface ContactUsProblem {
+  id: number;
+  problem: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userPhoto: string;
+  createdAt: string;
+  isResolved: boolean;
+}
+
+export interface ContactUsResponse {
+  count: number;
+  problems: ContactUsProblem[];
+}

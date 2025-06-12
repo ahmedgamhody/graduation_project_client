@@ -14,7 +14,7 @@ export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const handleClose = () => setIsOpen(false);
   const dispatch = useAppDispatch();
-  const { name, token, role } = useAppSelector((state) => state.auth);
+  const { name, token, role, id } = useAppSelector((state) => state.auth);
   const nav = useNavigate();
   const handleSignOut = async () => {
     try {
@@ -117,9 +117,17 @@ export default function NavBar() {
                       <MenuItem>
                         <button
                           className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                          onClick={() => nav(`show-user-profile/${id}`)}
+                        >
+                          My Profile
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                           onClick={() => nav(AppRoutes.USER_PROFILE)}
                         >
-                          Profile
+                          Edit Profile
                         </button>
                       </MenuItem>
                       <MenuItem>
@@ -228,9 +236,17 @@ export default function NavBar() {
                             <MenuItem>
                               <button
                                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                                onClick={() => nav(`show-user-profile/${id}`)}
+                              >
+                                My Profile
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
                                 onClick={() => nav(AppRoutes.USER_PROFILE)}
                               >
-                                Profile
+                                Edit Profile
                               </button>
                             </MenuItem>
                             <MenuItem>

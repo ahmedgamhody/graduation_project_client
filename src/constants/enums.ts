@@ -33,6 +33,7 @@ export enum AppRoutes {
   ADMIN_DASHBOARD = "/admin/dashboard",
   ADMIN_TOUR_GUIDES_REQUEST = "/admin/dashboard/tour-guides-request",
   ADMIN_PLACES = "/admin/dashboard/places",
+  ADMIN_USERS_CONTACT_US_PROBLEMS = "/admin/dashboard/users-contact-us-problems",
 }
 export enum UserRoles {
   ADMIN = "Admin",

@@ -24,24 +24,29 @@ export default function TourGuideRegisterPage() {
   const [errorMessage, setErrorMessage] = useState("");
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
     null
-  );  const [isSubmitting, setIsSubmitting] = useState(false);
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [placeSearchTerm, setPlaceSearchTerm] = useState("");
   const [showPlaceDropdown, setShowPlaceDropdown] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");const ref = useRef<HTMLInputElement | null>(null);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const ref = useRef<HTMLInputElement | null>(null);
   const cvRef = useRef<HTMLInputElement | null>(null);
   const placeDropdownRef = useRef<HTMLDivElement | null>(null);
-    // Close dropdown when clicking outside
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (placeDropdownRef.current && !placeDropdownRef.current.contains(event.target as Node)) {
+      if (
+        placeDropdownRef.current &&
+        !placeDropdownRef.current.contains(event.target as Node)
+      ) {
         setShowPlaceDropdown(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -53,12 +58,14 @@ export default function TourGuideRegisterPage() {
 
     return () => clearTimeout(timer);
   }, [placeSearchTerm]);
-  const { token } = useAppSelector((state) => state.auth);  const { placesNames: AllPlacesName, loading: placesLoading } =
+  const { token } = useAppSelector((state) => state.auth);
+  const { placesNames: AllPlacesName, loading: placesLoading } =
     usePlacesNames();
-    // Filter places based on search term
-  const filteredPlaces = AllPlacesName?.filter((place) =>
-    place.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-  ) || [];
+  // Filter places based on search term
+  const filteredPlaces =
+    AllPlacesName?.filter((place) =>
+      place.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
+    ) || [];
   const nav = useNavigate();
   const {
     register,
@@ -399,8 +406,10 @@ export default function TourGuideRegisterPage() {
                     {errors.BirthDate.message}
                   </p>
                 )}
-              </div>{" "}              <div className="mb-3">
-                <label className="block text-gray-700">Place Name</label>                <div className="relative" ref={placeDropdownRef}>
+              </div>{" "}
+              <div className="mb-3">
+                <label className="block text-gray-700">Place Name</label>{" "}
+                <div className="relative" ref={placeDropdownRef}>
                   <div className="relative">
                     <input
                       type="text"
@@ -413,11 +422,15 @@ export default function TourGuideRegisterPage() {
                         setValue("PlaceName", "");
                       }}
                       onFocus={() => setShowPlaceDropdown(true)}
-                      placeholder={placesLoading ? "Loading places..." : "Search for a place..."}
+                      placeholder={
+                        placesLoading
+                          ? "Loading places..."
+                          : "Search for a place..."
+                      }
                       disabled={isSubmitting || placesLoading}
                       className="w-full px-3 py-2 pr-10 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                     />
-                      {/* Search/Clear Icon */}
+                    {/* Search/Clear Icon */}
                     <div className="absolute right-3 top-3 text-gray-400">
                       {selectedPlace ? (
                         <button
@@ -432,24 +445,44 @@ export default function TourGuideRegisterPage() {
                           className="text-gray-500 hover:text-gray-700"
                           title="Clear selection"
                         >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
                           </svg>
                         </button>
                       ) : (
-                        <svg className="w-4 h-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        <svg
+                          className="w-4 h-4 pointer-events-none"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                          />
                         </svg>
                       )}
                     </div>
                   </div>
-                    {/* Hidden input for form registration */}
+                  {/* Hidden input for form registration */}
                   <input
                     {...register("PlaceName")}
                     type="hidden"
                     value={selectedPlace}
                   />
-                    {/* Dropdown list */}
+                  {/* Dropdown list */}
                   {showPlaceDropdown && !placesLoading && (
                     <div className="absolute z-10 w-full bg-white border border-gray-400 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg">
                       {filteredPlaces.length > 0 ? (
@@ -467,7 +500,9 @@ export default function TourGuideRegisterPage() {
                               className="px-3 py-2 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                             >
                               <span className="text-sm text-gray-700">
-                                {place.length > 50 ? `${place.slice(0, 50)}...` : place}
+                                {place.length > 50
+                                  ? `${place.slice(0, 50)}...`
+                                  : place}
                               </span>
                             </div>
                           ))}
@@ -475,11 +510,11 @@ export default function TourGuideRegisterPage() {
                             <div className="px-3 py-2 text-xs text-gray-500 text-center bg-gray-50">
                               Showing first 20 results. Type to narrow search.
                             </div>
-                          )}
+                          )}{" "}
                         </>
-                      ) : placeSearchTerm ? (
+                      ) : debouncedSearchTerm ? (
                         <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                          No places found matching "{placeSearchTerm}"
+                          No places found matching "{debouncedSearchTerm}"
                         </div>
                       ) : (
                         <div className="px-3 py-2 text-sm text-gray-500 text-center">

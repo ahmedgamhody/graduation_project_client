@@ -74,6 +74,9 @@ const AdminTourGuidesRequest = lazy(
   () => import("./pages/admin dashboard/AdminTourGuidesRequest")
 );
 const AdminPlaces = lazy(() => import("./pages/admin dashboard/AdminPlaces"));
+const AdminUsersContactUsProblems = lazy(
+  () => import("./pages/admin dashboard/AdminUsersContactUsProblems")
+);
 function App() {
   return (
     <div className="App">
@@ -140,6 +143,14 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <AdminPlaces />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.ADMIN_USERS_CONTACT_US_PROBLEMS}
+              element={
+                <PageSuspenseFallback>
+                  <AdminUsersContactUsProblems />
                 </PageSuspenseFallback>
               }
             />
@@ -227,6 +238,23 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
+            <Route
+              path={AppRoutes.SHOW_USER_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <ShowUserProfile />
+                </PageSuspenseFallback>
+              }
+            />
+
+            <Route
+              path={AppRoutes.SHOW_TOUR_GUIDE_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <ShowTourGuideProfile />
+                </PageSuspenseFallback>
+              }
+            />
           </Route>
           <Route
             element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
@@ -246,7 +274,7 @@ function App() {
                   <UserProfile />
                 </PageSuspenseFallback>
               }
-            />{" "}
+            />
             <Route
               path={AppRoutes.TRIP_DETAILS}
               element={
@@ -255,22 +283,7 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
-            <Route
-              path={AppRoutes.SHOW_USER_PROFILE}
-              element={
-                <PageSuspenseFallback>
-                  <ShowUserProfile />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path={AppRoutes.SHOW_TOUR_GUIDE_PROFILE}
-              element={
-                <PageSuspenseFallback>
-                  <ShowTourGuideProfile />
-                </PageSuspenseFallback>
-              }
-            />
+
             <Route
               path={AppRoutes.CONTACT_US}
               element={
