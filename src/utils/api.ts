@@ -393,3 +393,59 @@ export const resolveUserProblem = async (
   toast.success("User problem resolved successfully!");
   return response.data;
 };
+
+export const deleteTripByAdmin = async (token: string, tripName: string) => {
+  const response = await axiosInstance.delete(
+    `/Admin/DeleteTrip?tripName=${tripName}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response;
+};
+
+export const addTripByAdmin = async (
+  token: string,
+  data: {
+    name: string;
+    description: string;
+    price: number;
+    days: number;
+    programName: string;
+    tripsPlaces: string[];
+  }
+) => {
+  const response = await axiosInstance.post(`/Admin/AddTrip`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  toast.success("Trip added successfully!");
+  return response;
+};
+
+export const updateTripByAdmin = async (
+  token: string,
+  tripName: string,
+  data: {
+    description: string;
+    price: number;
+    days: number;
+    programName: string;
+    trips_Places: string[];
+  }
+) => {
+  const response = await axiosInstance.put(
+    `/Admin/UpdateTrip?tripName=${tripName}`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Trip updated successfully!");
+  return response;
+};

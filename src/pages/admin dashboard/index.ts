@@ -45,4 +45,17 @@ const allTypesOfTourism = [
   "Religious",
 ] as const;
 
-export { visitingHoursOptions, allGovernorates, allTypesOfTourism };
+const allProgramsNames = [
+  "Adventure Program",
+  "Beach Program",
+  "Historical Program",
+  "Major Cities Program",
+  "Relaxation Program",
+] as const;
+
+export {
+  visitingHoursOptions,
+  allGovernorates,
+  allTypesOfTourism,
+  allProgramsNames,
+};

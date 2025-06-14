@@ -77,6 +77,10 @@ const AdminPlaces = lazy(() => import("./pages/admin dashboard/AdminPlaces"));
 const AdminUsersContactUsProblems = lazy(
   () => import("./pages/admin dashboard/AdminUsersContactUsProblems")
 );
+const AdminTripPlaces = lazy(
+  () => import("./pages/admin dashboard/AdminTripPlaces")
+);
+
 function App() {
   return (
     <div className="App">
@@ -151,6 +155,15 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <AdminUsersContactUsProblems />
+                </PageSuspenseFallback>
+              }
+            />
+
+            <Route
+              path={AppRoutes.ADMIN_TRIP_PLACES}
+              element={
+                <PageSuspenseFallback>
+                  <AdminTripPlaces />
                 </PageSuspenseFallback>
               }
             />
@@ -255,6 +268,14 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
+            <Route
+              path={AppRoutes.TRIP_DETAILS}
+              element={
+                <PageSuspenseFallback>
+                  <TripDetails />
+                </PageSuspenseFallback>
+              }
+            />
           </Route>
           <Route
             element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
@@ -272,14 +293,6 @@ function App() {
               element={
                 <PageSuspenseFallback>
                   <UserProfile />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path={AppRoutes.TRIP_DETAILS}
-              element={
-                <PageSuspenseFallback>
-                  <TripDetails />
                 </PageSuspenseFallback>
               }
             />

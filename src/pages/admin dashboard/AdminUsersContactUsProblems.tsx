@@ -103,13 +103,13 @@ export default function AdminUsersContactUsProblems() {
   function handleShowResolvedModal(problemId: number) {
     setShowResolvedModal(true);
     setProblemId(problemId);
-    reset(); // Reset form when opening modal
+    reset();
   }
 
   function handleCloseResolvedModal() {
     setShowResolvedModal(false);
     setProblemId(null);
-    reset(); // Reset form when closing modal
+    reset();
   }
 
   async function handleResolveProblem(data: ReplyFormData) {

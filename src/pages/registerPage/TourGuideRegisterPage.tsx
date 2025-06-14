@@ -11,10 +11,11 @@ import {
 } from "../../validation/RegisterValidation";
 import toast from "react-hot-toast";
 import { useAppSelector } from "../../store/hooks";
-import { countries, AllTripsName, languages } from ".";
+import { countries, languages } from ".";
 import axiosInstance from "../../api/axiosInstance";
 import { AppRoutes } from "../../constants/enums";
 import { usePlacesNames } from "../../hooks/usePlacesNames";
+import { useTripsNames } from "../../hooks/useTripNames";
 export default function TourGuideRegisterPage() {
   useTitle("Register - Tour Guide");
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +62,7 @@ export default function TourGuideRegisterPage() {
   const { token } = useAppSelector((state) => state.auth);
   const { placesNames: AllPlacesName, loading: placesLoading } =
     usePlacesNames();
+  const { tripsNames: AllTripsName, loading: tripsLoading } = useTripsNames();
   // Filter places based on search term
   const filteredPlaces =
     AllPlacesName?.filter((place) =>
@@ -335,14 +337,14 @@ export default function TourGuideRegisterPage() {
                 <label className="block text-gray-700">Trip Name</label>
                 <select
                   {...register("TripName")}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || tripsLoading}
                   defaultValue=""
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
                   <option value="" disabled>
-                    Select a trip type
+                    {tripsLoading ? "Loading trips..." : "Select a trip type"}
                   </option>
-                  {AllTripsName.map((trip) => (
+                  {AllTripsName?.map((trip) => (
                     <option key={trip} value={trip}>
                       {trip}
                     </option>

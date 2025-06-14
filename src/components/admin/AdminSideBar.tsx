@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   MapPinHouse,
   BookUser,
+  LandPlot,
 } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import {
@@ -41,13 +42,18 @@ export default function AdminSideBar() {
     },
     {
       path: AppRoutes.ADMIN_PLACES,
-      name: "Places",
+      name: "Manage Places",
       icon: MapPinHouse,
     },
     {
       path: AppRoutes.ADMIN_USERS_CONTACT_US_PROBLEMS,
       name: "Users Problems",
       icon: BookUser,
+    },
+    {
+      path: AppRoutes.ADMIN_TRIP_PLACES,
+      name: "Manage Trips",
+      icon: LandPlot,
     },
   ];
 

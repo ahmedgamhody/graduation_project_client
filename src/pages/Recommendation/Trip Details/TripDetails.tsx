@@ -9,11 +9,12 @@ import CardPlaceSkeleton from "../../../animations/skeletons/CardPlaceSkeleton";
 import TripInfoSkeleton from "../../../animations/skeletons/TripInfoSkeleton";
 import { User } from "lucide-react";
 import GuideCard from "../../Single place/GuideCard";
+import { UserRoles } from "../../../constants/enums";
 
 export default function TripDetails() {
   const { name } = useParams();
   useTitle(`Trip Details - ${name}`);
-  const token = useAppSelector((state) => state.auth.token);
+  const { token, role } = useAppSelector((state) => state.auth);
   const fetchSinglePlace = () =>
     axiosInstance(`/Programes/Trip-Details?TripName=${name}`, {
       headers: {
@@ -30,9 +31,9 @@ export default function TripDetails() {
     queryFn: () => fetchSinglePlace(),
     placeholderData: keepPreviousData,
   });
-
+  console.log("Trip Details Data:", data);
   return (
-    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16 flex flex-col items-center">
+    <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16 flex flex-col items-center ">
       <h1 className="text-4xl font-bold text-center text-primary">
         {name} Trip Details
       </h1>
@@ -40,7 +41,7 @@ export default function TripDetails() {
       {isPending ? (
         <TripInfoSkeleton />
       ) : (
-        <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-xl my-10">
+        <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-xl my-10 w-full ">
           <p className="text-lg text-gray-700 dark:text-gray-300 mb-4 flex gap-2 items-center">
             <strong className="text-primary">Program:</strong>{" "}
             <p className="bg-secondary text-white px-2 py-1 rounded">
@@ -82,27 +83,29 @@ export default function TripDetails() {
             ))}
         </div>
       </div>
-      <div className="w-full">
-        <h2 className="text-3xl font-semibold text-secondary my-8 text-center">
-          Tour Guides
-        </h2>
-        {data?.tourguids && data.tourguids.length > 0 && (
-          <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <User className="w-6 h-6 text-blue-600" />
-              </div>
-              Available Tour Guides
-            </h2>
+      {role !== UserRoles.ADMIN && (
+        <div className="w-full">
+          <h2 className="text-3xl font-semibold text-secondary my-8 text-center">
+            Tour Guides
+          </h2>
+          {data?.tourguids && data.tourguids.length > 0 && (
+            <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <User className="w-6 h-6 text-blue-600" />
+                </div>
+                Available Tour Guides
+              </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {data.tourguids.map((guide, index) => (
-                <GuideCard key={index} guide={guide} />
-              ))}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {data.tourguids.map((guide, index) => (
+                  <GuideCard key={index} guide={guide} />
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
