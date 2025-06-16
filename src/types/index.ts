@@ -1,3 +1,5 @@
+import { MachineQuestionsFormData } from "../validation/MachineQuestionsValidation";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type TLoading = "idle" | "pending" | "succeeded" | "failed";
 export type TPlaceHome = {
@@ -199,3 +201,9 @@ export interface ContactUsResponse {
   count: number;
   problems: ContactUsProblem[];
 }
+
+export type MachineQuestionsRequestData = MachineQuestionsFormData & {
+  country: string;
+  gender: string;
+  Age: number;
+};

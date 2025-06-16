@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const MachineQuotationsSchema = z.object({
+export const MachineQuestionsSchema = z.object({
   with_family: z.enum(["With Family", "Without Family"], {
     message: "With family is required",
   }),
@@ -56,4 +56,4 @@ export const MachineQuotationsSchema = z.object({
     }),
 });
 
-export type MachineQuotationsFormData = z.infer<typeof MachineQuotationsSchema>;
+export type MachineQuestionsFormData = z.infer<typeof MachineQuestionsSchema>;

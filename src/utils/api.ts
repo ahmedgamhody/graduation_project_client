@@ -2,7 +2,7 @@
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/axiosInstance";
 import { UserProfileFormData } from "../validation/ProfileValidation";
-import { ContactUsResponse } from "../types";
+import { ContactUsResponse, MachineQuestionsRequestData } from "../types";
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -447,5 +447,23 @@ export const updateTripByAdmin = async (
     }
   );
   toast.success("Trip updated successfully!");
+  return response;
+};
+
+export const sendMachineQuestions = async (
+  data: MachineQuestionsRequestData
+) => {
+  const response = await axiosInstance.post(
+    `${import.meta.env.VITE_BASE_URL_MACHINE_QUESTIONS}/predict_tourism_type/`,
+    data
+  );
+  return response;
+};
+
+export const sendUserProgram = async (userid: string, program: string) => {
+  const response = await axiosInstance.post(
+    `MLValues/ProgramName?userid=${userid}&program=${program}`
+  );
+  toast.success("Your Answers sent successfully!");
   return response;
 };

@@ -31,7 +31,7 @@ export const UserRegisterSchema = z.object({
   ),
   language: z.string().min(1, { message: "Language is required" }),
 
-  gender: z.enum(["male", "female"], { message: "Select a gender" }),
+  gender: z.enum(["Male", "Female"], { message: "Select a gender" }),
 });
 
 export type UserRegisterFormData = z.infer<typeof UserRegisterSchema>;
@@ -64,7 +64,7 @@ export const TourGuideRegisterSchema = z.object({
       message: "Please enter a valid birth date that is not in the future",
     }
   ),
-  Gender: z.enum(["male", "female"], { message: "Select a gender" }),
+  Gender: z.enum(["Male", "Female"], { message: "Select a gender" }),
   image: z
     .any()
     .refine((file) => file?.length === 1, "Profile image is required")

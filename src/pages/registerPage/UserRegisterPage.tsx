@@ -32,13 +32,12 @@ const UserRegisterPage = () => {
   });
 
   const onSubmit = async (data: UserRegisterFormData) => {
-    console.log("Register Data:", data);
     try {
       const result = await dispatch(actAuthRegister(data)).unwrap();
 
       if (result.token) {
         toast.success(`Registration successful! Welcome ${result.name}`);
-        nav("/machine-quotations");
+        nav("/machine-quotations", { state: { user: data } });
       } else {
         toast.error("Registration failed. Please check your details.");
       }
@@ -132,8 +131,8 @@ const UserRegisterPage = () => {
                   className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
                 >
                   <option className="hidden">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
                 {errors.gender && (
                   <p className="text-red-500 text-sm">

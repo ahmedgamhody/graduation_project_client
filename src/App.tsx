@@ -55,7 +55,7 @@ const SingleGovernorate = lazy(
 
 // Machine Quotations Page
 const MachineQuotations = lazy(
-  () => import("./pages/Machine Quotations/MachineQuotations")
+  () => import("./pages/Machine Quotations/MachineQuestions")
 );
 // User Profile Pages and Favorite Places
 const UserProfile = lazy(() => import("./pages/profile/UserProfile"));

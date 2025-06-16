@@ -4,10 +4,11 @@ import axiosInstance from "../../api/axiosInstance";
 import { User, MapPin, Phone, Calendar, Globe } from "lucide-react";
 import { UserProfileData } from "../../types";
 import { renderStars } from "../../utils/functions";
+import useTitle from "../../hooks/useChangePageTitle";
 
 export default function ShowUserProfile() {
+  useTitle("User Profile");
   const { userId } = useParams<{ userId: string }>();
-
   const fetchShowUserProfile = (userId: string) =>
     axiosInstance.get(`/User/PublicProfile?userId=${userId}`).then((res) => {
       const data = res.data;
