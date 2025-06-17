@@ -9,7 +9,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "../../store/hooks";
 
 export default function TripPlacesSection({
-  allTripPlacesFromAdmin = [],
+  allTripPlacesFromAdmin,
   isInAdminDashboard = false,
   handleOpenUpdateTripModal,
 }: {
