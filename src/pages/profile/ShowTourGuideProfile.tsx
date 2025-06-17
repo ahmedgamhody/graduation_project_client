@@ -22,19 +22,21 @@ import {
   cancelTourguidReservation,
   setTourguidReservation,
   rateTourGuide,
+  handleActiveTourGuide,
 } from "../../utils/api";
 import StarRating from "../../components/StarRating";
 import { toast } from "react-hot-toast";
+import { UserRoles } from "../../constants/enums";
 
 export default function ShowTourGuideProfile() {
   const { tourGuideId } = useParams<{ tourGuideId: string }>();
-  const { token } = useAppSelector((state) => state.auth);
+  const { token, role } = useAppSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [ratingLoading, setRatingLoading] = useState(false);
+  const [isToggleLoading, setIsToggleLoading] = useState(false);
 
   // Set page title
   useTitle("Tour Guide Profile");
-
   const fetchShowTourGuideProfile = (tourGuideId: string) =>
     axiosInstance
       .get(`/Tourguid/PublicProfile?id=${tourGuideId}`, {
@@ -62,7 +64,9 @@ export default function ShowTourGuideProfile() {
     } catch (error) {
       console.error("Error canceling guide:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["ShowTourGuideProfile"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["ShowTourGuideProfile"],
+      });
       setLoading(false);
     }
   };
@@ -73,7 +77,9 @@ export default function ShowTourGuideProfile() {
     } catch (error) {
       console.error("Error booking guide:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["ShowTourGuideProfile"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["ShowTourGuideProfile"],
+      });
       setLoading(false);
     }
   };
@@ -90,8 +96,26 @@ export default function ShowTourGuideProfile() {
     } catch (error) {
       console.error("Error rating tour guide:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["ShowTourGuideProfile"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["ShowTourGuideProfile"],
+      });
       setRatingLoading(false);
+    }
+  };
+
+  const handleToggleActive = async () => {
+    if (!data) return;
+
+    setIsToggleLoading(true);
+    try {
+      await handleActiveTourGuide(token, !data.isActive);
+      await queryClient.invalidateQueries({
+        queryKey: ["ShowTourGuideProfile"],
+      });
+    } catch (error) {
+      console.error("Failed to toggle active status:", error);
+    } finally {
+      setIsToggleLoading(false);
     }
   };
 
@@ -163,9 +187,9 @@ export default function ShowTourGuideProfile() {
                     <XCircle className="w-8 h-8 text-red-500 bg-white rounded-full" />
                   )}
                 </div>
-              </div>
+              </div>{" "}
               {/* Basic Info */}
-              <div className="text-center md:text-left text-white">
+              <div className="text-center md:text-left text-white flex-1">
                 <h1 className="text-3xl font-bold mb-2">{data.name}</h1>
                 <div className="flex items-center justify-center md:justify-start space-x-1 mb-2">
                   {renderStars(data.rate || 0)}
@@ -185,6 +209,41 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </div>
               </div>
+              {/* Activity Toggle - Only visible to the owner */}
+              {role === UserRoles.TOUR_GUIDE && (
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[280px]">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-white">
+                      <h3 className="font-semibold text-lg">Activity Status</h3>
+                      <p className="text-sm text-white/80">
+                        {data.isActive
+                          ? "You are available for bookings"
+                          : "You are unavailable for bookings"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-medium">
+                      {data.isActive ? "Active" : "Inactive"}
+                    </span>
+                    <div className="flex items-center space-x-2">
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={data.isActive}
+                          onChange={handleToggleActive}
+                          disabled={isToggleLoading}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-white/30 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed"></div>
+                      </label>
+                      {isToggleLoading && (
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -250,48 +309,48 @@ export default function ShowTourGuideProfile() {
                     </p>
                   </div>
                 </div>{" "}
-                <div className="flex items-center space-x-3">
-                  <Star className="w-5 h-5 text-yellow-300" />
-                  <div>
-                    <p className="text-sm text-gray-500">Rating</p>
-                  </div>{" "}
-                  <div className="flex flex-col space-y-1">
-                    <StarRating
-                      maxRating={5}
-                      size="18px"
-                      defaultRating={data.rate || 0}
-                      onSetRating={handleRating}
-                      disabled={ratingLoading || !token}
-                      messages={[
-                        "Bad",
-                        "Average",
-                        "Good",
-                        "Very Good",
-                        "Excellent",
-                      ]}
-                    />
-                    {ratingLoading && (
-                      <p className="text-xs text-blue-600">
-                        Submitting rating...
-                      </p>
-                    )}
+                {role === UserRoles.MEMBER && (
+                  <div className="flex items-center space-x-3">
+                    <Star className="w-5 h-5 text-yellow-300" />
+                    <div>
+                      <p className="text-sm text-gray-500">Rating</p>
+                    </div>{" "}
+                    <div className="flex flex-col space-y-1">
+                      <StarRating
+                        maxRating={5}
+                        size="18px"
+                        defaultRating={data.rate || 0}
+                        onSetRating={handleRating}
+                        disabled={ratingLoading || !token}
+                        messages={[
+                          "Bad",
+                          "Average",
+                          "Good",
+                          "Very Good",
+                          "Excellent",
+                        ]}
+                      />
+                      {ratingLoading && (
+                        <p className="text-xs text-blue-600">
+                          Submitting rating...
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
+                )}
+                {role === UserRoles.MEMBER && <div>{/*  */}</div>}
               </div>
             </div>{" "}
           </div>
-          {
-            /* Action Buttons Section */
-            !data.isBooked ? (
+          {role === UserRoles.MEMBER &&
+            (!data.isBooked ? (
               <div className="p-6 bg-gray-50 border-t border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">
                   Book This Tour Guide
                 </h3>
                 <Button
                   className="w-full bg-primary enabled:hover:bg-secondary !important"
-                  onClick={() => {
-                    handleBookGuide(tourGuideId!);
-                  }}
+                  onClick={() => handleBookGuide(tourGuideId!)}
                   disabled={loading}
                 >
                   <div className="flex items-center justify-center gap-2">
@@ -328,8 +387,8 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </Button>
               </div>
-            )
-          }
+            ))}
+
           {/* Additional Information Section */}
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">

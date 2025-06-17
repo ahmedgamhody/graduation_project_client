@@ -83,7 +83,7 @@ export default function TripDetails() {
             ))}
         </div>
       </div>
-      {role !== UserRoles.ADMIN && (
+      {role === UserRoles.MEMBER && (
         <div className="w-full">
           <h2 className="text-3xl font-semibold text-secondary my-8 text-center">
             Tour Guides

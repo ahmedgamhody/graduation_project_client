@@ -35,9 +35,12 @@ export enum AppRoutes {
   ADMIN_PLACES = "/admin/dashboard/places",
   ADMIN_USERS_CONTACT_US_PROBLEMS = "/admin/dashboard/users-contact-us-problems",
   ADMIN_TRIP_PLACES = "/admin/dashboard/trip-places",
+  // Tour Guide Pages
+  ALL_TRIPS_FOR_TOUR_GUIDE = "/tour-guide/all-trips",
+  UPDATE_TOUR_GUIDE_PROFILE = "/tour-guide/update-profile",
 }
 export enum UserRoles {
   ADMIN = "Admin",
-  TOUR_GUIDE = "TourGuide",
+  TOUR_GUIDE = "Tourguid",
   MEMBER = "Member",
 }

@@ -33,13 +33,16 @@ export default function NavBar() {
     { to: AppRoutes.TYPE_OF_TOURISM, label: "Type of Tourism" },
     { to: AppRoutes.GOVERNORATES, label: "Governorates" },
     ...(role === UserRoles.MEMBER
-      ? [
-          { to: AppRoutes.RECOMMENDATION, label: "Recommendation" },
-          { to: AppRoutes.CONTACT_US, label: "Contact Us" },
-        ]
+      ? [{ to: AppRoutes.RECOMMENDATION, label: "Recommendation" }]
       : []),
     ...(role === UserRoles.ADMIN
       ? [{ to: AppRoutes.ADMIN_DASHBOARD, label: "Dashboard" }]
+      : []),
+    ...(role === UserRoles.TOUR_GUIDE
+      ? [{ to: AppRoutes.ALL_TRIPS_FOR_TOUR_GUIDE, label: "All Trips" }]
+      : []),
+    ...(role === UserRoles.MEMBER || role === UserRoles.TOUR_GUIDE
+      ? [{ to: AppRoutes.CONTACT_US, label: "Contact Us" }]
       : []),
   ];
   return (
@@ -90,7 +93,7 @@ export default function NavBar() {
                     alt="avatar"
                     className="w-6 h-6 rounded-full"
                   />
-                  {name}
+                  {name.slice(0, 10) + (name.length > 10 ? "..." : "")}
                   <ChevronDownIcon
                     aria-hidden="true"
                     className="-mr-1 size-5 text-gray-400"
@@ -112,16 +115,26 @@ export default function NavBar() {
                       </Link>
                     </MenuItem>
                   )}
+
+                  {(role === UserRoles.MEMBER ||
+                    role === UserRoles.TOUR_GUIDE) && (
+                    <MenuItem>
+                      <button
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                        onClick={() => {
+                          if (role === UserRoles.MEMBER) {
+                            nav(`show-user-profile/${id}`);
+                          } else if (role === UserRoles.TOUR_GUIDE) {
+                            nav(`show-tour-guide-profile/${id}`);
+                          }
+                        }}
+                      >
+                        My Profile
+                      </button>
+                    </MenuItem>
+                  )}
                   {role === UserRoles.MEMBER && (
                     <>
-                      <MenuItem>
-                        <button
-                          className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                          onClick={() => nav(`show-user-profile/${id}`)}
-                        >
-                          My Profile
-                        </button>
-                      </MenuItem>
                       <MenuItem>
                         <button
                           className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
@@ -139,6 +152,16 @@ export default function NavBar() {
                         </button>
                       </MenuItem>
                     </>
+                  )}
+                  {role === UserRoles.TOUR_GUIDE && (
+                    <MenuItem>
+                      <button
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                        onClick={() => nav(AppRoutes.UPDATE_TOUR_GUIDE_PROFILE)}
+                      >
+                        Edit Profile
+                      </button>
+                    </MenuItem>
                   )}
                   <MenuItem>
                     <button
@@ -231,16 +254,19 @@ export default function NavBar() {
                             </Link>
                           </MenuItem>
                         )}
+                        {(role === UserRoles.MEMBER ||
+                          role === UserRoles.TOUR_GUIDE) && (
+                          <MenuItem>
+                            <button
+                              className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
+                              onClick={() => nav(`show-user-profile/${id}`)}
+                            >
+                              My Profile
+                            </button>
+                          </MenuItem>
+                        )}
                         {role === UserRoles.MEMBER && (
                           <>
-                            <MenuItem>
-                              <button
-                                className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
-                                onClick={() => nav(`show-user-profile/${id}`)}
-                              >
-                                My Profile
-                              </button>
-                            </MenuItem>
                             <MenuItem>
                               <button
                                 className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"
@@ -259,7 +285,6 @@ export default function NavBar() {
                             </MenuItem>
                           </>
                         )}
-
                         <MenuItem>
                           <button
                             className="block w-full px-4 py-2 text-left text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900 data-[focus]:outline-none"

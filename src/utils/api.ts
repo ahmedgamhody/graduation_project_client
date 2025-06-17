@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from "react-hot-toast";
 import axiosInstance from "../api/axiosInstance";
-import { UserProfileFormData } from "../validation/ProfileValidation";
+import {
+  TourGuideProfileFormData,
+  UserProfileFormData,
+} from "../validation/ProfileValidation";
 import { ContactUsResponse, MachineQuestionsRequestData } from "../types";
 
 axiosInstance.interceptors.response.use(
@@ -136,7 +139,7 @@ export const sendContactUserMessage = async (
   token: string
 ) => {
   const response = await axiosInstance.post(
-    `/User/SendContactUsProblem`,
+    `/Tourguid/SendContactUsProblem`,
     {
       problem,
     },
@@ -465,5 +468,38 @@ export const sendUserProgram = async (userid: string, program: string) => {
     `MLValues/ProgramName?userid=${userid}&program=${program}`
   );
   toast.success("Your Answers sent successfully!");
+  return response;
+};
+
+export const updateTourGuideProfile = async (
+  token: string,
+  data: TourGuideProfileFormData
+) => {
+  const response = await axiosInstance.put("/Tourguid/update-profile", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  toast.success("Profile updated successfully!");
+  return response.data;
+};
+export const handleActiveTourGuide = async (
+  token: string,
+  isActive: boolean
+) => {
+  const response = await axiosInstance.put(
+    `/Tourguid/UpdateIsActive?isActive=${isActive}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  if (isActive) {
+    toast.success("Tour guide activated successfully!");
+  } else {
+    toast.success("Tour guide deactivated successfully!");
+  }
   return response;
 };

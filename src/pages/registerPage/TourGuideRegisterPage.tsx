@@ -324,8 +324,8 @@ export default function TourGuideRegisterPage() {
                   <option value="" disabled>
                     Select
                   </option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
                 </select>
                 {errors.Gender && (
                   <p className="text-red-500 text-sm">

@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import useTitle from "../../hooks/useChangePageTitle";
@@ -18,7 +18,7 @@ export default function SinglePlace() {
   const { name } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
   const [isUpdatingFavorite, setIsUpdatingFavorite] = useState(false);
-
+  const nav = useNavigate();
   useTitle(`Place - ${name}`);
   const { token, role } = useAppSelector((state) => state.auth);
   const fetchSinglePlace = () =>
@@ -44,7 +44,7 @@ export default function SinglePlace() {
 
   // Handle favorite toggle
   const handleFavoriteToggle = async () => {
-    if (!token) return;
+    if (!token) return nav("/login");
 
     try {
       setIsUpdatingFavorite(true);
@@ -86,7 +86,7 @@ export default function SinglePlace() {
               </div>
               {/* Favorite Heart Icon */}
 
-              {role !== UserRoles.ADMIN && (
+              {role !== UserRoles.ADMIN && role !== UserRoles.TOUR_GUIDE && (
                 <button
                   onClick={handleFavoriteToggle}
                   disabled={isUpdatingFavorite}

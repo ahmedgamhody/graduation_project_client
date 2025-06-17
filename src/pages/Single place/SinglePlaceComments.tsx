@@ -7,7 +7,7 @@ import {
   deleteCommentByAdmin,
 } from "../../utils/api";
 import { queryClient } from "../../main";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppSelector } from "../../store/hooks";
 import { TComment, TPlaceDetails } from "../../types";
 import avatar from "../../../public/avatar.png";
@@ -17,6 +17,7 @@ import { UserRoles } from "../../constants/enums";
 import { Trash2 } from "lucide-react";
 export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
   const { name } = useParams();
+  const nav = useNavigate();
   const { token, id, role } = useAppSelector((state) => state.auth);
   const [comment, setComment] = useState("");
   const [isSubmittingComment, setIsSubmittingComment] = useState(false);
@@ -28,6 +29,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
   const [isUpdateLoading, setIsUpdateLoading] = useState(false);
   const handleComment = async () => {
     if (!comment.trim() || !name) return;
+    if (!token) return nav("/login");
 
     try {
       setIsSubmittingComment(true);
@@ -86,7 +88,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
   };
   return (
     <>
-      {role !== UserRoles.ADMIN && (
+      {role !== UserRoles.ADMIN && role !== UserRoles.TOUR_GUIDE && (
         <>
           <div className="mt-3">
             <label

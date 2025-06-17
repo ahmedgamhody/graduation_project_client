@@ -80,6 +80,13 @@ const AdminUsersContactUsProblems = lazy(
 const AdminTripPlaces = lazy(
   () => import("./pages/admin dashboard/AdminTripPlaces")
 );
+// Tour Guide  Page
+const AllTripsForTourGuide = lazy(
+  () => import("./pages/tour guide pages/AllTripsForTourGuide")
+);
+const UpdateTourGuideProfile = lazy(
+  () => import("./pages/tour guide pages/UpdateTourGuideProfile")
+);
 
 function App() {
   return (
@@ -235,22 +242,57 @@ function App() {
               </PageSuspenseFallback>
             }
           />
+          <Route
+            path={AppRoutes.SINGLE_PLACE}
+            element={
+              <PageSuspenseFallback>
+                <SinglePlace />
+              </PageSuspenseFallback>
+            }
+          />
+
+          <Route
+            element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
+          >
+            <Route
+              path={AppRoutes.RECOMMENDATION}
+              element={
+                <PageSuspenseFallback>
+                  <Recommendation />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.USER_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <UserProfile />
+                </PageSuspenseFallback>
+              }
+            />
+
+            <Route
+              path={AppRoutes.FAVORITE_PLACES}
+              element={
+                <PageSuspenseFallback>
+                  <FavoritePlaces />
+                </PageSuspenseFallback>
+              }
+            />
+          </Route>
+
           {/* SinglePlace route for both Admin and Member */}
           <Route
             element={
               <ProtectedRoutes
-                allowedRoles={[UserRoles.ADMIN, UserRoles.MEMBER]}
+                allowedRoles={[
+                  UserRoles.ADMIN,
+                  UserRoles.MEMBER,
+                  UserRoles.TOUR_GUIDE,
+                ]}
               />
             }
           >
-            <Route
-              path={AppRoutes.SINGLE_PLACE}
-              element={
-                <PageSuspenseFallback>
-                  <SinglePlace />
-                </PageSuspenseFallback>
-              }
-            />
             <Route
               path={AppRoutes.SHOW_USER_PROFILE}
               element={
@@ -277,26 +319,14 @@ function App() {
               }
             />
           </Route>
-          <Route
-            element={<ProtectedRoutes allowedRoles={[UserRoles.MEMBER]} />}
-          >
-            <Route
-              path={AppRoutes.RECOMMENDATION}
-              element={
-                <PageSuspenseFallback>
-                  <Recommendation />
-                </PageSuspenseFallback>
-              }
-            />
-            <Route
-              path={AppRoutes.USER_PROFILE}
-              element={
-                <PageSuspenseFallback>
-                  <UserProfile />
-                </PageSuspenseFallback>
-              }
-            />
 
+          <Route
+            element={
+              <ProtectedRoutes
+                allowedRoles={[UserRoles.MEMBER, UserRoles.TOUR_GUIDE]}
+              />
+            }
+          >
             <Route
               path={AppRoutes.CONTACT_US}
               element={
@@ -305,11 +335,24 @@ function App() {
                 </PageSuspenseFallback>
               }
             />
+          </Route>
+
+          <Route
+            element={<ProtectedRoutes allowedRoles={[UserRoles.TOUR_GUIDE]} />}
+          >
             <Route
-              path={AppRoutes.FAVORITE_PLACES}
+              path={AppRoutes.ALL_TRIPS_FOR_TOUR_GUIDE}
               element={
                 <PageSuspenseFallback>
-                  <FavoritePlaces />
+                  <AllTripsForTourGuide />
+                </PageSuspenseFallback>
+              }
+            />
+            <Route
+              path={AppRoutes.UPDATE_TOUR_GUIDE_PROFILE}
+              element={
+                <PageSuspenseFallback>
+                  <UpdateTourGuideProfile />
                 </PageSuspenseFallback>
               }
             />
