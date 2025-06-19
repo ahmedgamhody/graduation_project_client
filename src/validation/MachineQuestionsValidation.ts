@@ -17,7 +17,7 @@ export const MachineQuestionsSchema = z.object({
   stay_duration: z.coerce
     .number()
     .min(1, { message: "Stay Duration must be at least 1" })
-    .max(100, { message: "Stay Duration must be less than or equal to 100" }),
+    .max(50, { message: "Stay Duration must be less than or equal to 50" }),
   spending_usd: z.coerce
     .number()
     .min(1, { message: "Spending must be at least 1" })
@@ -25,8 +25,8 @@ export const MachineQuestionsSchema = z.object({
   travel_frequency: z.coerce
     .number()
     .min(1, { message: "Travel Frequency must be at least 1" })
-    .max(100, {
-      message: "Travel Frequency must be less than or equal to 100",
+    .max(50, {
+      message: "Travel Frequency must be less than or equal to 50",
     }),
   avg_spending_accommodation: z.coerce
     .number()
@@ -38,21 +38,21 @@ export const MachineQuestionsSchema = z.object({
   avg_spending_transport: z.coerce
     .number()
     .min(1, { message: "Average Spending on Transport is required" })
-    .max(100000, {
+    .max(1000, {
       message:
-        "Average Spending on Transport must be less than or equal to 100000",
+        "Average Spending on Transport must be less than or equal to 1000",
     }),
   avg_spending_food: z.coerce
     .number()
     .min(1, { message: "Average Spending on Food is required" })
-    .max(100000, {
-      message: "Average Spending on Food must be less than or equal to 100000",
+    .max(1000, {
+      message: "Average Spending on Food must be less than or equal to 1000",
     }),
   avg_cost_per_day_aed: z.coerce
     .number()
     .min(1, { message: "Average Cost Per Day is required" })
-    .max(100000, {
-      message: "Average Cost Per Day must be less than or equal to 100000",
+    .max(500, {
+      message: "Average Cost Per Day must be less than or equal to 500",
     }),
 });
 

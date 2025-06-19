@@ -503,3 +503,26 @@ export const handleActiveTourGuide = async (
   }
   return response;
 };
+
+// this function is used to upload a photo for the tour guide and user profile (both)
+export const uploadPhoto = async (token: string, image: File) => {
+  const formData = new FormData();
+  formData.append("image", image);
+  const response = await axiosInstance.post("/Tourguid/UploadPhoto", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+// this function is used to delete a photo for the tour guide and user profile (both)
+export const deletePhoto = async (token: string) => {
+  const response = await axiosInstance.delete("/Tourguid/DeletePhoto", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};

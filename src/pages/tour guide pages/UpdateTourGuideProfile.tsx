@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppSelector } from "../../store/hooks";
@@ -10,8 +10,13 @@ import {
   TourGuideProfileFormData,
   tourGuideProfileSchema,
 } from "../../validation/ProfileValidation";
-import { updateTourGuideProfile } from "../../utils/api";
+import {
+  deletePhoto,
+  updateTourGuideProfile,
+  uploadPhoto,
+} from "../../utils/api";
 import { languages } from "../registerPage";
+import toast from "react-hot-toast";
 
 interface TourGuideReadonlyData {
   country: string;
@@ -24,6 +29,7 @@ export default function UpdateTourGuideProfile() {
   useTitle("Profile - Tour Guide Information");
   const [isNeedUpdate, setIsNeedUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAvatar, setIsAvatar] = useState(false);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [readonlyData, setReadonlyData] = useState<TourGuideReadonlyData>({
     birthDate: "",
@@ -31,6 +37,11 @@ export default function UpdateTourGuideProfile() {
     gender: "",
     photo: "",
   });
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(
+    null
+  );
+  const ref = useRef<HTMLInputElement | null>(null);
 
   const nav = useNavigate();
   const { token } = useAppSelector((state) => state.auth);
@@ -44,7 +55,43 @@ export default function UpdateTourGuideProfile() {
   } = useForm<TourGuideProfileFormData>({
     resolver: zodResolver(tourGuideProfileSchema),
   });
+  const handleImageDelete = async () => {
+    setProfileImage(null);
+    setProfileImagePreview(null);
+    setReadonlyData((prev) => ({
+      ...prev,
+      photo: "",
+    }));
+  };
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    console.log("file:", file);
+    if (file) {
+      // Check if file is an image
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
 
+      // Check file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image size should not exceed 10MB");
+        return;
+      }
+
+      setProfileImage(file);
+      setIsNeedUpdate(true);
+      setIsAvatar(false);
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   useEffect(() => {
     const fetchTourGuideProfile = async () => {
       try {
@@ -54,6 +101,7 @@ export default function UpdateTourGuideProfile() {
           },
         });
         const data = response.data;
+        console.log("Fetched Tour Guide Profile Data:", data);
         reset({
           name: data.name,
           email: data.email,
@@ -61,11 +109,15 @@ export default function UpdateTourGuideProfile() {
           phone: data.phone,
           allLangues: data.allLangues || [],
         });
-        console.log("AllLangues:", data.allLangues);
 
         // Set selected languages for the UI
         setSelectedLanguages(data.allLangues || []);
-
+        setProfileImagePreview(
+          data.photo
+            ? `https://egypt-guid26.runasp.net/images/${data.photo}`
+            : avatar
+        );
+        setIsAvatar(data.photo === null ? true : false);
         setReadonlyData({
           country: data.country,
           birthDate: data.birthDate,
@@ -86,6 +138,12 @@ export default function UpdateTourGuideProfile() {
   const onSubmit = async (data: TourGuideProfileFormData) => {
     if (isNeedUpdate) {
       setIsLoading(true);
+      if (profileImagePreview && profileImage) {
+        await uploadPhoto(token, profileImage);
+      }
+      if (!profileImagePreview && !profileImage) {
+        await deletePhoto(token);
+      }
       try {
         await updateTourGuideProfile(token, data);
         nav("/");
@@ -98,6 +156,7 @@ export default function UpdateTourGuideProfile() {
       setIsNeedUpdate(true);
     }
   };
+  console.log("isAvatar:", isAvatar);
   return (
     <div className="max-w-4xl mx-auto p-4 bg-white shadow-lg rounded-lg mt-10 px-4 md:px-8 lg:px-16">
       <h2 className="text-2xl font-bold mb-6 text-center text-primary">
@@ -106,22 +165,109 @@ export default function UpdateTourGuideProfile() {
 
       {/* Profile Picture */}
       <div className="flex flex-col items-center justify-center mb-6">
-        <div className="relative">
-          {readonlyData.photo ? (
-            <img
-              src={`https://egypt-guid26.runasp.net/images/${readonlyData.photo}`}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = avatar;
-              }}
-            />
-          ) : (
-            <div className="w-24 h-24 rounded-full flex items-center justify-center">
-              <img src={avatar} alt="Profile" className="w-full rounded-full" />
+        <div className="relative mb-4">
+          {" "}
+          {profileImagePreview ? (
+            <div className="relative">
+              <img
+                src={profileImagePreview}
+                alt="Profile Preview"
+                className="w-32 h-32 rounded-full object-cover border-4 border-purple-200 shadow-lg"
+              />
+              {isNeedUpdate && (
+                <>
+                  {!isAvatar && (
+                    <button
+                      type="button"
+                      onClick={handleImageDelete}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                      title="Remove image"
+                    >
+                      &times;
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      ref.current?.click();
+                    }}
+                    className="absolute bottom-0 right-0 bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-purple-600 transition-colors"
+                    title="Edit image"
+                  >
+                    ✎
+                  </button>
+                </>
+              )}
             </div>
-          )}
+          ) : readonlyData.photo ? (
+            <div className="relative">
+              <img
+                src={`https://egypt-guid26.runasp.net/images/${readonlyData.photo}`}
+                alt="Profile"
+                className="w-32 h-32 rounded-full object-cover border-4 border-purple-200 shadow-lg"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = avatar;
+                }}
+              />
+              {isNeedUpdate && (
+                <>
+                  {/* زر الحذف يظهر فقط إذا كانت هناك صورة حقيقية */}
+                  <button
+                    type="button"
+                    onClick={handleImageDelete}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 transition-colors"
+                    title="Remove image"
+                  >
+                    &times;
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      ref.current?.click();
+                    }}
+                    className="absolute bottom-0 right-0 bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-purple-600 transition-colors"
+                    title="Change image"
+                  >
+                    ✎
+                  </button>
+                </>
+              )}
+            </div>
+          ) : (
+            <div
+              onClick={() => {
+                ref.current?.click();
+              }}
+              className="w-32 h-32 rounded-full bg-gray-100 border-4 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-colors"
+            >
+              <div className="text-center">
+                <svg
+                  className="w-8 h-8 text-gray-400 mx-auto mb-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  />
+                </svg>
+                <p className="text-xs text-gray-500">Add Photo</p>
+              </div>
+            </div>
+          )}{" "}
+          <input
+            id="profile-image-upload"
+            type="file"
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            ref={ref}
+          />
         </div>
       </div>
 

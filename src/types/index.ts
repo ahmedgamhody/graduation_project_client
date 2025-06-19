@@ -203,7 +203,6 @@ export interface ContactUsResponse {
 }
 
 export type MachineQuestionsRequestData = MachineQuestionsFormData & {
-  country: string;
   gender: string;
   Age: number;
 };

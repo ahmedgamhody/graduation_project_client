@@ -31,7 +31,7 @@ export const numberInputs: {
   },
   {
     name: "spending_usd",
-    label: "How much do you plan to spend (in USD)?",
+    label: "How much do you plan to spend ?",
     quotation_number: 6,
   },
   {
@@ -41,22 +41,22 @@ export const numberInputs: {
   },
   {
     name: "avg_spending_accommodation",
-    label: "What is your average spending on accommodation per trip (in USD)?",
+    label: "What is your average spending on accommodation per trip ?",
     quotation_number: 8,
   },
   {
     name: "avg_spending_transport",
-    label: "What is your average spending on transportation per trip (in USD)?",
+    label: "What is your average spending on transportation per trip ?",
     quotation_number: 9,
   },
   {
     name: "avg_spending_food",
-    label: "What is your average spending on food per trip (in USD)?",
+    label: "What is your average spending on food per trip ?",
     quotation_number: 10,
   },
   {
     name: "avg_cost_per_day_aed",
-    label: "What is your average cost per day during your trip (in AED)?",
+    label: "What is your average cost per day during your trip ?",
     quotation_number: 11,
   },
 ];

@@ -15,7 +15,7 @@ export default function MachineQuestions() {
   const nav = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isValidating, setIsValidating] = useState(true);
-  const { country, gender, birthDate } = location.state?.user || {};
+  const { gender, birthDate } = location.state?.user || {};
   const { id } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -26,9 +26,8 @@ export default function MachineQuestions() {
         return;
       }
 
-      if (!country || !gender || !birthDate) {
+      if (!gender || !birthDate) {
         console.error("Required user data is missing:", {
-          country,
           gender,
           birthDate,
         });
@@ -45,7 +44,7 @@ export default function MachineQuestions() {
       setIsValidating(false);
     };
     validateData();
-  }, [location.state, country, gender, birthDate, id, nav]);
+  }, [location.state, gender, birthDate, id, nav]);
 
   const {
     register,
@@ -94,7 +93,7 @@ export default function MachineQuestions() {
     try {
       setLoading(true);
 
-      if (!country || !gender || Age === 0) {
+      if (!gender || Age === 0) {
         console.error("Missing required data for submission");
         return;
       }
@@ -104,7 +103,7 @@ export default function MachineQuestions() {
         return;
       }
 
-      const res = await sendMachineQuestions({ ...data, country, gender, Age });
+      const res = await sendMachineQuestions({ ...data, gender, Age });
 
       if (!res?.data?.predicted_tourism_type) {
         console.error("Invalid response from machine questions API");
@@ -124,8 +123,11 @@ export default function MachineQuestions() {
   return (
     <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
       <h1 className="text-center text-4xl font-bold text-primary">
-        Machine Quotations
+        Recommended Tour Program
       </h1>
+      <p className="text-center text-gray-600 mt-2">
+        * All prices and values are in US Dollars (USD).
+      </p>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-wrap mt-12 justify-between gap-5">
           {selectorInputs.map((input) => (
