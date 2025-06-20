@@ -8,14 +8,19 @@ import {
 import { renderStars } from "../../utils/functions";
 import { Button } from "flowbite-react";
 import { queryClient } from "../../main";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Phone, User } from "lucide-react";
+import { UserRoles } from "../../constants/enums";
 
 export default function GuideCard({ guide }: { guide: TourGuideCard }) {
-  const token = useAppSelector((state) => state.auth.token);
+  const { token, role } = useAppSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
-
+  const nav = useNavigate();
   const handleBookGuide = async () => {
+    if (!token) {
+      nav("/login");
+      return;
+    }
     try {
       setLoading(true);
       await setTourguidReservation(guide.id, token);
@@ -129,22 +134,25 @@ export default function GuideCard({ guide }: { guide: TourGuideCard }) {
             </div>
           </Button>
         ) : (
-          <Button
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 !important"
-            onClick={handleBookGuide}
-            disabled={loading}
-          >
-            <div className="flex items-center justify-center gap-2">
-              {loading ? (
-                <>
-                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
-                  <span>Booking...</span>
-                </>
-              ) : (
-                <span>Book Tour Guide</span>
-              )}
-            </div>
-          </Button>
+          role !== UserRoles.ADMIN &&
+          role !== UserRoles.TOUR_GUIDE && (
+            <Button
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 !important"
+              onClick={handleBookGuide}
+              disabled={loading}
+            >
+              <div className="flex items-center justify-center gap-2">
+                {loading ? (
+                  <>
+                    <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                    <span>Booking...</span>
+                  </>
+                ) : (
+                  <span>Book Tour Guide</span>
+                )}
+              </div>
+            </Button>
+          )
         )}
       </div>
     </div>
