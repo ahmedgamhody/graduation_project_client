@@ -27,6 +27,7 @@ import {
 import StarRating from "../../components/StarRating";
 import { toast } from "react-hot-toast";
 import { UserRoles } from "../../constants/enums";
+import avatar from "../../../public/avatar.png";
 
 export default function ShowTourGuideProfile() {
   const { tourGuideId } = useParams<{ tourGuideId: string }>();
@@ -461,7 +462,11 @@ export default function ShowTourGuideProfile() {
                     >
                       <div className="flex items-center justify-between mb-2">
                         <img
-                          src={`https://egypt-guid26.runasp.net/images/${tourist.photo}`}
+                          src={
+                            tourist.photo === null
+                              ? avatar
+                              : `https://egypt-guid26.runasp.net/images/${tourist.photo}`
+                          }
                           alt={tourist.name}
                           className="w-10 h-10 rounded-full object-cover"
                           onError={(e) => {

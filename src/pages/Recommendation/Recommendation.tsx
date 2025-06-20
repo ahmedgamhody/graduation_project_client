@@ -1,7 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../../api/axiosInstance";
 import { useAppSelector } from "../../store/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { motion, AnimatePresence } from "framer-motion";
 import { TPlaceHome } from "../../types";
@@ -9,6 +9,8 @@ import { Pagination } from "flowbite-react";
 import PlaceCard from "../homePage/AllPlaces/PlaceCard";
 import useTitle from "../../hooks/useChangePageTitle";
 import TripPlacesSection from "./TripPlacesSection";
+import { getUserProgram } from "../../utils/api";
+import { CircleCheckBig } from "lucide-react";
 // import { Pagination } from "flowbite-react";
 
 export default function Recommendation() {
@@ -17,6 +19,8 @@ export default function Recommendation() {
   const [recommendationPlaces, setRecommendationPlaces] = useState<
     TPlaceHome[]
   >([]);
+  const [userProgram, setUserProgram] = useState<string | null>(null);
+  const [userProgramLoading, setUserProgramLoading] = useState(true);
   const limitPerPage = 6;
   const token = useAppSelector((state) => state.auth.token);
   const fetchAllRecommendationPlaces = () =>
@@ -46,10 +50,59 @@ export default function Recommendation() {
     startForRecommendationPlaces,
     endForRecommendationPlaces
   );
+  useEffect(() => {
+    async function fetchUserProgram() {
+      try {
+        setUserProgramLoading(true);
+        const response = await getUserProgram(token);
+        setUserProgram(response);
+      } catch (error) {
+        console.error("Error fetching user program:", error);
+        setUserProgram(null);
+      } finally {
+        setUserProgramLoading(false);
+      }
+    }
 
+    if (token) {
+      fetchUserProgram();
+    } else {
+      setUserProgramLoading(false);
+    }
+  }, [token]);
+  console.log("User Program:", userProgram);
   return (
     <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16 flex flex-col items-center">
       <div className="flex flex-col gap-10">
+        {" "}
+        {/* User Program Section */}
+        {userProgramLoading ? (
+          <div className="w-full max-w-4xl mx-auto mb-6">
+            <div className="bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg shadow-lg p-6 animate-pulse">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-gray-400 rounded-full p-2 w-10 h-10"></div>
+                <div className="h-6 bg-gray-400 rounded w-48"></div>
+              </div>
+              <div className="h-16 bg-gray-400 rounded-lg"></div>
+            </div>
+          </div>
+        ) : userProgram ? (
+          <div className="w-full max-w-4xl mx-auto mb-6">
+            <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-6 text-white">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="bg-white bg-opacity-20 rounded-full p-2">
+                  <CircleCheckBig className="w-6 h-6 " />
+                </div>
+                <h2 className="text-xl font-semibold">
+                  Your Recommended Program
+                </h2>
+              </div>
+              <p className="text-lg font-medium bg-white bg-opacity-10 rounded-lg px-4 py-3 backdrop-blur-sm">
+                {userProgram}
+              </p>
+            </div>
+          </div>
+        ) : null}
         <div className="mb-5">
           <h1 className="text-4xl font-bold text-center text-primary mb-8">
             Recommendation Places

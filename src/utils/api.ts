@@ -526,3 +526,12 @@ export const deletePhoto = async (token: string) => {
   });
   return response.data;
 };
+
+export const getUserProgram = async (token: string) => {
+  const response = await axiosInstance.get("/User/user-Program", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+};
