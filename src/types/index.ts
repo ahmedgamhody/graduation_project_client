@@ -156,7 +156,7 @@ export type GuideData = {
   gender: "Male" | "Female" | string;
   photo: string;
   rate: number;
-  places: any | null;
+  place: any | null;
   tripName: string;
   tourists: Tourist[];
   touristsCount: number;

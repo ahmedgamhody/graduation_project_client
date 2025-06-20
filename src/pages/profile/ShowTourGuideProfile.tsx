@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { useAppSelector } from "../../store/hooks";
 import { GuideData } from "../../types";
@@ -13,6 +13,8 @@ import {
   Star,
   CheckCircle,
   XCircle,
+  Languages,
+  CarTaxiFront,
 } from "lucide-react";
 import { renderStars } from "../../utils/functions";
 import { Button } from "flowbite-react";
@@ -172,7 +174,11 @@ export default function ShowTourGuideProfile() {
               {/* Profile Photo */}
               <div className="relative">
                 <img
-                  src={`https://egypt-guid26.runasp.net/images/${data.photo}`}
+                  src={
+                    data.photo === null
+                      ? avatar
+                      : `https://egypt-guid26.runasp.net/images/${data.photo}`
+                  }
                   alt={data.name}
                   className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
                   onError={(e) => {
@@ -339,7 +345,17 @@ export default function ShowTourGuideProfile() {
                     </div>
                   </div>
                 )}
-                {role === UserRoles.MEMBER && <div>{/*  */}</div>}
+                <div className="flex items-center space-x-3">
+                  <Languages className="w-5 h-5 text-green-600" />
+                  <div>
+                    <p className="text-sm text-gray-500">Languages</p>
+                    <p className="text-gray-800">
+                      {data?.allLangues && data.allLangues?.length > 0
+                        ? data.allLangues.join(", ")
+                        : "Not provided"}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>{" "}
           </div>
@@ -395,7 +411,6 @@ export default function ShowTourGuideProfile() {
             <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
               Professional Information
             </h3>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Score (Number of Trips) */}
               <div className="space-y-2">
@@ -415,20 +430,39 @@ export default function ShowTourGuideProfile() {
               {/* Places or Trip Name */}
               <div className="space-y-2">
                 <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <Calendar className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500">
-                      {data.tripName ? "Current Trip" : "Available Places"}
-                    </p>
-                    <p className="text-gray-800 font-medium">
-                      {data.tripName ||
-                        (data.places
-                          ? JSON.stringify(data.places)
-                          : "No current assignment")}
-                    </p>
-                  </div>
+                  {data.tripName && (
+                    <>
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <Calendar className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          {data.tripName ? "Current Trip" : "Available Places"}
+                        </p>
+                        <p className="text-gray-800 font-medium">
+                          {data.tripName ||
+                            (data.place
+                              ? JSON.stringify(data.place)
+                              : "No current assignment")}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {data?.place && (
+                    <>
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <CarTaxiFront className="w-5 h-5 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">
+                          Available Places
+                        </p>
+                        <p className="text-2xl font-bold text-blue-600">
+                          {(data.place && 1) || 0}
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -446,8 +480,48 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div>{" "}
+            {data.place && (
+              <div className="mt-6">
+                <h4 className="text-md font-semibold text-gray-800 mb-3">
+                  Available Place for Current Trip
+                </h4>
+                <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+                  <Link
+                    to={`/places/${data.place.name}`}
+                    className="flex items-center"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="flex-shrink-0">
+                        <img
+                          src={
+                            data.place.photo
+                              ? `${data.place.photo}`
+                              : "/api/placeholder/80/80"
+                          }
+                          alt={data.place.name || "Place"}
+                          className="w-20 h-20 rounded-lg object-cover border border-gray-200"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/api/placeholder/80/80";
+                          }}
+                        />
+                      </div>
 
+                      {/* Place Details */}
+                      <div className="flex-grow min-w-0">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <MapPin className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <h5 className="text-lg font-semibold text-gray-900 truncate">
+                            {data.place.name || "Unknown Place"}
+                          </h5>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </div>
+              </div>
+            )}
             {/* Current Tourists List */}
             {data.tourists && data.tourists.length > 0 && (
               <div className="mt-6">
@@ -488,7 +562,6 @@ export default function ShowTourGuideProfile() {
                 </div>
               </div>
             )}
-
             {/* No Tourists Message */}
             {(!data.tourists || data.tourists.length === 0) &&
               data.isActive && (

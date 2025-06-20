@@ -9,10 +9,12 @@ import { renderStars } from "../../utils/functions";
 import { Button } from "flowbite-react";
 import { queryClient } from "../../main";
 import { Link } from "react-router-dom";
+import { Phone, User } from "lucide-react";
 
 export default function GuideCard({ guide }: { guide: TourGuideCard }) {
   const token = useAppSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(false);
+
   const handleBookGuide = async () => {
     try {
       setLoading(true);
@@ -25,6 +27,7 @@ export default function GuideCard({ guide }: { guide: TourGuideCard }) {
       setLoading(false);
     }
   };
+
   const handleCancelGuide = async () => {
     try {
       setLoading(true);
@@ -37,85 +40,113 @@ export default function GuideCard({ guide }: { guide: TourGuideCard }) {
       setLoading(false);
     }
   };
+
   return (
-    <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow duration-200">
-      {/* Guide Photo */}
-      <Link to={`/show-tour-guide-profile/${guide.id}`}>
-        <div className="flex flex-col items-center mb-4 hover:underline hover:text-blue-600 transition duration-300">
-          <img
-            src={
-              guide.photo
-                ? `https://egypt-guid26.runasp.net/images/${guide.photo}`
-                : "/avatar.png"
-            }
-            alt={guide.name}
-            className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
-            onError={(e) => {
-              e.currentTarget.src = "/avatar.png";
-            }}
-          />
-          <h3 className="text-lg font-semibold text-gray-900 mt-2 text-center">
-            {guide.name}
-          </h3>
+    <div className="bg-white rounded-xl border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+      {/* Header with booking status */}
+      {guide?.isBooked && (
+        <div className="bg-gradient-to-r from-red-500 to-pink-500 text-white text-center py-2 text-sm font-semibold duration-300 ease-out">
+          Currently Booked
         </div>
-      </Link>
-      {/* Guide Info */}
-      <div className="space-y-2 text-sm text-gray-600 mb-4">
+      )}
+
+      <div className="p-6">
+        {/* Guide Photo and Name */}
+        <Link to={`/show-tour-guide-profile/${guide.id}`}>
+          <div className="text-center mb-4 group cursor-pointer">
+            <div className="relative inline-block">
+              <img
+                src={
+                  guide.photo
+                    ? `https://egypt-guid26.runasp.net/images/${guide.photo}`
+                    : "/avatar.png"
+                }
+                alt={guide.name}
+                className="w-24 h-24 rounded-full object-cover border-4 border-gradient-to-r from-blue-500 to-purple-500 shadow-lg group-hover:scale-105 transition-transform duration-200 mx-auto"
+                onError={(e) => {
+                  e.currentTarget.src = "/avatar.png";
+                }}
+              />
+              <div className="absolute -bottom-1 -right-1 bg-green-500 w-6 h-6 rounded-full border-2 border-white flex items-center justify-center">
+                <User size={12} className="text-white" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mt-3 group-hover:text-blue-600 transition-colors duration-200">
+              {guide.name}
+            </h3>
+          </div>
+        </Link>
+
+        {/* Guide Rating */}
         {guide?.rate !== undefined && guide.rate >= 0 && (
-          <div className="flex items-center justify-center gap-1">
-            {renderStars(guide.rate)}
-            <span className="text-gray-600">({guide.rate.toFixed(1)})</span>
+          <div className="flex items-center justify-center gap-2 mb-4 bg-gradient-to-r from-yellow-50 to-amber-50 rounded-lg p-3">
+            <div className="flex items-center gap-1">
+              {renderStars(guide.rate)}
+              <span className="text-gray-700 font-semibold ml-1">
+                ({guide.rate.toFixed(1)})
+              </span>
+            </div>
           </div>
         )}
 
-        {guide.gender && (
-          <p className="text-center">
-            <span className="font-medium">Gender:</span> {guide.gender}
-          </p>
-        )}
-        {guide.phone && (
-          <p className="text-center">
-            <span className="font-medium">Phone:</span> {guide.phone}
-          </p>
+        {/* Guide Details */}
+        <div className="space-y-3 mb-6">
+          {guide.gender && (
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <User size={16} className="text-blue-500" />
+              <span className="text-sm">
+                <span className="font-medium">Gender:</span> {guide.gender}
+              </span>
+            </div>
+          )}
+
+          {guide.phone && (
+            <div className="flex items-center justify-center gap-2 text-gray-600">
+              <Phone size={16} className="text-green-500" />
+              <span className="text-sm">
+                <span className="font-medium">Phone:</span> {guide.phone}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Action Button */}
+        {guide?.isBooked ? (
+          <Button
+            className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 !important"
+            onClick={handleCancelGuide}
+            disabled={loading}
+          >
+            <div className="flex items-center justify-center gap-2">
+              {loading ? (
+                <>
+                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                  <span>Cancelling...</span>
+                </>
+              ) : (
+                <span>Cancel Tour Guide</span>
+              )}
+            </div>
+          </Button>
+        ) : (
+          <Button
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 !important"
+            onClick={handleBookGuide}
+            disabled={loading}
+          >
+            <div className="flex items-center justify-center gap-2">
+              {loading ? (
+                <>
+                  <div className="animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full"></div>
+                  <span>Booking...</span>
+                </>
+              ) : (
+                <span>Book Tour Guide</span>
+              )}
+            </div>
+          </Button>
         )}
       </div>
-
-      {/* Book Button */}
-      {guide?.isBooked ? (
-        <Button
-          className="w-full bg-red-500 enabled:hover:bg-red-600 !important"
-          onClick={handleCancelGuide}
-          disabled={loading}
-        >
-          <div className="flex items-center justify-center gap-2">
-            {loading ? (
-              <>
-                <span className="loader"></span>
-                <span> Cancelling...</span>
-              </>
-            ) : (
-              <span>Cancel Tour Guide</span>
-            )}
-          </div>
-        </Button>
-      ) : (
-        <Button
-          className="w-full bg-primary enabled:hover:bg-secondary !important"
-          onClick={handleBookGuide}
-          disabled={loading}
-        >
-          <div className="flex items-center justify-center gap-2">
-            {loading ? (
-              <>
-                <span className="loader"></span>
-                <span>Booking...</span>
-              </>
-            ) : (
-              <span>Book Tour Guide</span>
-            )}
-          </div>
-        </Button>
-      )}
     </div>
   );
 }
