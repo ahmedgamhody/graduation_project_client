@@ -194,13 +194,17 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
                   <div className="flex items-center justify-between mb-2">
                     {" "}
                     <Link to={`/show-user-profile/${commentItem.userId}`}>
-                      <div className="flex items-center gap-3 hover:underline hover:text-blue-600 transition duration-300">
+                      <div className="flex items-center gap-3 hover:underline hover:text-blue-600 transition-colors duration-300">
                         <img
-                          src={avatar}
+                          src={
+                            commentItem.photo === null
+                              ? avatar
+                              : `https://egypt-guid26.runasp.net/images/${commentItem.photo}`
+                          }
                           alt="User Avatar"
                           className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
                         />
-                        <span className="font-semibold text-gray-800">
+                        <span className="font-semibold text-gray-800 hover:text-blue-600 transition-colors duration-300">
                           {commentItem.userName || "Anonymous User"}
                         </span>
                       </div>

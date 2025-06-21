@@ -47,7 +47,6 @@ export default function SinglePlace() {
   // Handle favorite toggle
   const handleFavoriteToggle = async () => {
     if (!token) return nav("/login");
-
     try {
       setIsUpdatingFavorite(true);
       const newFavoriteState = !isFavorite;

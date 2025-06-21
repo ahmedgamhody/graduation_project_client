@@ -5,7 +5,11 @@ import {
   TourGuideProfileFormData,
   UserProfileFormData,
 } from "../validation/ProfileValidation";
-import { ContactUsResponse, MachineQuestionsRequestData } from "../types";
+import {
+  ContactUsResponse,
+  MachineQuestionsRequestData,
+  TourGuideProfileData,
+} from "../types";
 
 axiosInstance.interceptors.response.use(
   (response) => response,
@@ -534,4 +538,33 @@ export const getUserProgram = async (token: string) => {
     },
   });
   return response.data;
+};
+
+export const getTourGuideProfileData = async (token: string) => {
+  const response = await axiosInstance.get<TourGuideProfileData>(
+    "/Tourguid/Profile",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateMaxTouristsForTourGuide = async (
+  token: string,
+  maxTourists: number
+) => {
+  const response = await axiosInstance.put(
+    `/Tourguid/UpdateMaxTourists?maxTourists=${maxTourists}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  toast.success("Max tourists updated successfully!");
+  return response;
 };

@@ -206,3 +206,8 @@ export type MachineQuestionsRequestData = MachineQuestionsFormData & {
   gender: string;
   Age: number;
 };
+
+export interface TourGuideProfileData {
+  maxTourists: number | null;
+  cv: string | null;
+}

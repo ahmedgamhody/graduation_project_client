@@ -2,7 +2,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 import axiosInstance from "../../api/axiosInstance";
 import { useAppSelector } from "../../store/hooks";
-import { GuideData } from "../../types";
+import { GuideData, TourGuideProfileData } from "../../types";
 import useTitle from "../../hooks/useChangePageTitle";
 import {
   User,
@@ -15,16 +15,22 @@ import {
   XCircle,
   Languages,
   CarTaxiFront,
+  FileText,
+  Edit3,
+  Save,
+  Users,
 } from "lucide-react";
 import { renderStars } from "../../utils/functions";
 import { Button } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { queryClient } from "../../main";
 import {
   cancelTourguidReservation,
   setTourguidReservation,
   rateTourGuide,
   handleActiveTourGuide,
+  getTourGuideProfileData,
+  updateMaxTouristsForTourGuide,
 } from "../../utils/api";
 import StarRating from "../../components/StarRating";
 import { toast } from "react-hot-toast";
@@ -37,7 +43,11 @@ export default function ShowTourGuideProfile() {
   const [loading, setLoading] = useState(false);
   const [ratingLoading, setRatingLoading] = useState(false);
   const [isToggleLoading, setIsToggleLoading] = useState(false);
-
+  const [tourGuideData, setTourGuideData] =
+    useState<TourGuideProfileData | null>(null);
+  const [isEditingMaxTourists, setIsEditingMaxTourists] = useState(false);
+  const [maxTouristsValue, setMaxTouristsValue] = useState<string>("");
+  const [isUpdatingMaxTourists, setIsUpdatingMaxTourists] = useState(false);
   // Set page title
   useTitle("Tour Guide Profile");
   const fetchShowTourGuideProfile = (tourGuideId: string) =>
@@ -49,7 +59,6 @@ export default function ShowTourGuideProfile() {
       })
       .then((res) => {
         const data = res.data;
-        console.log(data);
         return data;
       });
 
@@ -105,7 +114,6 @@ export default function ShowTourGuideProfile() {
       setRatingLoading(false);
     }
   };
-
   const handleToggleActive = async () => {
     if (!data) return;
 
@@ -121,6 +129,64 @@ export default function ShowTourGuideProfile() {
       setIsToggleLoading(false);
     }
   };
+
+  const handleEditMaxTourists = () => {
+    setIsEditingMaxTourists(true);
+    setMaxTouristsValue(tourGuideData?.maxTourists?.toString() || "");
+  };
+
+  const handleSaveMaxTourists = async () => {
+    if (!maxTouristsValue || isNaN(Number(maxTouristsValue))) {
+      toast.error("Please enter a valid number");
+      return;
+    }
+
+    setIsUpdatingMaxTourists(true);
+    try {
+      await updateMaxTouristsForTourGuide(token, Number(maxTouristsValue));
+
+      // Update local state
+      if (tourGuideData) {
+        setTourGuideData({
+          ...tourGuideData,
+          maxTourists: Number(maxTouristsValue),
+        });
+      }
+
+      setIsEditingMaxTourists(false);
+    } catch (error) {
+      console.error("Failed to update max tourists:", error);
+    } finally {
+      setIsUpdatingMaxTourists(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingMaxTourists(false);
+    setMaxTouristsValue("");
+  };
+
+  const handleViewCV = () => {
+    if (tourGuideData?.cv) {
+      const cvUrl = `https://docs.google.com/gview?url=https://egypt-guid26.runasp.net/files/${tourGuideData.cv}&embedded=true`;
+      window.open(cvUrl, "_blank");
+    }
+  };
+  useEffect(() => {
+    if (role === UserRoles.TOUR_GUIDE) {
+      const tourGuideData = async () => {
+        const res = await getTourGuideProfileData(token);
+        if (res) {
+          setTourGuideData(res);
+          // Set initial value for maxTourists
+          setMaxTouristsValue(res.maxTourists?.toString() || "");
+        } else {
+          console.error("Failed to fetch tour guide data");
+        }
+      };
+      tourGuideData();
+    }
+  }, [token, role]);
 
   // Loading state
   if (isLoading) {
@@ -162,7 +228,7 @@ export default function ShowTourGuideProfile() {
       </div>
     );
   }
-  console.log(data);
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -253,7 +319,6 @@ export default function ShowTourGuideProfile() {
               )}
             </div>
           </div>
-
           {/* Details Section */}
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -404,8 +469,7 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </Button>
               </div>
-            ))}
-
+            ))}{" "}
           {/* Additional Information Section */}
           <div className="p-6 bg-gray-50 border-t border-gray-200">
             <h3 className="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2 mb-4">
@@ -426,7 +490,6 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </div>
               </div>
-
               {/* Places or Trip Name */}
               <div className="space-y-2">
                 <div className="flex items-center space-x-3">
@@ -464,8 +527,7 @@ export default function ShowTourGuideProfile() {
                     </>
                   )}
                 </div>
-              </div>
-
+              </div>{" "}
               {/* Current Tourists Count */}
               <div className="space-y-2">
                 <div className="flex items-center space-x-3">
@@ -480,7 +542,106 @@ export default function ShowTourGuideProfile() {
                   </div>
                 </div>
               </div>
-            </div>{" "}
+            </div>
+            {/* CV and Max Tourists Section - Only for Tour Guide */}
+            {role === UserRoles.TOUR_GUIDE && tourGuideData && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h4 className="text-md font-semibold text-gray-800 mb-4">
+                  Tour Guide Settings
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* CV Section */}
+                  {tourGuideData.cv && (
+                    <div className="bg-white rounded-lg border border-gray-200 p-4">
+                      <div className="flex items-center space-x-3 mb-3">
+                        <div className="p-2 bg-indigo-100 rounded-lg">
+                          <FileText className="w-5 h-5 text-indigo-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">CV Document</p>
+                          <p className="text-gray-800 font-medium">Available</p>
+                        </div>
+                      </div>
+                      <Button
+                        onClick={handleViewCV}
+                        className="w-full bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white !important"
+                      >
+                        <FileText className="w-4 h-4 mr-2" />
+                        View CV
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Max Tourists Section */}
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-green-100 rounded-lg">
+                          <Users className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-500">Max Tourists</p>
+                          <p className="text-gray-800 font-medium">
+                            {tourGuideData.maxTourists === null
+                              ? "No Limit"
+                              : `${tourGuideData.maxTourists} tourists`}
+                          </p>
+                        </div>
+                      </div>
+                      {!isEditingMaxTourists && (
+                        <Button
+                          onClick={handleEditMaxTourists}
+                          size="sm"
+                          className="bg-blue-500 hover:bg-blue-600 text-white !important"
+                        >
+                          <Edit3 className="w-4 h-4" />
+                        </Button>
+                      )}
+                    </div>
+
+                    {isEditingMaxTourists && (
+                      <div className="space-y-3">
+                        <input
+                          type="number"
+                          value={maxTouristsValue}
+                          onChange={(e) => setMaxTouristsValue(e.target.value)}
+                          placeholder="Enter max tourists (leave empty for no limit)"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          min="1"
+                          disabled={isUpdatingMaxTourists}
+                        />
+                        <div className="flex space-x-2">
+                          <Button
+                            onClick={handleSaveMaxTourists}
+                            disabled={isUpdatingMaxTourists}
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white !important"
+                          >
+                            {isUpdatingMaxTourists ? (
+                              <div className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Saving...
+                              </div>
+                            ) : (
+                              <>
+                                <Save className="w-4 h-4 mr-2" />
+                                Save
+                              </>
+                            )}
+                          </Button>
+                          <Button
+                            onClick={handleCancelEdit}
+                            disabled={isUpdatingMaxTourists}
+                            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white !important"
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}{" "}
             {data.place && (
               <div className="mt-6">
                 <h4 className="text-md font-semibold text-gray-800 mb-3">

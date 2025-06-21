@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { CircleX, EyeIcon, EyeOffIcon, Search } from "lucide-react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import useTitle from "../../hooks/useChangePageTitle";
 import {
@@ -31,6 +31,7 @@ export default function TourGuideRegisterPage() {
   const [showPlaceDropdown, setShowPlaceDropdown] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [selectedTrip, setSelectedTrip] = useState("");
   const ref = useRef<HTMLInputElement | null>(null);
   const cvRef = useRef<HTMLInputElement | null>(null);
   const placeDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -74,6 +75,7 @@ export default function TourGuideRegisterPage() {
     handleSubmit,
     setValue,
     trigger,
+    watch,
     formState: { errors, isValid },
   } = useForm<TourGuideRegisterFormData>({
     resolver: zodResolver(TourGuideRegisterSchema),
@@ -332,30 +334,56 @@ export default function TourGuideRegisterPage() {
                     {errors.Gender.message}
                   </p>
                 )}
-              </div>{" "}
-              <div className="mb-3">
-                <label className="block text-gray-700">Trip Name</label>
-                <select
-                  {...register("TripName")}
-                  disabled={isSubmitting || tripsLoading}
-                  defaultValue=""
-                  className="w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-                >
-                  <option value="" disabled>
-                    {tripsLoading ? "Loading trips..." : "Select a trip type"}
-                  </option>
-                  {AllTripsName?.map((trip) => (
-                    <option key={trip} value={trip}>
-                      {trip}
-                    </option>
-                  ))}
-                </select>
-                {errors.TripName && (
-                  <p className="text-red-500 text-sm">
-                    {errors.TripName.message}
-                  </p>
-                )}
-              </div>
+              </div>{" "}              {!watch("PlaceName") && (
+                <div className="mb-3">
+                  <label className="block text-gray-700">Trip Name</label>
+                  <div className="relative">
+                    <select
+                      {...register("TripName")}
+                      disabled={isSubmitting || tripsLoading}
+                      value={selectedTrip}                      onChange={async (e) => {
+                        const value = e.target.value;
+                        setSelectedTrip(value);
+                        setSelectedPlace(""); // Clear place selection
+                        setPlaceSearchTerm(""); // Clear place search
+                        setValue("TripName", value);
+                        setValue("PlaceName", ""); // Clear place form value
+                        await trigger("TripName");
+                      }}
+                      className="w-full px-3 py-2 pr-10 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300 appearance-none"
+                    >
+                      <option value="">
+                        {tripsLoading ? "Loading trips..." : "Select a trip type"}
+                      </option>
+                      {AllTripsName?.map((trip) => (
+                        <option key={trip} value={trip}>
+                          {trip}
+                        </option>
+                      ))}
+                    </select>
+                    {/* Clear Icon */}
+                    {selectedTrip && (
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setSelectedTrip("");
+                          setValue("TripName", "");
+                          await trigger("TripName");
+                        }}
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                        title="Clear selection"
+                      >
+                        <CircleX className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                  {errors.TripName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.TripName.message}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
             <div className="w-full">
               {" "}
@@ -409,129 +437,110 @@ export default function TourGuideRegisterPage() {
                   </p>
                 )}
               </div>{" "}
-              <div className="mb-3">
-                <label className="block text-gray-700">Place Name</label>{" "}
-                <div className="relative" ref={placeDropdownRef}>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={selectedPlace || placeSearchTerm}
-                      onChange={(e) => {
-                        setPlaceSearchTerm(e.target.value);
-                        setSelectedPlace("");
-                        setShowPlaceDropdown(true);
-                        // Clear the form value when searching
-                        setValue("PlaceName", "");
-                      }}
-                      onFocus={() => setShowPlaceDropdown(true)}
-                      placeholder={
-                        placesLoading
-                          ? "Loading places..."
-                          : "Search for a place..."
-                      }
-                      disabled={isSubmitting || placesLoading}
-                      className="w-full px-3 py-2 pr-10 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-                    />
-                    {/* Search/Clear Icon */}
-                    <div className="absolute right-3 top-3 text-gray-400">
-                      {selectedPlace ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedPlace("");
-                            setPlaceSearchTerm("");
-                            setValue("PlaceName", "");
-                            setShowPlaceDropdown(false);
-                          }}
-                          className="text-gray-500 hover:text-gray-700"
-                          title="Clear selection"
-                        >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+              {!watch("TripName") && (
+                <div className="mb-3">
+                  <label className="block text-gray-700">Place Name</label>{" "}
+                  <div className="relative" ref={placeDropdownRef}>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={selectedPlace || placeSearchTerm}                        onChange={(e) => {
+                          setPlaceSearchTerm(e.target.value);
+                          setSelectedPlace("");
+                          setSelectedTrip(""); // Clear trip selection
+                          setShowPlaceDropdown(true);
+                          // Clear the form values when searching
+                          setValue("PlaceName", "");
+                          setValue("TripName", "");
+                        }}
+                        onFocus={() => setShowPlaceDropdown(true)}
+                        placeholder={
+                          placesLoading
+                            ? "Loading places..."
+                            : "Search for a place..."
+                        }
+                        disabled={isSubmitting || placesLoading}
+                        className="w-full px-3 py-2 pr-10 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
+                      />
+                      {/* Search/Clear Icon */}
+                      <div className="absolute right-3 top-3 text-gray-400">
+                        {selectedPlace ? (
+                          <button
+                            type="button"                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedPlace("");
+                              setPlaceSearchTerm("");
+                              setSelectedTrip(""); // Clear trip selection too
+                              setValue("PlaceName", "");
+                              setValue("TripName", "");
+                              setShowPlaceDropdown(false);
+                            }}
+                            className="text-gray-500 hover:text-gray-700"
+                            title="Clear selection"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M6 18L18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </button>
-                      ) : (
-                        <svg
-                          className="w-4 h-4 pointer-events-none"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                          />
-                        </svg>
-                      )}
+                            <CircleX className="w-5 h-5" />
+                          </button>
+                        ) : (
+                          <Search className="w-5 h-5" />
+                        )}
+                      </div>
                     </div>
+                    {/* Hidden input for form registration */}
+                    <input
+                      {...register("PlaceName")}
+                      type="hidden"
+                      value={selectedPlace}
+                    />
+                    {/* Dropdown list */}
+                    {showPlaceDropdown && !placesLoading && (
+                      <div className="absolute z-10 w-full bg-white border border-gray-400 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg">
+                        {filteredPlaces.length > 0 ? (
+                          <>
+                            {filteredPlaces.slice(0, 20).map((place) => (
+                              <div
+                                key={place}                                onClick={() => {
+                                  setSelectedPlace(place);
+                                  setPlaceSearchTerm("");
+                                  setSelectedTrip(""); // Clear trip selection
+                                  setShowPlaceDropdown(false);
+                                  setValue("PlaceName", place);
+                                  setValue("TripName", ""); // Clear trip form value
+                                  trigger("PlaceName");
+                                }}
+                                className="px-3 py-2 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                              >
+                                <span className="text-sm text-gray-700">
+                                  {place.length > 50
+                                    ? `${place.slice(0, 50)}...`
+                                    : place}
+                                </span>
+                              </div>
+                            ))}
+                            {filteredPlaces.length > 20 && (
+                              <div className="px-3 py-2 text-xs text-gray-500 text-center bg-gray-50">
+                                Showing first 20 results. Type to narrow search.
+                              </div>
+                            )}{" "}
+                          </>
+                        ) : debouncedSearchTerm ? (
+                          <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                            No places found matching "{debouncedSearchTerm}"
+                          </div>
+                        ) : (
+                          <div className="px-3 py-2 text-sm text-gray-500 text-center">
+                            Start typing to search for places...
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
-                  {/* Hidden input for form registration */}
-                  <input
-                    {...register("PlaceName")}
-                    type="hidden"
-                    value={selectedPlace}
-                  />
-                  {/* Dropdown list */}
-                  {showPlaceDropdown && !placesLoading && (
-                    <div className="absolute z-10 w-full bg-white border border-gray-400 rounded-md mt-1 max-h-48 overflow-y-auto shadow-lg">
-                      {filteredPlaces.length > 0 ? (
-                        <>
-                          {filteredPlaces.slice(0, 20).map((place) => (
-                            <div
-                              key={place}
-                              onClick={() => {
-                                setSelectedPlace(place);
-                                setPlaceSearchTerm("");
-                                setShowPlaceDropdown(false);
-                                setValue("PlaceName", place);
-                                trigger("PlaceName");
-                              }}
-                              className="px-3 py-2 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                            >
-                              <span className="text-sm text-gray-700">
-                                {place.length > 50
-                                  ? `${place.slice(0, 50)}...`
-                                  : place}
-                              </span>
-                            </div>
-                          ))}
-                          {filteredPlaces.length > 20 && (
-                            <div className="px-3 py-2 text-xs text-gray-500 text-center bg-gray-50">
-                              Showing first 20 results. Type to narrow search.
-                            </div>
-                          )}{" "}
-                        </>
-                      ) : debouncedSearchTerm ? (
-                        <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                          No places found matching "{debouncedSearchTerm}"
-                        </div>
-                      ) : (
-                        <div className="px-3 py-2 text-sm text-gray-500 text-center">
-                          Start typing to search for places...
-                        </div>
-                      )}
-                    </div>
+                  {errors.PlaceName && (
+                    <p className="text-red-500 text-sm">
+                      {errors.PlaceName.message}
+                    </p>
                   )}
                 </div>
-                {errors.PlaceName && (
-                  <p className="text-red-500 text-sm">
-                    {errors.PlaceName.message}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
           </div>
           <div className="w-full">

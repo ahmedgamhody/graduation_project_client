@@ -18,6 +18,7 @@ import {
 import CardPlaceSkeleton from "../../animations/skeletons/CardPlaceSkeleton";
 import { queryClient } from "../../main";
 import { deleteTourguid, setTourguidActive } from "../../utils/api";
+import { Link } from "react-router-dom";
 
 export default function AdminTourGuidesRequest() {
   useTitle("Admin Tour Guides Request");
@@ -183,17 +184,18 @@ export default function AdminTourGuidesRequest() {
 
                     {/* Guide Info */}
                     <div className="p-4">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                          <User className="w-5 h-5 text-blue-600" />
+                      <Link to={`/show-tour-guide-profile/${guide.id}`}>
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-2 bg-blue-100 rounded-lg">
+                            <User className="w-5 h-5 text-blue-600" />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-gray-900 mt-3 hover:text-blue-600 transition-colors duration-200">
+                              {guide.name}
+                            </h3>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="text-xl font-bold text-gray-900">
-                            {guide.name}
-                          </h3>
-                        </div>
-                      </div>
-
+                      </Link>
                       {/* CV Section */}
                       <div className="mb-6">
                         <div className="flex items-center gap-2 mb-2">
