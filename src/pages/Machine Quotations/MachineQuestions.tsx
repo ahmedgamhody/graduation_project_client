@@ -9,12 +9,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { sendMachineQuestions, sendUserProgram } from "../../utils/api";
 import { useState, useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function MachineQuestions() {
   const location = useLocation();
-  const nav = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const nav = useNavigate();  const [loading, setLoading] = useState(false);
   const [isValidating, setIsValidating] = useState(true);
+  const [currentStep, setCurrentStep] = useState(0);
   const { gender, birthDate } = location.state?.user || {};
   const { id } = useAppSelector((state) => state.auth);
 
@@ -45,15 +46,40 @@ export default function MachineQuestions() {
     };
     validateData();
   }, [location.state, gender, birthDate, id, nav]);
-
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isValid },
   } = useForm<MachineQuestionsFormData>({
     resolver: zodResolver(MachineQuestionsSchema),
     mode: "onChange",
   });
+
+  // Combine all questions for step-by-step navigation
+  const allQuestions = [...selectorInputs, ...numberInputs].sort(
+    (a, b) => a.quotation_number - b.quotation_number
+  );
+
+  const totalSteps = allQuestions.length;
+  const currentQuestion = allQuestions[currentStep];
+
+  const nextStep = () => {
+    if (currentStep < totalSteps - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+  const isCurrentStepValid = () => {
+    if (!currentQuestion) return false;
+    const currentValue = watch(currentQuestion.name);
+    return currentValue !== undefined && currentValue !== null && String(currentValue).trim() !== "";
+  };
 
   if (isValidating) {
     return (
@@ -119,92 +145,142 @@ export default function MachineQuestions() {
     } finally {
       setLoading(false);
     }
-  };
-  return (
+  };  return (
     <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
-      <h1 className="text-center text-4xl font-bold text-primary">
-        Recommended Tour Program
-      </h1>
-      <p className="text-center text-gray-600 mt-2">
-        * All prices and values are in US Dollars (USD).
-      </p>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-wrap mt-12 justify-between gap-5">
-          {selectorInputs.map((input) => (
-            <div
-              className="mb-3 flex flex-col gap-2 w-full md:w-[48%] "
-              key={input.name}
-            >
-              <label className="text-2xl font-bold">
-                <span className="text-secondary">
-                  {" "}
-                  Q{input.quotation_number})
-                </span>
-                {input.label}
-              </label>
-              <select
-                {...register(input.name)}
-                className="w-1/2 md:w-full px-3 py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300 cursor-pointer"
-              >
-                <option className="hidden">Select Option</option>
-                {input.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-              {errors[input.name] && (
-                <p className="text-red-500 text-sm">
-                  {errors[input.name]?.message as string}
-                </p>
-              )}
-            </div>
-          ))}
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-center text-4xl font-bold text-primary">
+          Recommended Tour Program
+        </h1>
+        <p className="text-center text-gray-600 mt-2">
+          * All prices and values are in US Dollars (USD).
+        </p>
 
-          {numberInputs?.map((input) => (
+        {/* Progress Bar */}
+        <div className="mt-8 mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-600">
+              Question {currentStep + 1} of {totalSteps}
+            </span>
+            <span className="text-sm font-medium text-gray-600">
+              {Math.round(((currentStep + 1) / totalSteps) * 100)}% Complete
+            </span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
             <div
-              key={input.name}
-              className="mb-3 flex flex-col gap-2 w-full md:w-[48%] "
-            >
-              <label className="text-2xl font-bold">
-                <span className="text-secondary">{` Q${input.quotation_number}) `}</span>{" "}
-                {input.label}
-              </label>
-              <input
-                type="number"
-                {...register(input.name)}
-                placeholder={"Enter your value"}
-                className="w-1/2 px-3 md:w-full py-2 border border-gray-400 rounded-md focus:outline-none focus:ring focus:ring-purple-300"
-              />
-              {errors[input.name] && (
-                <p className="text-red-500 text-sm">
-                  {errors[input.name]?.message as string}
-                </p>
-              )}
-            </div>
-          ))}
+              className="bg-primary h-2 rounded-full transition-all duration-300 ease-in-out"
+              style={{
+                width: `${((currentStep + 1) / totalSteps) * 100}%`,
+              }}
+            ></div>
+          </div>
         </div>
 
-        <div className="flex justify-center mt-8 w-full">
-          <button
-            className="w-1/3 px-4 py-2 rounded-md transition duration-300
-          bg-primary text-white hover:bg-secondary
-          disabled:bg-gray-400 disabled:cursor-not-allowed
-          flex items-center justify-center"
-            type="submit"
-            disabled={!isValid || loading}
-          >
-            {loading ? (
-              <>
-                <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></span>
-                Loading ...
-              </>
-            ) : (
-              "Submit"
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {/* Current Question Card */}
+          <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200 min-h-[400px] flex flex-col justify-between">
+            {currentQuestion && (
+              <div className="flex-1">
+                <div className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4">
+                    <span className="text-secondary">
+                      Q{currentQuestion.quotation_number})
+                    </span>{" "}
+                    {currentQuestion.label}
+                  </h2>
+                </div>                <div className="flex justify-center">
+                  <div className="w-full max-w-md">                    {/* Selector Input */}
+                    {selectorInputs.find(input => input.name === currentQuestion.name) && (
+                      <select
+                        key={`select-${currentQuestion.name}-${currentStep}`}
+                        {...register(currentQuestion.name)}
+                        className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer transition-all duration-200"
+                      >
+                        <option value="">Select Option</option>
+                        {selectorInputs.find(input => input.name === currentQuestion.name)?.options.map((option: string) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    )}{/* Number Input */}
+                    {numberInputs.find(input => input.name === currentQuestion.name) && (
+                      <input
+                        key={`number-${currentQuestion.name}-${currentStep}`}
+                        type="number"
+                        {...register(currentQuestion.name)}
+                        placeholder="Enter your value"
+                        className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
+                      />
+                    )}
+
+                    {/* Error Message */}
+                    {errors[currentQuestion.name] && (
+                      <p className="text-red-500 text-sm mt-2 text-center">
+                        {errors[currentQuestion.name]?.message as string}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
             )}
-          </button>
-        </div>
-      </form>
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+              <button
+                type="button"
+                onClick={prevStep}
+                disabled={currentStep === 0}
+                className="flex items-center px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
+              >
+                <ChevronLeft className="w-5 h-5 mr-2" />
+                Previous
+              </button>
+
+              <div className="flex items-center space-x-2">
+                {Array.from({ length: totalSteps }, (_, index) => (
+                  <div
+                    key={index}
+                    className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                      index === currentStep
+                        ? "bg-primary scale-125"
+                        : index < currentStep
+                        ? "bg-green-500"
+                        : "bg-gray-300"
+                    }`}
+                  ></div>
+                ))}
+              </div>
+
+              {currentStep < totalSteps - 1 ? (
+                <button
+                  type="button"
+                  onClick={nextStep}
+                  disabled={!isCurrentStepValid()}
+                  className="flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  Next
+                  <ChevronRight className="w-5 h-5 ml-2" />
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={!isValid || loading}
+                  className="flex items-center px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200"
+                >
+                  {loading ? (
+                    <>
+                      <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent mr-2"></span>
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </button>
+              )}
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -35,7 +35,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
       setIsSubmittingComment(true);
       await addComment(token, comment.trim(), name);
       setComment("");
-      queryClient.invalidateQueries({ queryKey: ["place"] });
+      await queryClient.invalidateQueries({ queryKey: ["place"] });
     } catch (err) {
       console.error("Failed to add comment:", err);
     } finally {
@@ -51,7 +51,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
     } catch (error) {
       console.error("Failed to deleted  comment:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["place"] });
+      await queryClient.invalidateQueries({ queryKey: ["place"] });
       setDeletingCommentId(null);
     }
   };
@@ -65,7 +65,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
     } catch (error) {
       console.error("Failed to delete comment by admin:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["place"] });
+      await queryClient.invalidateQueries({ queryKey: ["place"] });
       setDeletingCommentId(null);
     }
   };
@@ -80,7 +80,7 @@ export default function SinglePlaceComments({ data }: { data: TPlaceDetails }) {
     } catch (error) {
       console.error("Failed to update  comment:", error);
     } finally {
-      queryClient.invalidateQueries({ queryKey: ["place"] });
+      await queryClient.invalidateQueries({ queryKey: ["place"] });
       setIsNeedToUpdateStatus(false);
       setCommentNeedToUpdate({});
       setIsUpdateLoading(false);
