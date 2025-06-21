@@ -39,7 +39,7 @@ import avatar from "../../../public/avatar.png";
 
 export default function ShowTourGuideProfile() {
   const { tourGuideId } = useParams<{ tourGuideId: string }>();
-  const { token, role } = useAppSelector((state) => state.auth);
+  const { token, role, id } = useAppSelector((state) => state.auth);
   const [loading, setLoading] = useState(false);
   const [ratingLoading, setRatingLoading] = useState(false);
   const [isToggleLoading, setIsToggleLoading] = useState(false);
@@ -283,7 +283,7 @@ export default function ShowTourGuideProfile() {
                 </div>
               </div>
               {/* Activity Toggle - Only visible to the owner */}
-              {role === UserRoles.TOUR_GUIDE && (
+              {role === UserRoles.TOUR_GUIDE && id === tourGuideId && (
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 min-w-[280px]">
                   <div className="flex items-center justify-between mb-3">
                     <div className="text-white">
@@ -573,72 +573,78 @@ export default function ShowTourGuideProfile() {
                   )}
 
                   {/* Max Tourists Section */}
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                          <Users className="w-5 h-5 text-green-600" />
+                  {id === tourGuideId && (
+                    <div className="bg-white rounded-lg border border-gray-200 p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-green-100 rounded-lg">
+                            <Users className="w-5 h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm text-gray-500">
+                              Max Tourists
+                            </p>
+                            <p className="text-gray-800 font-medium">
+                              {tourGuideData.maxTourists === null
+                                ? "No Limit"
+                                : `${tourGuideData.maxTourists} tourists`}
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Max Tourists</p>
-                          <p className="text-gray-800 font-medium">
-                            {tourGuideData.maxTourists === null
-                              ? "No Limit"
-                              : `${tourGuideData.maxTourists} tourists`}
-                          </p>
-                        </div>
+                        {!isEditingMaxTourists && (
+                          <Button
+                            onClick={handleEditMaxTourists}
+                            size="sm"
+                            className="bg-blue-500 hover:bg-blue-600 text-white !important"
+                          >
+                            <Edit3 className="w-4 h-4" />
+                          </Button>
+                        )}
                       </div>
-                      {!isEditingMaxTourists && (
-                        <Button
-                          onClick={handleEditMaxTourists}
-                          size="sm"
-                          className="bg-blue-500 hover:bg-blue-600 text-white !important"
-                        >
-                          <Edit3 className="w-4 h-4" />
-                        </Button>
+
+                      {isEditingMaxTourists && (
+                        <div className="space-y-3">
+                          <input
+                            type="number"
+                            value={maxTouristsValue}
+                            onChange={(e) =>
+                              setMaxTouristsValue(e.target.value)
+                            }
+                            placeholder="Enter max tourists (leave empty for no limit)"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                            min="1"
+                            disabled={isUpdatingMaxTourists}
+                          />
+                          <div className="flex space-x-2">
+                            <Button
+                              onClick={handleSaveMaxTourists}
+                              disabled={isUpdatingMaxTourists}
+                              className="flex-1 bg-green-500 hover:bg-green-600 text-white !important"
+                            >
+                              {isUpdatingMaxTourists ? (
+                                <div className="flex items-center justify-center">
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                  Saving...
+                                </div>
+                              ) : (
+                                <>
+                                  <Save className="w-4 h-4 mr-2" />
+                                  Save
+                                </>
+                              )}
+                            </Button>
+                            <Button
+                              onClick={handleCancelEdit}
+                              disabled={isUpdatingMaxTourists}
+                              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white !important"
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
                       )}
                     </div>
-
-                    {isEditingMaxTourists && (
-                      <div className="space-y-3">
-                        <input
-                          type="number"
-                          value={maxTouristsValue}
-                          onChange={(e) => setMaxTouristsValue(e.target.value)}
-                          placeholder="Enter max tourists (leave empty for no limit)"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          min="1"
-                          disabled={isUpdatingMaxTourists}
-                        />
-                        <div className="flex space-x-2">
-                          <Button
-                            onClick={handleSaveMaxTourists}
-                            disabled={isUpdatingMaxTourists}
-                            className="flex-1 bg-green-500 hover:bg-green-600 text-white !important"
-                          >
-                            {isUpdatingMaxTourists ? (
-                              <div className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                Saving...
-                              </div>
-                            ) : (
-                              <>
-                                <Save className="w-4 h-4 mr-2" />
-                                Save
-                              </>
-                            )}
-                          </Button>
-                          <Button
-                            onClick={handleCancelEdit}
-                            disabled={isUpdatingMaxTourists}
-                            className="flex-1 bg-gray-500 hover:bg-gray-600 text-white !important"
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
               </div>
             )}{" "}
