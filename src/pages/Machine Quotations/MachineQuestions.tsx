@@ -13,7 +13,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function MachineQuestions() {
   const location = useLocation();
-  const nav = useNavigate();  const [loading, setLoading] = useState(false);
+  const nav = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [isValidating, setIsValidating] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
   const { gender, birthDate } = location.state?.user || {};
@@ -78,7 +79,11 @@ export default function MachineQuestions() {
   const isCurrentStepValid = () => {
     if (!currentQuestion) return false;
     const currentValue = watch(currentQuestion.name);
-    return currentValue !== undefined && currentValue !== null && String(currentValue).trim() !== "";
+    return (
+      currentValue !== undefined &&
+      currentValue !== null &&
+      String(currentValue).trim() !== ""
+    );
   };
 
   if (isValidating) {
@@ -145,7 +150,8 @@ export default function MachineQuestions() {
     } finally {
       setLoading(false);
     }
-  };  return (
+  };
+  return (
     <div className="container mx-auto my-5 px-4 md:px-8 lg:px-16">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-center text-4xl font-bold text-primary">
@@ -187,23 +193,33 @@ export default function MachineQuestions() {
                     </span>{" "}
                     {currentQuestion.label}
                   </h2>
-                </div>                <div className="flex justify-center">
-                  <div className="w-full max-w-md">                    {/* Selector Input */}
-                    {selectorInputs.find(input => input.name === currentQuestion.name) && (
+                </div>{" "}
+                <div className="flex justify-center">
+                  <div className="w-full max-w-md">
+                    {" "}
+                    {/* Selector Input */}
+                    {selectorInputs.find(
+                      (input) => input.name === currentQuestion.name
+                    ) && (
                       <select
                         key={`select-${currentQuestion.name}-${currentStep}`}
                         {...register(currentQuestion.name)}
                         className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent cursor-pointer transition-all duration-200"
                       >
                         <option value="">Select Option</option>
-                        {selectorInputs.find(input => input.name === currentQuestion.name)?.options.map((option: string) => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
+                        {selectorInputs
+                          .find((input) => input.name === currentQuestion.name)
+                          ?.options.map((option: string) => (
+                            <option key={option} value={option}>
+                              {option}
+                            </option>
+                          ))}
                       </select>
-                    )}{/* Number Input */}
-                    {numberInputs.find(input => input.name === currentQuestion.name) && (
+                    )}
+                    {/* Number Input */}
+                    {numberInputs.find(
+                      (input) => input.name === currentQuestion.name
+                    ) && (
                       <input
                         key={`number-${currentQuestion.name}-${currentStep}`}
                         type="number"
@@ -212,7 +228,6 @@ export default function MachineQuestions() {
                         className="w-full px-4 py-3 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200"
                       />
                     )}
-
                     {/* Error Message */}
                     {errors[currentQuestion.name] && (
                       <p className="text-red-500 text-sm mt-2 text-center">
